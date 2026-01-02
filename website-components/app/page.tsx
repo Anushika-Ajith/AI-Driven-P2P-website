@@ -6,6 +6,7 @@ import { CircleArrowLeft, CircleArrowRight } from "lucide-react"
 
 export default function Page() {
   const [currentFeature, setCurrentFeature] = useState(0)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const features = [
     {
@@ -53,9 +54,17 @@ export default function Page() {
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="border-b border-gray-100 sticky top-0 bg-white z-50">
+<<<<<<< HEAD
         <div className="px-8 sm:px-12 lg:px-16 xl:px-20">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 h-16 items-center">
             <button
+=======
+      <div className="pl-6 pr-8 sm:pl-8 sm:pr-12 lg:pl-[20px] lg:pr-20 xl:pl-[24px] xl:pr-28">
+      <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 h-20 items-center">
+          <button
+            title="Go to home section"
+          aria-label="Go to home section"
+>>>>>>> 999a478 (Update website components and UI improvements)
               onClick={() => scrollToSection("home")}
               className="flex items-center gap-2 hover:opacity-80 transition-opacity duration-200"
             >
@@ -63,6 +72,7 @@ export default function Page() {
                 <Image
                   src="/images/logo.png"
                   alt="ODIN Technologies Logo"
+                  title="ODIN Technologies Logo"
                   width={40}
                   height={40}
                   className="object-contain"
@@ -70,32 +80,85 @@ export default function Page() {
               </div>
               <span className="text-xl font-semibold text-gray-900">ODIN Technologies</span>
             </button>
-
-            <nav className="hidden lg:flex items-center gap-8">
+            {/* Mobile Hamburger Button */}
               <button
+                className="lg:hidden ml-auto text-gray-700"
+                onClick={() => setMenuOpen(!menuOpen)}
+                aria-label="Toggle navigation menu"
+                title="Open navigation menu"
+              >
+                ☰
+              </button>
+
+            <nav className="hidden lg:flex items-center gap-10">
+            <button
+              title="View platform features"
+              aria-label="View platform features"
                 onClick={() => scrollToSection("features")}
                 className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200"
               >
                 Features
               </button>
               <button
+                title="View about us"
+                aria-label="View about us"
                 onClick={() => scrollToSection("about")}
                 className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200"
               >
                 About
               </button>
               <button
+                title="View contact us"
+                aria-label="View contact us"
                 onClick={() => scrollToSection("contact")}
                 className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200"
               >
                 Contact
               </button>
             </nav>
+            {/* Mobile Menu */}
+{menuOpen && (
+  <div className="lg:hidden absolute top-20 left-0 w-full bg-white border-t border-gray-100 shadow-md">
+    <div className="flex flex-col p-4 gap-4">
+      <button
+        onClick={() => {
+          scrollToSection("features")
+          setMenuOpen(false)
+        }}
+        className="text-left text-sm font-medium text-gray-700"
+      >
+        Features
+      </button>
+
+      <button
+        onClick={() => {
+          scrollToSection("about")
+          setMenuOpen(false)
+        }}
+        className="text-left text-sm font-medium text-gray-700"
+      >
+        About
+      </button>
+
+      <button
+        onClick={() => {
+          scrollToSection("contact")
+          setMenuOpen(false)
+        }}
+        className="text-left text-sm font-medium text-gray-700"
+      >
+        Contact
+      </button>
+    </div>
+  </div>
+)}
+
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
+<<<<<<< HEAD
       <section id="home">
         <div className="px-8 sm:px-12 lg:px-16 xl:px-20">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center py-6 lg:py-8">
@@ -104,13 +167,34 @@ export default function Page() {
               <div className="inline-flex items-center gap-1.5 text-sm text-red-500">
                 {/* <Image src="/images/rocket-icon.png" alt="Rocket" width={20} height={20} className="object-contain" /> */}
                 <span className="font-medium">🚀 AI-powered excellence</span>
+=======
+      <section id="home" className="pt-16 lg:pt-20">
+
+      <div className="pl-6 pr-8 sm:pl-8 sm:pr-12 lg:pl-[20px] lg:pr-24 xl:pl-[24px] xl:pr-32">
+      <div className="grid lg:grid-cols-[3fr_2.5fr] gap-10 lg:gap-24 items-center py-6 lg:py-12">
+
+            {/* Left Content */}
+            <div className="space-y-6 mt-4 lg:mt-6 overflow-visible">
+
+            <div
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-600"
+                  title="AI-powered excellence tagline"
+                  aria-label="AI-powered excellence tagline"
+                >
+                  <span>🚀</span> AI-powered excellence
+            
+>>>>>>> 999a478 (Update website components and UI improvements)
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                AI-Driven Procurement <span className="text-yellow-500">Process</span>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight max-w-none">
+                <span className="block lg:inline">AI-Driven Procurement</span>{" "}
+                <span className="text-yellow-500 block lg:inline">Process</span>
               </h1>
 
-              <p className="text-base sm:text-lg text-gray-600 leading-relaxed max-w-xl">
+
+
+
+              <p className="text-base sm:text-lg text-gray-600 leading-7 max-w-xl">
                 We are redesigning the procure-to-pay process to be agile and 100% transparent. From transcribed voice
                 calls to RFQ-linked emails and meetings, we make every vendor-buyer interaction traceable. Leadership
                 can step in at any point, and approvals happen instantly on any device. The result? Faster decisions,
@@ -118,6 +202,7 @@ export default function Page() {
               </p>
             </div>
 
+<<<<<<< HEAD
             <div className="relative">
               <div className="bg-white rounded-2xl shadow-xl p-2 sm:p-2.5 lg:p-3 hover:shadow-2xl transition-shadow duration-300">
                 <Image
@@ -125,6 +210,22 @@ export default function Page() {
                   alt="AI-Driven Procurement Process Illustration"
                   width={750}
                   height={520}
+=======
+            <div className="relative lg:-mt-10">
+            <div className="bg-white rounded-2xl shadow-xl 
+                p-2 lg:p-3 
+                min-h-[380px] lg:min-h-[400px]
+                flex items-center justify-center"
+                title="AI-Driven Procurement Process Illustration"
+                aria-label="AI-Driven Procurement Process Illustration"
+              >
+
+            <Image
+                  src="/images/hero.png"
+                  alt="AI-Driven Procurement Process Illustration"
+                  width={932}
+                  height={632}
+>>>>>>> 999a478 (Update website components and UI improvements)
                   className="w-full h-auto"
                   priority
                 />
@@ -256,6 +357,10 @@ export default function Page() {
             <button
               onClick={handlePrevious}
               className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-16 z-10 bg-white text-gray-700 border border-gray-200 rounded-full p-1 hover:border-gray-400 hover:scale-110 transition-all duration-200"
+<<<<<<< HEAD
+=======
+              title="View previous feature" 
+>>>>>>> 999a478 (Update website components and UI improvements)
               aria-label="Previous feature"
             >
               <CircleArrowLeft size={32} strokeWidth={1.5} />
@@ -265,6 +370,7 @@ export default function Page() {
               onClick={handleNext}
               className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-16 z-10 bg-white text-gray-700 border border-gray-200 rounded-full p-1 hover:border-gray-400 hover:scale-110 transition-all duration-200"
               aria-label="Next feature"
+              title="Next feature"
             >
               <CircleArrowRight size={32} strokeWidth={1.5} />
             </button>
@@ -276,10 +382,19 @@ export default function Page() {
                 return (
                   <div
                     key={index}
+<<<<<<< HEAD
                     className="bg-white rounded-xl p-8 shadow-md hover:shadow-xl hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer min-h-[280px] flex flex-col"
                   >
                     <div className="flex flex-col items-center text-center flex-1 justify-center">
                       <div className="mb-6">
+=======
+                    title={feature.title}
+                    aria-label={feature.title}
+                    className="bg-white rounded-xl p-8 shadow-md hover:shadow-xl hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer min-h-[280px] flex flex-col"
+                  >
+                    <div className="flex flex-col items-center text-center flex-1 justify-center">
+                      <div className="mb-6" title={`${feature.title} icon`} aria-label={`${feature.title} icon`}>
+>>>>>>> 999a478 (Update website components and UI improvements)
                         <Image
                           src={feature.iconUrl || "/placeholder.svg"}
                           alt={feature.title}
@@ -312,7 +427,15 @@ export default function Page() {
             </p>
 
             {/* Contact Form */}
+<<<<<<< HEAD
             <div className="bg-white rounded-lg shadow-sm p-8 max-w-2xl mx-auto hover:shadow-md transition-shadow duration-300">
+=======
+            <div
+                className="bg-white rounded-lg shadow-sm p-8 max-w-2xl mx-auto hover:shadow-md transition-shadow duration-300"
+                title="Contact form"
+                aria-label="Contact form"
+              >
+>>>>>>> 999a478 (Update website components and UI improvements)
               <form className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="text-left">
@@ -322,6 +445,11 @@ export default function Page() {
                     <input
                       type="email"
                       id="email"
+<<<<<<< HEAD
+=======
+                      title="Email address"
+                      aria-label="Email address"
+>>>>>>> 999a478 (Update website components and UI improvements)
                       placeholder="Enter your email address"
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent hover:border-gray-400 transition-colors duration-200"
                     />
@@ -334,6 +462,11 @@ export default function Page() {
                     <input
                       type="tel"
                       id="phone"
+<<<<<<< HEAD
+=======
+                      title="Phone number"
+                      aria-label="Phone number"
+>>>>>>> 999a478 (Update website components and UI improvements)
                       placeholder="Enter your phone number"
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent hover:border-gray-400 transition-colors duration-200"
                     />
@@ -346,6 +479,11 @@ export default function Page() {
                     <input
                       type="text"
                       id="firstName"
+<<<<<<< HEAD
+=======
+                      title="First name"
+                      aria-label="First name"
+>>>>>>> 999a478 (Update website components and UI improvements)
                       placeholder="Enter your first name"
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent hover:border-gray-400 transition-colors duration-200"
                     />
@@ -358,6 +496,11 @@ export default function Page() {
                     <input
                       type="text"
                       id="fullName"
+<<<<<<< HEAD
+=======
+                      title="Full name"
+                      aria-label="Full name"
+>>>>>>> 999a478 (Update website components and UI improvements)
                       placeholder="Enter your full name"
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent hover:border-gray-400 transition-colors duration-200"
                     />
@@ -371,6 +514,11 @@ export default function Page() {
                   <textarea
                     id="message"
                     rows={5}
+<<<<<<< HEAD
+=======
+                    title="Describe your project or message"
+                    aria-label="Describe your project or message"
+>>>>>>> 999a478 (Update website components and UI improvements)
                     placeholder="Tell us about your project and how we can help..."
                     className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent hover:border-gray-400 transition-colors duration-200 resize-none"
                   />
@@ -379,6 +527,11 @@ export default function Page() {
                 <button
                   type="submit"
                   className="w-full bg-[#F5A623] hover:bg-[#E59512] hover:scale-[1.02] text-gray-900 font-semibold py-3 px-6 rounded-md transition-all duration-200 flex items-center justify-center gap-2"
+<<<<<<< HEAD
+=======
+                  title="Send your message to ODIN Technologies"
+                  aria-label="Send your message to ODIN Technologies"
+>>>>>>> 999a478 (Update website components and UI improvements)
                 >
                   Send Message
                   <svg
