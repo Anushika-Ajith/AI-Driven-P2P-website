@@ -1,8 +1,9 @@
 "use client"
 
 import Image from "next/image"
-import { useState } from "react"
+
 import { CircleArrowLeft, CircleArrowRight } from "lucide-react"
+import { useState, useEffect } from "react"
 
 export default function Page() {
   const [currentFeature, setCurrentFeature] = useState(0)
@@ -35,14 +36,33 @@ export default function Page() {
     },
   ]
 
+  const MAX_INDEX = features.length - 3
+
   const handlePrevious = () => {
-    setCurrentFeature((prev) => (prev === 0 ? features.length - 1 : prev - 1))
+    setCurrentFeature((prev) => (prev === 0 ? MAX_INDEX : prev - 1))
   }
 
   const handleNext = () => {
-    setCurrentFeature((prev) => (prev === features.length - 1 ? 0 : prev + 1))
+    setCurrentFeature((prev) => (prev === MAX_INDEX ? 0 : prev + 1))
   }
 
+  const [isPaused, setIsPaused] = useState(false)
+  useEffect(() => {
+    if (isPaused) return
+  
+    const interval = setInterval(() => {
+      setCurrentFeature((prev) =>
+        prev >= MAX_INDEX ? 0 : prev + 1
+      )
+    }, 4000)
+  
+    return () => clearInterval(interval)
+  }, [isPaused])
+  
+  
+
+
+  
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
     if (element) {
@@ -51,12 +71,12 @@ export default function Page() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
+  <div className="min-h-screen bg-white px-4 sm:px-6 lg:px-8">
+  {/* Header */}
       <header className="border-b border-gray-100 sticky top-0 bg-white z-50">
       <div className="pl-6 pr-8 sm:pl-8 sm:pr-12 lg:pl-[20px] lg:pr-20 xl:pl-[24px] xl:pr-28">
-      <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 h-20 items-center">
-          <button
+      <div className="flex items-center h-20 w-full">
+      <button
             title="Go to home section"
           aria-label="Go to home section"
               onClick={() => scrollToSection("home")}
@@ -76,7 +96,7 @@ export default function Page() {
             </button>
             {/* Mobile Hamburger Button */}
               <button
-                className="lg:hidden ml-auto text-gray-700"
+                className="lg:hidden text-gray-700 absolute right-6 sm:right-8"
                 onClick={() => setMenuOpen(!menuOpen)}
                 aria-label="Toggle navigation menu"
                 title="Open navigation menu"
@@ -84,7 +104,7 @@ export default function Page() {
                 ☰
               </button>
 
-            <nav className="hidden lg:flex items-center gap-10">
+            <nav className="hidden lg:flex items-center gap-10 ml-auto">
             <button
               title="View platform features"
               aria-label="View platform features"
@@ -152,13 +172,16 @@ export default function Page() {
       </header>
 
       {/* Hero Section */}
-      <section id="home" className="pt-16 lg:pt-20">
+      <section id="home" className="pt-6 lg:pt-7">
+        <div className="
+          pl-8 sm:pl-10 lg:pl-[36px] xl:pl-[48px]
+          pr-8 sm:pr-12 lg:pr-24 xl:pr-32
+        ">
 
-      <div className="pl-6 pr-8 sm:pl-8 sm:pr-12 lg:pl-[20px] lg:pr-24 xl:pl-[24px] xl:pr-32">
-      <div className="grid lg:grid-cols-[3fr_2.5fr] gap-10 lg:gap-24 items-center py-6 lg:py-12">
+        <div className="grid lg:grid-cols-[3fr_2.5fr] gap-10 lg:gap-24 items-center py-6 lg:py-9">
 
             {/* Left Content */}
-            <div className="space-y-6 mt-4 lg:mt-6 overflow-visible">
+            <div className="space-y-6 overflow-visible">
 
             <div
                   className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-600"
@@ -208,8 +231,88 @@ export default function Page() {
         </div>
       </section>
 
+      
+
+      {/* Features Section */}
+
+      <section id="features" className="bg-gray-50 py-20 lg:py-24">
+        <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
+
+          <div className="text-center mb-10">
+            <h2 className="text-base font-semibold text-amber-500">Features</h2>
+          </div>
+
+          <div className="relative max-w-6xl mx-auto">
+
+            {/* Left Arrow */}
+            <button
+              onClick={handlePrevious}
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-7 z-10
+                        bg-white text-gray-700 border border-gray-200 rounded-full p-1
+                        hover:scale-110 transition-all"
+            >
+              <CircleArrowLeft size={32} />
+            </button>
+
+            {/* Right Arrow */}
+            <button
+              onClick={handleNext}
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-7 z-10
+                        bg-white text-gray-700 border border-gray-200 rounded-full p-1
+                        hover:scale-110 transition-all"
+            >
+              <CircleArrowRight size={32} />
+            </button>
+
+            {/* Carousel */}
+           
+            <div
+              className="overflow-hidden"
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+            >
+
+            <div
+              className="flex transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
+              style={{
+                transform: `translateX(-${currentFeature * 33.3333}%)`,
+              }}
+            >
+
+                {features.map((feature, index) => (
+                  <div
+                    key={index}
+                    className="w-full md:w-1/3 px-4 flex-shrink-0"
+                  >
+                    <div
+                      className="bg-white rounded-xl p-8 min-h-[280px]
+                                flex flex-col items-center justify-center text-center
+                                shadow-md
+                                transition-all duration-300 ease-out
+                                hover:-translate-y-2 hover:shadow-2xl hover:scale-[1.03]"
+>
+
+                      <Image
+                        src={feature.iconUrl}
+                        alt={feature.title}
+                        width={112}
+                        height={112}
+                        className="mb-6 object-contain"
+                      />
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        {feature.title}
+                      </h3>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
       {/* About Section */}
-      <section id="about" className="bg-gray-50 py-16 lg:py-20">
+      <section id="about" className="bg-gray-50 py-20 lg:py-24">
         <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
           <div className="flex items-center justify-center gap-2 mb-8">
             {/* <div className="w-4 h-4 bg-amber-500 rounded-sm"></div> */}
@@ -318,66 +421,8 @@ export default function Page() {
           </div>
         </div>
       </section>
-
-      {/* Features Section */}
-      <section id="features" className="bg-gray-50 py-12 lg:py-16">
-        <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
-          <div className="text-center mb-16">
-            <h2 className="text-base font-semibold text-amber-500">Features</h2>
-          </div>
-
-          <div className="relative max-w-6xl mx-auto">
-            <button
-              onClick={handlePrevious}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-16 z-10 bg-white text-gray-700 border border-gray-200 rounded-full p-1 hover:border-gray-400 hover:scale-110 transition-all duration-200"
-              title="View previous feature" 
-              aria-label="Previous feature"
-            >
-              <CircleArrowLeft size={32} strokeWidth={1.5} />
-            </button>
-
-            <button
-              onClick={handleNext}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-16 z-10 bg-white text-gray-700 border border-gray-200 rounded-full p-1 hover:border-gray-400 hover:scale-110 transition-all duration-200"
-              aria-label="Next feature"
-              title="Next feature"
-            >
-              <CircleArrowRight size={32} strokeWidth={1.5} />
-            </button>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[0, 1, 2].map((offset) => {
-                const index = (currentFeature + offset) % features.length
-                const feature = features[index]
-                return (
-                  <div
-                    key={index}
-                    title={feature.title}
-                    aria-label={feature.title}
-                    className="bg-white rounded-xl p-8 shadow-md hover:shadow-xl hover:scale-105 hover:-translate-y-1 transition-all duration-300 cursor-pointer min-h-[280px] flex flex-col"
-                  >
-                    <div className="flex flex-col items-center text-center flex-1 justify-center">
-                      <div className="mb-6" title={`${feature.title} icon`} aria-label={`${feature.title} icon`}>
-                        <Image
-                          src={feature.iconUrl || "/placeholder.svg"}
-                          alt={feature.title}
-                          width={112}
-                          height={112}
-                          className="object-contain"
-                        />
-                      </div>
-                      <h3 className="text-lg font-semibold text-gray-900 leading-snug">{feature.title}</h3>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Contact Section */}
-      <section id="contact" className="bg-gray-50 py-12 lg:py-16">
+      <section id="contact" className="bg-gray-50 py-20 lg:py-24">
         <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
           <div className="max-w-4xl mx-auto text-center mb-12">
             <h2 className="text-base font-semibold text-amber-500 mb-6">Contact Us</h2>
