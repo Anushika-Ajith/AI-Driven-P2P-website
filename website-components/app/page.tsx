@@ -2,7 +2,6 @@
 
 import Image from "next/image"
 
-import { CircleArrowLeft, CircleArrowRight } from "lucide-react"
 import { useState, useEffect } from "react"
 
 export default function Page() {
@@ -185,7 +184,7 @@ export default function Page() {
             <div className="space-y-4 overflow-visible lg:-mt-6">
 
             <div
-                  className="relative lg:-mt-8 lg:ml-6 gap-1.5 text-xs font-medium text-amber-600"
+                  className="relative lg:-mt-6 text-xs font-medium text-amber-600"
                   title="AI-powered excellence tagline"
                   aria-label="AI-powered excellence tagline"
                 >
@@ -251,20 +250,35 @@ export default function Page() {
             <button
               onClick={handlePrevious}
               className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-7 z-10
-                        bg-white text-gray-700 border border-gray-200 rounded-full p-1
-                        hover:scale-110 transition-all"
-            >
-              <CircleArrowLeft size={32} />
+                bg-white rounded-full p-2 shadow-sm
+                opacity-70 hover:opacity-100 hover:scale-110
+                transition-all cursor-pointer"
+              >
+              <Image
+                src="/images/arrow.png"
+                alt="Previous"
+                width={24}
+                height={24}
+                className="rotate-180"
+              />
+
             </button>
 
             {/* Right Arrow */}
             <button
               onClick={handleNext}
               className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-7 z-10
-                        bg-white text-gray-700 border border-gray-200 rounded-full p-1
-                        hover:scale-110 transition-all"
+                bg-white rounded-full p-2 shadow-sm
+                opacity-70 hover:opacity-100 hover:scale-110
+                transition-all cursor-pointer"
             >
-              <CircleArrowRight size={32} />
+              <Image
+                src="/images/arrow.png"
+                alt="Next"
+                width={24}
+                height={24}
+              />
+
             </button>
 
 
