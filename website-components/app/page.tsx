@@ -35,7 +35,28 @@ export default function Page() {
     },
   ]
 
-  const MAX_INDEX = features.length - 3
+  const [itemsPerView, setItemsPerView] = useState(3)
+
+  useEffect(() => {
+    const updateItemsPerView = () => {
+      if (window.innerWidth < 640) {
+        setItemsPerView(1) // mobile
+      } else if (window.innerWidth < 1024) {
+        setItemsPerView(2) // tablet
+      } else {
+        setItemsPerView(3) // desktop
+      }
+    }
+  
+    updateItemsPerView()
+    window.addEventListener("resize", updateItemsPerView)
+  
+    return () => window.removeEventListener("resize", updateItemsPerView)
+  }, [])
+  
+
+  const MAX_INDEX = Math.max(features.length - itemsPerView, 0)
+
 
   const handlePrevious = () => {
     setCurrentFeature((prev) => (prev === 0 ? MAX_INDEX : prev - 1))
@@ -293,14 +314,15 @@ export default function Page() {
             <div
               className="flex transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
               style={{
-                transform: `translateX(-${currentFeature * 33.3333}%)`,
+                transform: `translateX(-${currentFeature * (100 / itemsPerView)}%)`
+,
               }}
             >
 
                 {features.map((feature, index) => (
                   <div
                     key={index}
-                    className="w-full md:w-1/3 px-4 flex-shrink-0"
+                    className="w-full sm:w-1/2 lg:w-1/3 px-4 flex-shrink-0"
                   >
                     <div
                       className="bg-white rounded-xl p-6 min-h-[210px]
@@ -334,7 +356,7 @@ export default function Page() {
         <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
           <div className="flex items-center justify-center gap-2 mb-8">
             {/* <div className="w-4 h-4 bg-amber-500 rounded-sm"></div> */}
-            <span className="text-base font-medium text-amber-600">🟨 About Us</span>
+            <span className="text-base font-semibold text-amber-500">🟨 About Us</span>
           </div>
 
           <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-12 leading-tight text-center">
