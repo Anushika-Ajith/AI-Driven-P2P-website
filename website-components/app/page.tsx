@@ -237,7 +237,7 @@ export default function Page() {
 
       {/* Features Section */}
 
-      <section id="features" className="bg-gray-50 pt-4 pb-12 lg:pt-6 lg:pb-14">
+      <section id="features" className="pt-8 pb-12 lg:pt-10 lg:pb-14">
 
         <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
 
@@ -271,7 +271,7 @@ export default function Page() {
             {/* Carousel */}
            
             <div
-              className="overflow-hidden"
+              className="overflow-hidden py-4"
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
             >
@@ -289,11 +289,11 @@ export default function Page() {
                     className="w-full md:w-1/3 px-4 flex-shrink-0"
                   >
                     <div
-                      className="bg-white rounded-xl p-6 min-h-[240px]
+                      className="bg-white rounded-xl p-6 min-h-[210px]
                                 flex flex-col items-center justify-center text-center
                                 shadow-md
                                 transition-all duration-300 ease-out
-                                hover:-translate-y-1 hover:shadow-xl hover:scale-[1.02]"
+                                hover:-translate-y-1 hover:shadow-xl hover:scale-[1.01]"
 >
 
                       <Image
@@ -316,7 +316,7 @@ export default function Page() {
         </div>
       </section>
       {/* About Section */}
-      <section id="about" className="bg-gray-50 py-20 lg:py-24">
+      <section id="about" className="py-20 lg:py-24">
         <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
           <div className="flex items-center justify-center gap-2 mb-8">
             {/* <div className="w-4 h-4 bg-amber-500 rounded-sm"></div> */}
@@ -426,7 +426,7 @@ export default function Page() {
         </div>
       </section>
       {/* Contact Section */}
-      <section id="contact" className="bg-gray-50 py-20 lg:py-24">
+      <section id="contact" className="py-20 lg:py-24">
         <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
           <div className="max-w-4xl mx-auto text-center mb-12">
             <h2 className="text-base font-semibold text-amber-500 mb-6">Contact Us</h2>
