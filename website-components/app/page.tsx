@@ -356,7 +356,7 @@ export default function Page() {
         <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
           <div className="flex items-center justify-center gap-2 mb-8">
             {/* <div className="w-4 h-4 bg-amber-500 rounded-sm"></div> */}
-            <span className="text-base font-semibold text-amber-500">🟨 About Us</span>
+            <span className="text-base font-semibold text-amber-500">About Us</span>
           </div>
 
           <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-12 leading-tight text-center">
