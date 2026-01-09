@@ -172,19 +172,20 @@ export default function Page() {
       </header>
 
       {/* Hero Section */}
-      <section id="home" className="pt-6 lg:pt-7">
+      <section id="home" className="pt-2 lg:pt-2">
         <div className="
-          pl-8 sm:pl-10 lg:pl-[36px] xl:pl-[48px]
-          pr-8 sm:pr-12 lg:pr-24 xl:pr-32
+          px-8 sm:px-10 lg:px-16 xl:px-20
+
         ">
 
-        <div className="grid lg:grid-cols-[3fr_2.5fr] gap-10 lg:gap-24 items-center py-6 lg:py-9">
+          <div className="grid grid-cols-1 lg:grid-cols-[3fr_2.5fr] gap-8 lg:gap-16 items-center py-3 lg:py-4">
+
 
             {/* Left Content */}
-            <div className="space-y-6 overflow-visible">
+            <div className="space-y-4 overflow-visible lg:-mt-6">
 
             <div
-                  className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-600"
+                  className="relative lg:-mt-8 lg:ml-6 gap-1.5 text-xs font-medium text-amber-600"
                   title="AI-powered excellence tagline"
                   aria-label="AI-powered excellence tagline"
                 >
@@ -192,15 +193,16 @@ export default function Page() {
             
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight max-w-none">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold">
+
                 <span className="block lg:inline">AI-Driven Procurement</span>{" "}
                 <span className="text-yellow-500 block lg:inline">Process</span>
               </h1>
 
 
 
+              <p className="text-sm sm:text-base text-gray-600 leading-5 max-w-xl">
 
-              <p className="text-base sm:text-lg text-gray-600 leading-7 max-w-xl">
                 We are redesigning the procure-to-pay process to be agile and 100% transparent. From transcribed voice
                 calls to RFQ-linked emails and meetings, we make every vendor-buyer interaction traceable. Leadership
                 can step in at any point, and approvals happen instantly on any device. The result? Faster decisions,
@@ -208,10 +210,10 @@ export default function Page() {
               </p>
             </div>
 
-            <div className="relative lg:-mt-10">
+            <div className="relative lg:-mt-2 lg:ml-4">
             <div className="bg-white rounded-2xl shadow-xl 
                 p-2 lg:p-3 
-                min-h-[380px] lg:min-h-[400px]
+               min-h-[260px] sm:min-h-[300px] lg:min-h-[340px]
                 flex items-center justify-center"
                 title="AI-Driven Procurement Process Illustration"
                 aria-label="AI-Driven Procurement Process Illustration"
@@ -235,10 +237,11 @@ export default function Page() {
 
       {/* Features Section */}
 
-      <section id="features" className="bg-gray-50 py-20 lg:py-24">
+      <section id="features" className="bg-gray-50 pt-4 pb-12 lg:pt-6 lg:pb-14">
+
         <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
 
-          <div className="text-center mb-10">
+          <div className="text-center mb-6">
             <h2 className="text-base font-semibold text-amber-500">Features</h2>
           </div>
 
