@@ -202,7 +202,7 @@ export default function Page() {
 
 
             {/* Left Content */}
-            <div className="space-y-4 overflow-visible lg:-mt-6">
+            <div className="space-y-5 overflow-visible lg:-mt-6">
 
             <div
                   className="relative lg:-mt-6 text-xs font-medium text-amber-600"
@@ -213,7 +213,7 @@ export default function Page() {
             
               </div>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading tight">
 
                 <span className="block lg:inline">AI-Driven Procurement</span>{" "}
                 <span className="text-yellow-500 block lg:inline">Process</span>
@@ -221,7 +221,7 @@ export default function Page() {
 
 
 
-              <p className="text-sm sm:text-base text-gray-600 leading-5 max-w-xl">
+              <p className="text-sm sm:text-base text-gray-600 leading-6 max-w-xl">
 
                 We are redesigning the procure-to-pay process to be agile and 100% transparent. From transcribed voice
                 calls to RFQ-linked emails and meetings, we make every vendor-buyer interaction traceable. Leadership
@@ -257,7 +257,7 @@ export default function Page() {
 
       {/* Features Section */}
 
-      <section id="features" className="pt-8 pb-12 lg:pt-10 lg:pb-14">
+      <section id="features" className="pt-10 pb-8 lg:pt-12 lg:pb-10">
 
         <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
 
@@ -352,7 +352,7 @@ export default function Page() {
         </div>
       </section>
       {/* About Section */}
-      <section id="about" className="py-20 lg:py-24">
+      <section id="about" className="pt-14 pb-10 lg:pt-11 lg:pb-12">
         <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
           <div className="flex items-center justify-center gap-2 mb-8">
             {/* <div className="w-4 h-4 bg-amber-500 rounded-sm"></div> */}
@@ -462,7 +462,7 @@ export default function Page() {
         </div>
       </section>
       {/* Contact Section */}
-      <section id="contact" className="py-20 lg:py-24">
+      <section id="contact" className="py-10 lg:py-13">
         <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
           <div className="max-w-4xl mx-auto text-center mb-12">
             <h2 className="text-base font-semibold text-amber-500 mb-6">Contact Us</h2>
