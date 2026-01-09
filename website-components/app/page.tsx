@@ -288,19 +288,19 @@ export default function Page() {
                     className="w-full md:w-1/3 px-4 flex-shrink-0"
                   >
                     <div
-                      className="bg-white rounded-xl p-8 min-h-[280px]
+                      className="bg-white rounded-xl p-6 min-h-[240px]
                                 flex flex-col items-center justify-center text-center
                                 shadow-md
                                 transition-all duration-300 ease-out
-                                hover:-translate-y-2 hover:shadow-2xl hover:scale-[1.03]"
+                                hover:-translate-y-1 hover:shadow-xl hover:scale-[1.02]"
 >
 
                       <Image
                         src={feature.iconUrl}
                         alt={feature.title}
-                        width={112}
-                        height={112}
-                        className="mb-6 object-contain"
+                        width={96}
+                        height={96}
+                        className="mb-4 object-contain"
                       />
                       <h3 className="text-lg font-semibold text-gray-900">
                         {feature.title}
