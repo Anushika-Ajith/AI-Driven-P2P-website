@@ -250,7 +250,7 @@ export default function Page() {
             {/* Left Arrow */}
             <button
               onClick={handlePrevious}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-7 z-10
+              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-7 z-10
                         bg-white text-gray-700 border border-gray-200 rounded-full p-1
                         hover:scale-110 transition-all"
             >
@@ -260,12 +260,13 @@ export default function Page() {
             {/* Right Arrow */}
             <button
               onClick={handleNext}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-7 z-10
+              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-7 z-10
                         bg-white text-gray-700 border border-gray-200 rounded-full p-1
                         hover:scale-110 transition-all"
             >
               <CircleArrowRight size={32} />
             </button>
+
 
             {/* Carousel */}
            
