@@ -495,7 +495,7 @@ export default function Page() {
           <div className="logo">ODIN Technologies</div>
           <nav className={`nav-links ${menuOpen ? "open" : ""}`}>
   <a href="#" onClick={() => setMenuOpen(false)}>Product</a>
-  <a href="#" onClick={() => setMenuOpen(false)}>Features</a>
+  <a href="#features" onClick={() => setMenuOpen(false)}>Features</a>
   <a href="#" onClick={() => setMenuOpen(false)}>Managed Services</a>
   <a href="#" onClick={() => setMenuOpen(false)}>About</a>
   <a href="#" onClick={() => setMenuOpen(false)}>Contact</a>
