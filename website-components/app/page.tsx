@@ -7,7 +7,9 @@ import { useState, useEffect } from "react"
 export default function Page() {
   const [currentFeature, setCurrentFeature] = useState(0)
   const [menuOpen, setMenuOpen] = useState(false)
-
+  const CARD_GAP = 32 // gap-8 = 32px
+  
+  
   const features = [
     {
       iconUrl: "/images/screenshot-202025-12-30-20210626.png",
@@ -34,37 +36,57 @@ export default function Page() {
       title: "Real-Time Inventory Tracking",
     },
   ]
-
-  const [itemsPerView, setItemsPerView] = useState(3)
-
+  const getCardAnimation = () => {
+    return slideDir === "next"
+      ? "animate-slide-left"
+      : "animate-slide-right"
+  }
+  const [itemsPerView, setItemsPerView] = useState(4)
   useEffect(() => {
     const updateItemsPerView = () => {
       if (window.innerWidth < 640) {
-        setItemsPerView(1) // mobile
+        setItemsPerView(1)
       } else if (window.innerWidth < 1024) {
-        setItemsPerView(2) // tablet
+        setItemsPerView(2)
       } else {
-        setItemsPerView(3) // desktop
+        setItemsPerView(4) // ✅ changed from 3 → 4
       }
     }
   
     updateItemsPerView()
     window.addEventListener("resize", updateItemsPerView)
-  
     return () => window.removeEventListener("resize", updateItemsPerView)
   }, [])
+
+  const visibleFeatures = Array.from(
+    { length: itemsPerView },
+    (_, i) => features[(currentFeature + i) % features.length]
+  )
+  
+  
+  const [slideDir, setSlideDir] = useState<"next" | "prev">("next")
+
+ 
+  
+
   
 
   const MAX_INDEX = Math.max(features.length - itemsPerView, 0)
 
 
-  const handlePrevious = () => {
-    setCurrentFeature((prev) => (prev === 0 ? MAX_INDEX : prev - 1))
-  }
-
   const handleNext = () => {
-    setCurrentFeature((prev) => (prev === MAX_INDEX ? 0 : prev + 1))
+    setSlideDir("next")
+    setCurrentFeature((prev) => (prev + 1) % features.length)
   }
+  
+  const handlePrevious = () => {
+    setSlideDir("prev")
+    setCurrentFeature((prev) =>
+      prev === 0 ? features.length - 1 : prev - 1
+    )
+  }
+  
+  
 
   const [isPaused, setIsPaused] = useState(false)
   useEffect(() => {
@@ -83,19 +105,28 @@ export default function Page() {
 
 
   
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
+  const NAVBAR_HEIGHT = 80 // h-20 = 80px
+
+    const scrollToSection = (sectionId: string) => {
+      const element = document.getElementById(sectionId)
+      if (!element) return
+
+      const elementPosition = element.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - NAVBAR_HEIGHT
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      })
     }
-  }
+
 
   return (
-  <div className="min-h-screen bg-white px-4 sm:px-6 lg:px-8">
+  <div className="min-h-screen bg-white">
   {/* Header */}
-      <header className="border-b border-gray-100 sticky top-0 bg-white z-50">
-      <div className="pl-6 pr-8 sm:pl-8 sm:pr-12 lg:pl-[20px] lg:pr-20 xl:pl-[24px] xl:pr-28">
-      <div className="flex items-center h-20 w-full">
+  <header className="border-b border-gray-100 sticky top-0 bg-white z-50">
+  <div className="w-full px-[24px] sm:px-[40px] lg:px-[64px]">
+    <div className="flex items-center h-20 w-full">
       <button
             title="Go to home section"
           aria-label="Go to home section"
@@ -116,7 +147,7 @@ export default function Page() {
             </button>
             {/* Mobile Hamburger Button */}
               <button
-                className="lg:hidden text-gray-700 absolute right-6 sm:right-8"
+                className="lg:hidden ml-auto"
                 onClick={() => setMenuOpen(!menuOpen)}
                 aria-label="Toggle navigation menu"
                 title="Open navigation menu"
@@ -193,11 +224,7 @@ export default function Page() {
 
       {/* Hero Section */}
       <section id="home" className="pt-2 lg:pt-2">
-        <div className="
-          px-8 sm:px-10 lg:px-16 xl:px-20
-
-        ">
-
+      <div className="px-[24px] sm:px-[40px] lg:px-[64px]">
           <div className="grid grid-cols-1 lg:grid-cols-[3fr_2.5fr] gap-8 lg:gap-16 items-center py-3 lg:py-4">
 
 
@@ -255,105 +282,91 @@ export default function Page() {
 
       
 
-      {/* Features Section */}
+      <section id="features" className="pt-6 pb-8 lg:pt-8 lg:pb-10">
+  <div className="relative w-full">
 
-      <section id="features" className="pt-10 pb-8 lg:pt-12 lg:pb-10">
+    {/* LEFT ARROW */}
+    <button
+      onClick={handlePrevious}
+      className="hidden md:flex absolute
+        left-[24px] sm:left-[40px] lg:left-[64px]
+        top-1/2 -translate-y-1/2 z-10
+        opacity-70 hover:opacity-100 hover:scale-110 transition-all"
+    >
+      <Image src="/images/arrow.png" alt="Previous" width={24} height={24} className="rotate-180" />
+    </button>
 
-        <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
+    {/* RIGHT ARROW */}
+    <button
+      onClick={handleNext}
+      className="hidden md:flex absolute
+        right-[24px] sm:right-[40px] lg:right-[64px]
+        top-1/2 -translate-y-1/2 z-10
+        opacity-70 hover:opacity-100 hover:scale-110 transition-all"
+    >
+      <Image src="/images/arrow.png" alt="Next" width={24} height={24} />
+    </button>
 
-          <div className="text-center mb-6">
-            <h2 className="text-base font-semibold text-amber-500">Features</h2>
-          </div>
+    {/* SAME padding as HERO */}
+    <div className="px-[24px] sm:px-[40px] lg:px-[64px]">
 
-          <div className="relative max-w-6xl mx-auto">
+      <div className="text-center mb-6">
+        <h2 className="text-base font-semibold text-amber-500">Features</h2>
+      </div>
 
-            {/* Left Arrow */}
-            <button
-              onClick={handlePrevious}
-              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-7 z-10
-                bg-white rounded-full p-2 shadow-sm
-                opacity-70 hover:opacity-100 hover:scale-110
-                transition-all cursor-pointer"
-              >
-              <Image
-                src="/images/arrow.png"
-                alt="Previous"
-                width={24}
-                height={24}
-                className="rotate-180"
-              />
-
-            </button>
-
-            {/* Right Arrow */}
-            <button
-              onClick={handleNext}
-              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-7 z-10
-                bg-white rounded-full p-2 shadow-sm
-                opacity-70 hover:opacity-100 hover:scale-110
-                transition-all cursor-pointer"
-            >
-              <Image
-                src="/images/arrow.png"
-                alt="Next"
-                width={24}
-                height={24}
-              />
-
-            </button>
-
-
-            {/* Carousel */}
-           
-            <div
-              className="overflow-hidden py-4"
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
-            >
-
-            <div
-              className="flex transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
-              style={{
-                transform: `translateX(-${currentFeature * (100 / itemsPerView)}%)`
-,
-              }}
-            >
-
-                {features.map((feature, index) => (
-                  <div
-                    key={index}
-                    className="w-full sm:w-1/2 lg:w-1/3 px-4 flex-shrink-0"
-                  >
-                    <div
-                      className="bg-white rounded-xl p-6 min-h-[210px]
-                                flex flex-col items-center justify-center text-center
-                                shadow-md
-                                transition-all duration-300 ease-out
-                                hover:-translate-y-1 hover:shadow-xl hover:scale-[1.01]"
+      {/* CAROUSEL */}
+<div
+  className="overflow-hidden py-4"
+  onMouseEnter={() => setIsPaused(true)}
+  onMouseLeave={() => setIsPaused(false)}
+>
+  <div
+    className="flex px-6 sm:px-8 transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
+    
+  >
+    {visibleFeatures.map((feature, index) => (
+      <div
+        key={index}
+        className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/4 px-2"
+      >
+        <div
+  className={`
+    bg-white rounded-xl p-5 h-[200px]
+    flex flex-col items-center justify-center text-center
+    shadow-md
+    transition-all duration-300
+    hover:-translate-y-1 hover:shadow-xl
+    ${getCardAnimation()}
+  `}
 >
 
-                      <Image
-                        src={feature.iconUrl}
-                        alt={feature.title}
-                        width={96}
-                        height={96}
-                        className="mb-4 object-contain"
-                      />
-                      <h3 className="text-lg font-semibold text-gray-900">
-                        {feature.title}
-                      </h3>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-          </div>
+          <Image
+            src={feature.iconUrl}
+            alt={feature.title}
+            width={88}
+            height={88}
+            className="mb-3 object-contain"
+          />
+          <h3 className="text-base font-semibold text-gray-900">
+            {feature.title}
+          </h3>
         </div>
-      </section>
+      </div>
+    ))}
+  </div>
+</div>
+
+      
+
+    </div>
+  </div>
+</section>
+
+
+
       {/* About Section */}
       <section id="about" className="pt-14 pb-10 lg:pt-11 lg:pb-12">
-        <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
+        <div className="max-w-7xl mx-auto px-[24px] sm:px-[40px] lg:px-[64px]">
           <div className="flex items-center justify-center gap-2 mb-8">
             {/* <div className="w-4 h-4 bg-amber-500 rounded-sm"></div> */}
             <span className="text-base font-semibold text-amber-500">About Us</span>
@@ -432,38 +445,41 @@ export default function Page() {
 
             {/* Our Proof Section */}
             <div>
-              <div className="flex items-center gap-3 mb-4">
-                {/* <span className="text-2xl">📊</span> */}
-                <h3 className="text-2xl font-semibold text-gray-700">📊 Our Proof</h3>
-              </div>
-              <p className="text-base text-gray-600 leading-relaxed mb-4">In early rollouts:</p>
-              <ul className="space-y-3 text-base text-gray-600">
-                <li className="flex items-start gap-3">
-                  <span className="text-gray-400 mt-1.5 text-xs">●</span>
-                  <span>Clients cut approval delays by 45%</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-gray-400 mt-1.5 text-xs">●</span>
-                  <span>Reduced procurement miscommunications by 60%</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-gray-400 mt-1.5 text-xs">●</span>
-                  <span>Gained 100% traceability from requisition to PO</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-gray-400 mt-1.5 text-xs">●</span>
-                  <span>
-                    We're not just building a product. We're enabling trust and transparency through technology.
-                  </span>
-                </li>
-              </ul>
-            </div>
+  <div className="flex items-center gap-3 mb-4">
+    <h3 className="text-2xl font-semibold text-gray-700">
+      📊 Expected Outcomes
+    </h3>
+  </div>
+
+  <ul className="space-y-3 text-base text-gray-600">
+    <li className="flex items-start gap-3">
+      <span className="text-gray-400 mt-1.5 text-xs">●</span>
+      <span>Reduction in approval delays</span>
+    </li>
+
+    <li className="flex items-start gap-3">
+      <span className="text-gray-400 mt-1.5 text-xs">●</span>
+      <span>Reduced procurement miscommunications</span>
+    </li>
+
+    <li className="flex items-start gap-3">
+      <span className="text-gray-400 mt-1.5 text-xs">●</span>
+      <span>Complete traceability from requisition to PO</span>
+    </li>
+
+    <li className="flex items-start gap-3">
+      <span className="text-gray-400 mt-1.5 text-xs">●</span>
+      <span>Improved procurement transparency across all stakeholders</span>
+    </li>
+  </ul>
+</div>
+
           </div>
         </div>
       </section>
       {/* Contact Section */}
       <section id="contact" className="py-10 lg:py-13">
-        <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 xl:px-20">
+        <div className="max-w-7xl mx-auto px-[24px] sm:px-[40px] lg:px-[64px]">
           <div className="max-w-4xl mx-auto text-center mb-12">
             <h2 className="text-base font-semibold text-amber-500 mb-6">Contact Us</h2>
             <h3 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
@@ -525,15 +541,15 @@ export default function Page() {
                   </div>
 
                   <div className="text-left">
-                    <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
-                      Full Name
+                    <label htmlFor="lastame" className="block text-sm font-medium text-gray-700 mb-2">
+                      Last Name
                     </label>
                     <input
                       type="text"
-                      id="fullName"
-                      title="Full name"
-                      aria-label="Full name"
-                      placeholder="Enter your full name"
+                      id="lastName"
+                      title="Last name"
+                      aria-label="Last name"
+                      placeholder="Enter your last name"
                       className="w-full px-4 py-2.5 border border-gray-300 rounded-md text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent hover:border-gray-400 transition-colors duration-200"
                     />
                   </div>
