@@ -4,6 +4,10 @@ import { useEffect, useState } from "react"
 
 export default function Page() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState("")
+  const [error, setError] = useState("")
+
   useEffect(() => {
     /* ================= PROCESS FLOW ================= */
     const steps = document.querySelectorAll(".step")
@@ -485,6 +489,110 @@ export default function Page() {
   }
 }
 
+/* ================= CONTACT (SIMPLE & CLEAN) ================= */
+
+#contact {
+  background: #eef2ff; /* same light blue as theme */
+  padding: 80px 20px;
+}
+
+/* Center everything */
+.contact-wrap {
+  max-width: 900px;
+  margin: auto;
+  text-align: center;
+}
+
+/* Small heading */
+.contact-eyebrow {
+  font-size: 14px;
+  font-weight: 600;
+  color:var(--secondary); 
+  margin-bottom: 10px;
+}
+
+/* Main heading */
+.contact-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 14px;
+}
+
+/* Description */
+.contact-desc {
+  font-size: 16px;
+  color: #475569;
+  max-width: 650px;
+  margin: 0 auto 40px;
+  line-height: 1.6;
+}
+
+/* Form box */
+.contact-box {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 28px;
+  max-width: 700px;
+  margin: auto;
+  border: 1px solid #e2e8f0;
+}
+
+/* Grid */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Labels */
+.contact-box label {
+  display: block;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+/* Inputs */
+.contact-box input,
+.contact-box textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+}
+
+.contact-box textarea {
+  resize: none;
+}
+
+/* Button */
+.contact-btn {
+  margin-top: 14px;
+  width: 100%;
+  background:rgb(90, 131, 244); /* BLUE */
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.contact-btn:hover {
+  background: #1d4ed8; /* darker blue */
+}
+
+
 `}</style>
 
 
@@ -498,7 +606,7 @@ export default function Page() {
   <a href="#features" onClick={() => setMenuOpen(false)}>Features</a>
   <a href="#" onClick={() => setMenuOpen(false)}>Managed Services</a>
   <a href="#" onClick={() => setMenuOpen(false)}>About</a>
-  <a href="#" onClick={() => setMenuOpen(false)}>Contact</a>
+  <a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
 </nav>
 
 <button
@@ -525,7 +633,7 @@ export default function Page() {
             </h1>
 
             <p>
-            We redesign the procure-to-pay process to be agile, auditable, and fully traceable. AI drives both internal and external sourcing decisions, ensuring every movement, approval, and interaction is visible and explainable.
+            We redesign the procure-to-pay process to be agile, auditable, and fully traceable. AI drives the internal and external sourcing process, ensuring every stakeholder has transparent, traceable, and explainable visibility across the entire sourcing lifecycle.
             </p>
 
             <ul className="hero-points">
@@ -599,6 +707,102 @@ export default function Page() {
           </div>
         </div>
       </section>
+      {/* Contact Section */}
+      <section id="contact">
+  <div className="contact-wrap">
+    <div className="contact-eyebrow">Contact Us</div>
+
+    <h2 className="contact-title">
+      Get in touch with our team
+    </h2>
+
+    <p className="contact-desc">
+      Ready to transform your workflow? Contact us today and discover how
+      StreamLine can help your team achieve extraordinary results.
+    </p>
+
+    <div className="contact-box">
+    <form
+  onSubmit={async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    setSuccess("")
+    setError("")
+
+    const form = e.currentTarget
+    const formData = new FormData(form)
+
+    const payload = {
+      email: formData.get("email"),
+      phone: formData.get("phone"),
+      firstName: formData.get("firstName"),
+      lastName: formData.get("lastName"),
+      message: formData.get("message"),
+    }
+
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+
+    const data = await res.json()
+
+    setLoading(false)
+
+    if (res.ok) {
+      setSuccess("Message sent successfully!")
+      form.reset()
+    } else {
+      setError("Something went wrong. Please try again.")
+    }
+  }}
+>
+
+        <div className="contact-grid">
+          <div>
+            <label>Email Address</label>
+            <input name="email" placeholder="Enter your email address" />
+          </div>
+
+          <div>
+            <label>Phone Number</label>
+            <input name="phone" placeholder="Enter your phone number" />
+          </div>
+
+          <div>
+            <label>First Name</label>
+            <input name="firstName" placeholder="Enter your first name" />
+          </div>
+
+          <div>
+            <label>Last Name</label>
+            <input name="lastName" placeholder="Enter your last name" />
+          </div>
+        </div>
+
+        <div style={{ marginTop: "16px" }}>
+          <label>Message</label>
+          <textarea
+          name="message"
+  rows={4}
+  placeholder="Tell us about your project..."
+></textarea>
+
+
+        </div>
+
+        <button className="contact-btn" disabled={loading}>
+  {loading ? "Sending..." : "Send Message →"}
+</button>
+{success && <p style={{ color: "green", marginTop: 10 }}>{success}</p>}
+{error && <p style={{ color: "red", marginTop: 10 }}>{error}</p>}
+
+      </form>
+    </div>
+  </div>
+</section>
+
     </>
   )
 }
