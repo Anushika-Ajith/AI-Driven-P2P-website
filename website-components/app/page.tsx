@@ -591,6 +591,29 @@ export default function Page() {
 .contact-btn:hover {
   background: #1d4ed8; /* darker blue */
 }
+  /* ================= WHATSAPP BUTTON (IMAGE ONLY) ================= */
+
+.whatsapp-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9999;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.whatsapp-btn img {
+  width: 190px;  
+  height: 120px;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.whatsapp-btn img:hover {
+  transform: scale(1.08);
+}
+
+
 
 
 `}</style>
@@ -802,6 +825,18 @@ export default function Page() {
     </div>
   </div>
 </section>
+{/* ================= WHATSAPP FLOAT BUTTON ================= */}
+<a
+  href="/api/whatsapp"
+  className="whatsapp-btn"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <img src="/images/whatsapp.png" alt="WhatsApp" />
+</a>
+
+
+
 
     </>
   )
