@@ -37,11 +37,12 @@ export async function POST(req: Request) {
         subject: "New Contact Form Submission",
         htmlContent: `
           <h3>New Contact Message</h3>
-          <p><b>Name:</b> ${firstName} ${lastName}</p>
-          <p><b>Email:</b> ${email}</p>
-          <p><b>Phone:</b> ${phone}</p>
-          <p><b>Message:</b></p>
-          <p>${message}</p>
+<p><strong>Name:</strong> ${firstName} ${lastName}</p>
+<p><strong>Email:</strong> ${email}</p>
+<p><strong>Phone:</strong> ${phone}</p>
+<p><strong>Message:</strong></p>
+<p>${message}</p>
+
           <hr />
           <p>
             <b>ODIN Technologies</b><br/>
