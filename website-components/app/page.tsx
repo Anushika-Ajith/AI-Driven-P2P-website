@@ -613,7 +613,136 @@ export default function Page() {
   transform: scale(1.08);
 }
 
+/* ================= PRODUCT SECTION ================= */
 
+.product-section {
+  padding: 120px 20px;        /* 🔥 increased from 80px */
+  min-height: 100vh;          /* 🔥 full screen height */
+  display: flex;
+  align-items: center;        /* vertically center content */
+  background: linear-gradient(180deg, #f0f9ff, #ffffff);
+}
+
+.product-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Eyebrow */
+.section-title  {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  margin-bottom: 14px;
+  display: inline-block;
+}
+
+/* Main heading */
+.product-heading {
+  font-size: 32px;            /* 🔥 slightly increased */
+  margin-bottom: 20px;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+/* Intro text */
+.product-intro {
+  max-width: 820px;
+  font-size: 17px;            /* 🔥 slightly increased */
+  line-height: 1.7;
+  color: #334155;
+  margin-bottom: 50px;        /* 🔥 increased spacing */
+}
+
+/* GRID */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 36px;                  /* 🔥 more spacing */
+}
+
+/* Glow Box (tile) */
+.glow-box {
+  position: relative;
+  padding: 30px 28px;         /* 🔥 increased padding */
+  border-radius: 16px;
+  background: #ffffff;
+  overflow: hidden;
+  min-height: 210px;          /* 🔥 increased tile height */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-shadow: 0 8px 30px rgba(2, 132, 199, 0.08);
+}
+
+.glow-box::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #38bdf8,
+    #0ea5e9,
+    #e0f2fe,
+    transparent
+  );
+  background-size: 400% 400%;
+  animation: borderGlow 6s linear infinite;
+  z-index: 0;
+}
+
+.glow-box::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: #ffffff;
+  border-radius: 14px;
+  z-index: 1;
+}
+
+.glow-box h4,
+.glow-box p {
+  position: relative;
+  z-index: 2;
+}
+
+.glow-box h4 {
+  font-size: 20px;            /* 🔥 slightly increased */
+  margin-bottom: 12px;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.glow-box p {
+  font-size: 16px;            /* 🔥 slightly increased */
+  line-height: 1.6;
+  color: #475569;
+}
+
+@keyframes borderGlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 400% 50%; }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-heading {
+    font-size: 26px;
+  }
+
+  .product-section {
+    padding: 100px 20px;
+    min-height: auto;        /* mobile should scroll naturally */
+  }
+}
 
 
 `}</style>
@@ -625,10 +754,10 @@ export default function Page() {
         <div className="nav">
           <div className="logo">ODIN Technologies</div>
           <nav className={`nav-links ${menuOpen ? "open" : ""}`}>
-  <a href="#" onClick={() => setMenuOpen(false)}>Product</a>
+  <a href="#product" onClick={() => setMenuOpen(false)}>Product</a>
   <a href="#features" onClick={() => setMenuOpen(false)}>Features</a>
-  <a href="#" onClick={() => setMenuOpen(false)}>Managed Services</a>
-  <a href="#" onClick={() => setMenuOpen(false)}>About</a>
+  <a href="#managed-services" onClick={() => setMenuOpen(false)}>Managed Services</a>
+  <a href="#about" onClick={() => setMenuOpen(false)}>About</a>
   <a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
 </nav>
 
@@ -691,6 +820,63 @@ export default function Page() {
         </div>
       </section>
 
+{/* ================= ABOUT SECTION ================= */}
+<section id="about" className="product-section">
+  <div className="product-container">
+
+    <h2 className="section-title">About</h2>
+    <h3 className="product-heading">
+      Built for Secure, Transparent Enterprise Operations
+    </h3>
+
+    <p className="product-intro">
+      ODIN Technologies designs and operates enterprise platforms where
+      confidentiality, auditability, and control are fundamental—not optional.
+      Our focus is on building trust-first systems that organizations can rely
+      on for long-term operational integrity.
+    </p>
+
+    <div className="product-grid">
+
+      <div className="glow-box">
+        <h4>Security-First Engineering</h4>
+        <p>
+          Every component is designed with tenant isolation, encryption, and
+          controlled access at its core—protecting sensitive commercial data
+          across users and organizations.
+        </p>
+      </div>
+
+      <div className="glow-box">
+        <h4>Governance by Design</h4>
+        <p>
+          Built-in audit trails, traceable actions, and policy-driven workflows
+          ensure accountability and compliance without slowing operations.
+        </p>
+      </div>
+
+      <div className="glow-box">
+        <h4>Operational Discipline</h4>
+        <p>
+          We combine technology with structured processes to deliver stability,
+          consistency, and reliability in mission-critical environments.
+        </p>
+      </div>
+
+      <div className="glow-box">
+        <h4>Long-Term Partnership</h4>
+        <p>
+          ODIN works as a trusted partner—supporting customers through platform
+          evolution, security needs, and changing operational demands.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
       {/* ================= FEATURES ================= */}
       <section className="features-section" id="features">
         <div className="features-container">
@@ -730,6 +916,120 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      {/* ================= PRODUCT SECTION ================= */}
+<section id="product" className="product-section">
+  <div className="product-container">
+
+    <h2 className="section-title">Product</h2>
+    <h3 className="product-heading">
+      ODIN P2P™ – Intelligent Procure-to-Pay Platform
+    </h3>
+
+    <p className="product-intro">
+      A secure, AI-powered, multi-tenant Procure-to-Pay platform designed for
+      organizations and their supplier ecosystems—built for control, compliance,
+      and transparency.
+    </p>
+
+    <div className="product-grid">
+
+      <div className="glow-box">
+        <h4>End-to-End Automation</h4>
+        <p>
+          Manage requisition, sourcing, RFQ, purchase orders, receipts,
+          invoicing, and payments through a unified workflow.
+        </p>
+      </div>
+
+      <div className="glow-box">
+        <h4>AI-Driven Intelligence</h4>
+        <p>
+          Demand forecasting, intelligent supplier selection, spend visibility,
+          and negotiation insights powered by AI.
+        </p>
+      </div>
+
+      <div className="glow-box">
+        <h4>Security with Transparency</h4>
+        <p>
+          Tenant isolation, auditable workflows, and immutable records ensure
+          trust, traceability, and accountability.
+        </p>
+      </div>
+
+      <div className="glow-box">
+        <h4>Flexible & Scalable</h4>
+        <p>
+          Configurable approvals, compliance rules, and an API-first
+          microservices architecture adaptable across industries.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+      
+
+{/* ================= MANAGED SERVICES SECTION ================= */}
+<section id="managed-services" className="product-section">
+  <div className="product-container">
+
+    <h2 className="section-title">Managed Services</h2>
+    <h3 className="product-heading">
+      Secure Procurement Operations, Managed by Experts
+    </h3>
+
+    <p className="product-intro">
+      ODIN Technologies provides managed procurement services to accelerate
+      operations while preserving strict confidentiality, security, and
+      customer-defined data protection controls.
+    </p>
+
+    <div className="product-grid">
+
+      <div className="glow-box">
+        <h4>Vendor Onboarding Acceleration</h4>
+        <p>
+          Our team fast-tracks supplier onboarding, validation, and
+          configuration—reducing cycle time while maintaining governance and
+          compliance.
+        </p>
+      </div>
+
+      <div className="glow-box">
+        <h4>Rate Contract Lifecycle Management</h4>
+        <p>
+          Effective dates, renewals, expiries, and compliance are continuously
+          monitored to keep rate contracts accurate and up to date.
+        </p>
+      </div>
+
+      <div className="glow-box">
+        <h4>Encrypted & Controlled Access</h4>
+        <p>
+          Pricing and sensitive contract information are visible only through
+          secured, role-restricted views. Rates remain encrypted with zero
+          plaintext exposure.
+        </p>
+      </div>
+
+      <div className="glow-box">
+        <h4>Customer-Defined Encryption</h4>
+        <p>
+          Additional data fields and documents can be custom-encrypted based on
+          customer security policies, compliance needs, and risk thresholds.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
       {/* Contact Section */}
       <section id="contact">
   <div className="contact-wrap">
