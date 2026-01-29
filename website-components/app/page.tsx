@@ -9,78 +9,31 @@ export default function Page() {
   const [error, setError] = useState("")
 
   useEffect(() => {
-    /* ================= PROCESS FLOW ================= */
-    const steps = document.querySelectorAll(".step")
-    const process = document.getElementById("process")
-
-    let index = 0
-    let interval: any
-
-    function startWave() {
-      interval = setInterval(() => {
-        steps.forEach(s => s.classList.remove("glow"))
-        steps[index]?.classList.add("glow")
-        index = (index + 1) % steps.length
-      }, 1600)
+    function startProcessFlow() {
+      const steps = Array.from(document.querySelectorAll("#process .step"));
+  
+      if (steps.length === 0) {
+        console.warn("Steps not found, retrying...");
+        setTimeout(startProcessFlow, 200);
+        return;
+      }
+  
+      let index = 0;
+  
+      setInterval(() => {
+        steps.forEach(s => s.classList.remove("glow"));
+        steps[index]?.classList.add("glow");
+        index = (index + 1) % steps.length;
+      }, 1000);
     }
-
-    process?.addEventListener("mouseenter", () => {
-      clearInterval(interval)
-    })
-
-    process?.addEventListener("mouseleave", () => {
-      startWave()
-    })
-
-    startWave()
-
-    /* ================= FEATURES FLOW ================= */
-    const featureSection = document.getElementById("features")
-    const cards = Array.from(
-      document.querySelectorAll(".feature-card")
-    )
-
-    let fIndex = 0
-    let fInterval: any
-
-    function startFlow(startFrom = 0) {
-      clearInterval(fInterval)
-      fIndex = startFrom
-
-      fInterval = setInterval(() => {
-        cards.forEach(c => c.classList.remove("glow"))
-        cards[fIndex]?.classList.add("glow")
-        fIndex = (fIndex + 1) % cards.length
-      }, 1800)
-    }
-
-    /* Hover pause like original HTML */
-    featureSection?.addEventListener("mouseenter", () => {
-      clearInterval(fInterval)
-    })
-
-    featureSection?.addEventListener("mouseleave", () => {
-      startFlow(fIndex)
-    })
-
-    /* Click behavior (missing earlier) */
-    cards.forEach((card, index) => {
-      card.addEventListener("click", () => {
-        cards.forEach(c => c.classList.remove("glow"))
-        card.classList.add("glow")
-        startFlow(index + 1)
-      })
-    })
-
-    /* Start animation */
-    startFlow()
-
-
-    return () => {
-      clearInterval(interval)
-      clearInterval(fInterval)
-    }
-  }, [])
+  
+    // Run after DOM settles
+    setTimeout(startProcessFlow, 500);
+  }, []);
+  
+  
+  
+  
 
   return (
     <>
@@ -98,6 +51,10 @@ export default function Page() {
     --border: #e2e8f0;
     --glow: rgba(37, 99, 235, 0.18);
   }
+    html {
+  scroll-behavior: smooth;
+}
+
 
   * {
     box-sizing: border-box;
@@ -107,6 +64,7 @@ export default function Page() {
   }
 
   body {
+   padding-top: 90px; 
      background: radial-gradient(
     1200px 500px at 70% 20%,
     #f5f8ff 0%,
@@ -120,9 +78,15 @@ export default function Page() {
 
   /* ================= NAV ================= */
   header {
-    background: white;
-    border-bottom: 1px solid var(--border);
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999; /* above all sections */
+  background: white;
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
 
   .nav {
     max-width: 1200px;
@@ -150,9 +114,18 @@ export default function Page() {
     color: var(--secondary);
   }
 
+/* FIX: Feature titles hidden */
+.features-grid .glow-box h3,
+.features-grid .glow-box p {
+  position: relative;
+  z-index: 2 !important;
+}
+
+
+
   /* ================= HERO ================= */
   .hero {
-    padding: 90px 20px;
+    padding: 150px 20px 90px; 
   }
 
   .hero-container {
@@ -215,20 +188,43 @@ export default function Page() {
 
   /* ================= PROCESS CARD ================= */
   .process {
-    background: #ffffff;
-    border-radius: 22px;
-    padding: 32px 34px;
-     box-shadow: 0 24px 48px rgba(15, 23, 42, 0.08);
-  }
-
-  .process h3 {
-  font-size: 14px;
-  font-weight: 700;     /* ⬆ slightly stronger */
-  color: var(--primary);
-  margin-bottom: 14px;
+  width: 100%;
+  max-width: 520px;        /* perfect width like original */
+  border-radius: 22px;
+  padding: 28px 30px;      /* more compact and clean */
+  background: white;
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.08);
+  position: relative;
 }
 
 
+.process.glow-border {
+  border-radius: 22px;
+  overflow: hidden;
+}
+.process.glow-border::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(90deg, transparent, #5b91ff, #2563eb, #bfdbfe, transparent);
+  background-size: 400% 400%;
+  animation: borderGlow 6s linear infinite;
+  z-index: 0;
+}
+
+.process.glow-border::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: white;
+  border-radius: 20px;
+  z-index: 1;
+}
+
+.process > * {
+  position: relative;
+  z-index: 2;
+}
   .steps {
     position: relative;
     display: flex;
@@ -286,13 +282,14 @@ export default function Page() {
 }
 
   .step.glow {
-  border-color: #2563eb;
-
-  box-shadow:
-    0 0 0 2px rgba(37, 99, 235, 0.35);
-
-  color: #0f172a;
+  border-color: #3b82f6 !important;
+  background: rgba(59, 130, 246, 0.12);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.35);
+  transform: translateY(-2px);
+  transition: all 0.4s ease;
 }
+
+
 
 .steps.external::after {
   opacity: 0.7;
@@ -305,7 +302,56 @@ export default function Page() {
   margin: 18px 0 20px;
   text-align: center;
 }
+/* MAKE FEATURE CARD HEADINGS MATCH OTHER SECTIONS */
+.features-grid .glow-box h3 {
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  color: #0f172a !important;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 2;
+}
 
+.features-grid .glow-box p {
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+  color: #475569 !important;
+  position: relative;
+  z-index: 2;
+}
+
+/* ================= UNIFIED GLOW BORDER STYLE ================= */
+.glow-border {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.glow-border::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #5b91ff,
+    #2563eb,
+    #bfdbfe,
+    transparent
+  );
+  background-size: 400% 400%;
+  animation: borderGlow 6s linear infinite;
+  z-index: 0;
+}
+
+.glow-border::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: white;
+  border-radius: 16px;
+  z-index: 1;
+}
 
   /* ================= FEATURES ================= */
   .features-section {
@@ -356,14 +402,6 @@ export default function Page() {
     gap: 36px;
   }
 
-  .feature-card {
-    background: var(--bg-white);
-    border-radius: 20px;
-    padding: 34px 32px;
-    min-height: 180px; 
-    border: 1px solid var(--border);
-    transition: box-shadow 0.6s ease, transform 0.6s ease;
-  }
 
   .feature-card.glow {
     border-color: var(--secondary);
@@ -386,11 +424,7 @@ export default function Page() {
     color: #475569;
   }
 
-  .feature-card:hover {
-    border-color: var(--secondary);
-    box-shadow: 0 0 0 6px var(--glow),
-      0 18px 40px rgba(0, 0, 0, 0.12);
-  }
+ 
   
   @media (max-width: 900px) {
     .hero-container {
@@ -531,11 +565,45 @@ export default function Page() {
 /* Form box */
 .contact-box {
   background: #ffffff;
-  border-radius: 14px;
-  padding: 28px;
+  border-radius: 16px;
+  padding: 32px;
   max-width: 700px;
   margin: auto;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #dbe3ff;
+  box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.15);
+  position: relative;
+}
+/* Continuous illuminated border for contact section */
+.contact-box::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 18px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #5b91ff,
+    #2563eb,
+    #bfdbfe,
+    transparent
+  );
+  background-size: 300% 300%;
+  animation: borderGlow 8s linear infinite;
+  z-index: 0;
+}
+
+.contact-box::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: white;
+  border-radius: 14px;
+  z-index: 1;
+}
+
+.contact-box > * {
+  position: relative;
+  z-index: 2;
 }
 
 /* Grid */
@@ -616,7 +684,8 @@ export default function Page() {
 /* ================= PRODUCT SECTION ================= */
 
 .product-section {
-  padding: 120px 20px;        /* 🔥 increased from 80px */
+  padding: 100px 20px 60px;
+    
   min-height: 100vh;          /* 🔥 full screen height */
   display: flex;
   align-items: center;        /* vertically center content */
@@ -657,11 +726,54 @@ export default function Page() {
   margin-bottom: 50px;        /* 🔥 increased spacing */
 }
 
+.hero {
+  padding-top: 130px;
+  padding-bottom: 90px;
+}
+
+.product-section {
+  padding: 120px 20px;
+}
+
+.features-section {
+  padding: 120px 20px;
+  border-top: 1px solid var(--border);
+}
+
 /* GRID */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 36px;                  /* 🔥 more spacing */
+}
+/* Make FEATURE section heading match other sections */
+.features-section {
+  padding: 100px 20px 60px;
+
+}
+
+.features-header h2 {
+  font-size: 32px !important;   /* match .product-heading */
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 16px;
+}
+
+.features-eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  margin-bottom: 12px;
+}
+
+.features-header p {
+  font-size: 17px !important;  /* match intro text */
+  line-height: 1.7;
+  color: #334155;
+  max-width: 820px;
 }
 
 /* Glow Box (tile) */
@@ -699,7 +811,7 @@ export default function Page() {
   content: "";
   position: absolute;
   inset: 1px;
-  background: #ffffff;
+  background: #fff;
   border-radius: 14px;
   z-index: 1;
 }
@@ -722,6 +834,11 @@ export default function Page() {
   line-height: 1.6;
   color: #475569;
 }
+
+.glow-border {
+  margin-bottom: -2px !important;
+}
+
 
 @keyframes borderGlow {
   0% { background-position: 0% 50%; }
@@ -754,11 +871,11 @@ export default function Page() {
         <div className="nav">
           <div className="logo">ODIN Technologies</div>
           <nav className={`nav-links ${menuOpen ? "open" : ""}`}>
-  <a href="#product" onClick={() => setMenuOpen(false)}>Product</a>
-  <a href="#features" onClick={() => setMenuOpen(false)}>Features</a>
-  <a href="#managed-services" onClick={() => setMenuOpen(false)}>Managed Services</a>
-  <a href="#about" onClick={() => setMenuOpen(false)}>About</a>
-  <a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
+          <a href="#about" onClick={() => setMenuOpen(false)}>About</a>
+          <a href="#features" onClick={() => setMenuOpen(false)}>Features</a>
+          <a href="#product" onClick={() => setMenuOpen(false)}>Product</a>
+          <a href="#managed-services" onClick={() => setMenuOpen(false)}>Managed Services</a>
+          <a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
 </nav>
 
 <button
@@ -795,28 +912,28 @@ export default function Page() {
             </ul>
           </div>
 
-          <div className="process" id="process">
-            <h3>AI-Driven Internal Sourcing</h3>
-            <div className="steps">
-              <div className="step">Internal Requisition</div>
-              <div className="step">Expiry Optimization</div>
-              <div className="step">Central Stock</div>
-              <div className="step">Store Issue</div>
-            </div>
+          <div className="process glow-border" id="process">
 
-            <div className="divider">
-              AI evaluates → Balance moves to External
-            </div>
+  <div className="steps internal">
+    <div className="step">Internal Requisition</div>
+    <div className="step">Expiry Optimization</div>
+    <div className="step">Central Stock</div>
+    <div className="step">Store Issue</div>
+  </div>
 
-            <h3>AI-Driven External Sourcing</h3>
-            <div className="steps">
-              <div className="step">RFQ</div>
-              <div className="step">PO</div>
-              <div className="step">GRN</div>
-              <div className="step">Invoice</div>
-              <div className="step">Payment</div>
-            </div>
-          </div>
+  <div className="divider">AI evaluates → Balance moves to External</div>
+
+  <div className="steps external">
+    <div className="step">RFQ</div>
+    <div className="step">PO</div>
+    <div className="step">GRN</div>
+    <div className="step">Invoice</div>
+    <div className="step">Payment</div>
+  </div>
+
+</div>
+
+
         </div>
       </section>
 
@@ -830,11 +947,13 @@ export default function Page() {
     </h3>
 
     <p className="product-intro">
-      ODIN Technologies designs and operates enterprise platforms where
-      confidentiality, auditability, and control are fundamental—not optional.
-      Our focus is on building trust-first systems that organizations can rely
-      on for long-term operational integrity.
-    </p>
+  An AI-powered Procure-to-Pay platform designed for cross-industry
+  supplier ecosystems—combining securely isolated multi-tenancy with a
+  highly configurable architecture. Supporting Cloud, On-Premise, or Hybrid
+  deployment, it ensures rigorous data isolation to meet the most stringent
+  compliance and residency needs.
+</p>
+
 
     <div className="product-grid">
 
@@ -889,31 +1008,38 @@ export default function Page() {
           </div>
 
           <div className="features-grid">
-            <div className="feature-card">
-              <h3>AI-Driven Sourcing Intelligence</h3>
-              <p>Evaluates internal availability and demand signals.</p>
-            </div>
-            <div className="feature-card">
-              <h3>End-to-End Traceability</h3>
-              <p>Complete audit trail across procurement lifecycle.</p>
-            </div>
-            <div className="feature-card">
-              <h3>Decision-Centric Workflows</h3>
-              <p>Workflows designed around decisions.</p>
-            </div>
-            <div className="feature-card">
-              <h3>Leadership Visibility & Control</h3>
-              <p>Real-time visibility at every stage.</p>
-            </div>
-            <div className="feature-card">
-              <h3>Vendor Interaction Intelligence</h3>
-              <p>Negotiations linked to sourcing events.</p>
-            </div>
-            <div className="feature-card">
-              <h3>Enterprise-Ready Architecture</h3>
-              <p>Secure and scalable architecture.</p>
-            </div>
-          </div>
+  <div className="glow-box">
+    <h3>AI-Driven Sourcing Intelligence</h3>
+    <p>Evaluates internal availability and demand signals.</p>
+  </div>
+
+  <div className="glow-box">
+    <h3>End-to-End Traceability</h3>
+    <p>Complete audit trail across procurement lifecycle.</p>
+  </div>
+
+  <div className="glow-box">
+    <h3>Decision-Centric Workflows</h3>
+    <p>Highly configurable and mobile-responsive workflows built for agile
+    decision-making—enabling seamless approvals from any device, anywhere.</p>
+  </div>
+
+  <div className="glow-box">
+    <h3>Leadership Visibility & Control</h3>
+    <p>Real-time visibility at every stage.</p>
+  </div>
+
+  <div className="glow-box">
+    <h3>Vendor Interaction Intelligence</h3>
+    <p>Negotiations linked to sourcing events.</p>
+  </div>
+
+  <div className="glow-box">
+    <h3>Enterprise-Ready Architecture</h3>
+    <p>Secure and scalable architecture.</p>
+  </div>
+</div>
+
         </div>
       </section>
 
@@ -1030,6 +1156,7 @@ export default function Page() {
 </section>
 
 
+
       {/* Contact Section */}
       <section id="contact">
   <div className="contact-wrap">
@@ -1045,6 +1172,7 @@ export default function Page() {
     </p>
 
     <div className="contact-box">
+
     <form
   onSubmit={async (e) => {
     e.preventDefault()
@@ -1134,10 +1262,6 @@ export default function Page() {
 >
   <img src="/images/whatsapp.png" alt="WhatsApp" />
 </a>
-
-
-
-
     </>
   )
 }
