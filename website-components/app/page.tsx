@@ -89,7 +89,7 @@ export default function Page() {
 }
 
   .nav {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: auto;
     padding: 16px 20px;
     display: flex;
@@ -125,18 +125,36 @@ export default function Page() {
 
   /* ================= HERO ================= */
   .hero {
-    padding: 150px 20px 90px; 
-  }
+  padding-top: 130px;
+  padding-bottom: 90px;
+}
+
 
   .hero-container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: auto;
     display: grid;
     grid-template-columns: 1.2fr 1fr;
     gap: 50px;
     align-items: center;
   }
+/* Tablets */
+@media (max-width: 1024px) {
+  .hero-container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
 
+/* Mobile */
+@media (max-width: 600px) {
+  .hero h1 {
+    font-size: 34px;
+  }
+  .hero p {
+    font-size: 18px;
+  }
+}
   /* constrain text column (important) */
   .hero-container > div:first-child {
     max-width: 600px;
@@ -155,7 +173,7 @@ export default function Page() {
 
   /* hero paragraph */
   .hero p {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 400;
     line-height: 1.65;
     color: #475569;
@@ -172,7 +190,7 @@ export default function Page() {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 600;
     line-height: 1.6;
     margin-bottom: 14px;
@@ -182,14 +200,14 @@ export default function Page() {
   .hero-points li::before {
     content: "✔";
     color: #22c55e;
-    font-size: 16px;
+    font-size: 18px;
     line-height: 1;
   }
 
   /* ================= PROCESS CARD ================= */
   .process {
   width: 100%;
-  max-width: 520px;        /* perfect width like original */
+  max-width: 620px;        /* perfect width like original */
   border-radius: 22px;
   padding: 28px 30px;      /* more compact and clean */
   background: white;
@@ -248,7 +266,7 @@ export default function Page() {
 
   border-radius: 16px;
 
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;        /* ⬅ reduced */
   line-height: 1.25;
 
@@ -296,7 +314,7 @@ export default function Page() {
 }
 
   .divider {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;              /* lighter */
   color:rgb(73, 109, 254);                /* muted blue-gray */
   margin: 18px 0 20px;
@@ -313,7 +331,7 @@ export default function Page() {
 }
 
 .features-grid .glow-box p {
-  font-size: 16px !important;
+  font-size: 18px !important;
   line-height: 1.6 !important;
   color: #475569 !important;
   position: relative;
@@ -361,7 +379,7 @@ export default function Page() {
   }
 
   .features-container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: auto;
   }
 
@@ -371,7 +389,7 @@ export default function Page() {
   }
 
   .features-eyebrow {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -381,7 +399,7 @@ export default function Page() {
   }
 
   .features-header h2 {
-  font-size: 36px;        /* slightly larger */
+  font-size: 38px;        /* slightly larger */
   font-weight: 700;       /* NOT 800 */
   letter-spacing: -0.01em;
   margin-bottom: 18px;
@@ -389,18 +407,34 @@ export default function Page() {
 }
 
   .features-header p {
-  font-size: 18px;       /* ⬆ increase */
+  font-size: 20px;       /* ⬆ increase */
   line-height: 1.7;      /* more breathing space */
   max-width: 720px;
   color: #475569;
 }
 
 
+  /* Desktop */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 36px;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
   .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 36px;
+    grid-template-columns: repeat(2, 1fr);
   }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 
   .feature-card.glow {
@@ -411,14 +445,14 @@ export default function Page() {
   }
 
   .feature-card h3 {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
     margin-bottom: 12px;
     color: var(--primary);
   }
 
   .feature-card p {
-    font-size: 15px;
+    font-size: 17px;
     color: var(--text-muted);
     line-height: 1.65;
     color: #475569;
@@ -426,19 +460,37 @@ export default function Page() {
 
  
   
+  // @media (max-width: 900px) {
+  //   .hero-container {
+  //     grid-template-columns: 1fr;
+  //   }
+  //     }
+
+
+  //   .steps {
+  //     flex-wrap: wrap;
+  //   }
+
+  //   .steps::after {
+  //      z-index: 1;
+  //   }
+  // }
+
   @media (max-width: 900px) {
-    .hero-container {
-      grid-template-columns: 1fr;
-    }
-
-    .steps {
-      flex-wrap: wrap;
-    }
-
-    .steps::after {
-       z-index: 1;
-    }
+  .steps {
+    flex-wrap: wrap;
+    justify-content: center;
   }
+
+  .step {
+    min-width: 140px;
+  }
+
+  .step:not(:last-child)::after {
+    display: none;
+  }
+}
+
     /* ================= HAMBURGER MENU ================= */
 
 .hamburger {
@@ -508,7 +560,7 @@ export default function Page() {
 
   .nav-links a {
     margin-left: 0;
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .nav {
@@ -539,7 +591,7 @@ export default function Page() {
 
 /* Small heading */
 .contact-eyebrow {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color:var(--secondary); 
   margin-bottom: 10px;
@@ -547,7 +599,7 @@ export default function Page() {
 
 /* Main heading */
 .contact-title {
-  font-size: 36px;
+  font-size: 38px;
   font-weight: 700;
   color: #0f172a;
   margin-bottom: 14px;
@@ -555,7 +607,7 @@ export default function Page() {
 
 /* Description */
 .contact-desc {
-  font-size: 16px;
+  font-size: 18px;
   color: #475569;
   max-width: 650px;
   margin: 0 auto 40px;
@@ -623,7 +675,7 @@ export default function Page() {
 .contact-box label {
   display: block;
   text-align: left;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   color: #334155;
   margin-bottom: 6px;
@@ -636,7 +688,7 @@ export default function Page() {
   padding: 10px 12px;
   border-radius: 8px;
   border: 1px solid #cbd5e1;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .contact-box textarea {
@@ -693,14 +745,14 @@ export default function Page() {
 }
 
 .product-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   width: 100%;
 }
 
 /* Eyebrow */
 .section-title  {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -711,7 +763,7 @@ export default function Page() {
 
 /* Main heading */
 .product-heading {
-  font-size: 32px;            /* 🔥 slightly increased */
+  font-size: 34px;            /* 🔥 slightly increased */
   margin-bottom: 20px;
   color: #0f172a;
   font-weight: 700;
@@ -720,7 +772,7 @@ export default function Page() {
 /* Intro text */
 .product-intro {
   max-width: 820px;
-  font-size: 17px;            /* 🔥 slightly increased */
+  font-size: 19px;            /* 🔥 slightly increased */
   line-height: 1.7;
   color: #334155;
   margin-bottom: 50px;        /* 🔥 increased spacing */
@@ -753,7 +805,7 @@ export default function Page() {
 }
 
 .features-header h2 {
-  font-size: 32px !important;   /* match .product-heading */
+    font-size: 34px !important;   /* match .product-heading */
   font-weight: 700;
   color: #0f172a;
   margin-bottom: 16px;
@@ -761,7 +813,7 @@ export default function Page() {
 
 .features-eyebrow {
   display: inline-block;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -770,7 +822,7 @@ export default function Page() {
 }
 
 .features-header p {
-  font-size: 17px !important;  /* match intro text */
+  font-size: 19px !important;  /* match intro text */
   line-height: 1.7;
   color: #334155;
   max-width: 820px;
@@ -823,14 +875,14 @@ export default function Page() {
 }
 
 .glow-box h4 {
-  font-size: 20px;            /* 🔥 slightly increased */
+  font-size: 22px;            /* 🔥 slightly increased */
   margin-bottom: 12px;
   color: #0f172a;
   font-weight: 600;
 }
 
 .glow-box p {
-  font-size: 16px;            /* 🔥 slightly increased */
+  font-size: 18px;            /* 🔥 slightly increased */
   line-height: 1.6;
   color: #475569;
 }
@@ -845,14 +897,22 @@ export default function Page() {
   100% { background-position: 400% 50%; }
 }
 
-/* Mobile responsive */
-@media (max-width: 768px) {
+/* Desktop */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 36px;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
   .product-grid {
     grid-template-columns: 1fr;
   }
+}
 
   .product-heading {
-    font-size: 26px;
+    font-size: 28px;
   }
 
   .product-section {
@@ -913,7 +973,18 @@ export default function Page() {
           </div>
 
           <div className="process glow-border" id="process">
-
+          <h4
+    style={{
+      textAlign: "left",
+      fontSize: "13px",
+      fontWeight: 400,
+      color: "#2546f5",
+      marginBottom: "12px",
+      marginTop: "-4px"
+    }}
+  >
+    Internal Sourcing
+  </h4>
   <div className="steps internal">
     <div className="step">Internal Requisition</div>
     <div className="step">Expiry Optimization</div>
@@ -922,7 +993,18 @@ export default function Page() {
   </div>
 
   <div className="divider">AI evaluates → Balance moves to External</div>
-
+  <h4
+    style={{
+      textAlign: "left",
+      fontSize: "13px",
+      fontWeight: 400,
+      color: "#2546f5",
+      marginBottom: "12px",
+      marginTop: "-4px"
+    }}
+  >
+    External Sourcing
+  </h4>
   <div className="steps external">
     <div className="step">RFQ</div>
     <div className="step">PO</div>
