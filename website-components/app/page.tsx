@@ -675,6 +675,39 @@ export default function Page() {
 .whatsapp-btn img:hover {
   transform: scale(1.08);
 }
+  /* Mobile + Tablet WhatsApp Button (small icon only) */
+@media (max-width: 1024px) {
+
+  .whatsapp-btn {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    z-index: 9999;
+  }
+
+  .whatsapp-btn img {
+    content: url("/images/wtsp-icon.png") !important;
+
+    width: 48px !important;   /* ⬅ slightly bigger */
+    height: 48px !important;
+
+    object-fit: contain !important;
+    border-radius: 50%;        /* keeps icon smooth */
+    background: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    transition: transform 0.2s ease;
+  }
+
+  .whatsapp-btn img:hover {
+    transform: scale(1.08);
+  }
+}
+
+
+
+
+
 
 /* ================= PRODUCT SECTION ================= */
 
