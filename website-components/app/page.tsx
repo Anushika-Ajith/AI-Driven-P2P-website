@@ -1538,15 +1538,9 @@ if (!message || message.length < 10)
     setLoading(false)
 
     if (res.ok) {
-      setSuccess("Message sent successfully!")
-      form.reset()
-
-      document
-        .querySelectorAll(".input-error")
-        .forEach(el => (el.textContent = ""))
-    } else {
-      setError("Something went wrong. Please try again.")
+      window.location.href = "/thank-you"
     }
+    
   }}
 >
 
@@ -1606,6 +1600,9 @@ if (!message || message.length < 10)
       </form>
     </div>
   </div>
+  
+ 
+
 </section>
 {/* ================= WHATSAPP FLOAT BUTTON ================= */}
 <a
@@ -1614,8 +1611,12 @@ if (!message || message.length < 10)
   target="_blank"
   rel="noopener noreferrer"
 >
-  <img src="/images/whatsapp.png" alt="WhatsApp" />
+  <img src="/images/whatsapp.png" alt="WhatsApp" 
+   
+   />
 </a>
+
+
     </>
   )
 }
