@@ -1606,15 +1606,14 @@ if (!message || message.length < 10)
 </section>
 {/* ================= WHATSAPP FLOAT BUTTON ================= */}
 <a
-  href="/api/whatsapp"
+  href={`/api/whatsapp?from=Landing Page`}
   className="whatsapp-btn"
   target="_blank"
   rel="noopener noreferrer"
 >
-  <img src="/images/whatsapp.png" alt="WhatsApp" 
-   
-   />
+  <img src="/images/whatsapp.png" alt="WhatsApp" />
 </a>
+
 
 
     </>
