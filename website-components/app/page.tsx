@@ -1462,13 +1462,71 @@ export default function Page() {
     const form = e.currentTarget
     const formData = new FormData(form)
 
-    const payload = {
-      email: formData.get("email"),
-      phone: formData.get("phone"),
-      firstName: formData.get("firstName"),
-      lastName: formData.get("lastName"),
-      message: formData.get("message"),
+    const email = String(formData.get("email") || "").trim()
+    const phone = String(formData.get("phone") || "").trim()
+    const firstName = String(formData.get("firstName") || "").trim()
+    const lastName = String(formData.get("lastName") || "").trim()
+    const message = String(formData.get("message") || "").trim()
+
+
+    // -------------------------
+    // VALIDATION RULES
+    // -------------------------
+    // -------------------------
+// VALIDATION RULES
+// -------------------------
+const errors: Record<string, string> = {}
+
+// EMAIL
+if (!email) errors.email = "Email is required"
+else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+  errors.email = "Enter a valid email address"
+
+// PHONE
+if (!phone) errors.phone = "Phone number is required"
+else if (!/^[0-9]{10}$/.test(phone))
+  errors.phone = "Enter a valid 10-digit phone number"
+
+// FIRST NAME
+if (!firstName) errors.firstName = "First name is required"
+else if (!/^[A-Za-z ]+$/.test(firstName))
+  errors.firstName = "First name must contain only letters"
+
+// LAST NAME
+if (!lastName) errors.lastName = "Last name is required"
+else if (!/^[A-Za-z ]+$/.test(lastName))
+  errors.lastName = "Last name must contain only letters"
+
+
+// MESSAGE
+if (!message || message.length < 10)
+  errors.message = "Message must be at least 10 characters"
+
+
+    // If validation fails → stop and show errors
+    if (Object.keys(errors).length > 0) {
+      setLoading(false)
+      setError("Please fix the errors below.")
+
+      // Show inline errors
+      const errorElements = document.querySelectorAll(".input-error")
+      document.querySelectorAll(".input-error").forEach(el => {
+       el.textContent = ""
+      })
+       // reset before setting new
+
+      Object.entries(errors).forEach(([field, msg]) => {
+        const errorTag = document.getElementById(`${field}-error`)
+        if (errorTag) errorTag.textContent = msg
+      })
+
+      return
     }
+
+    // -------------------------
+    // API CALL
+    //--------------------------
+    const payload = { email, phone, firstName, lastName, message }
 
     const res = await fetch("/api/contact", {
       method: "POST",
@@ -1477,50 +1535,67 @@ export default function Page() {
     })
 
     const data = await res.json()
-
     setLoading(false)
 
     if (res.ok) {
       setSuccess("Message sent successfully!")
       form.reset()
+
+      document
+        .querySelectorAll(".input-error")
+        .forEach(el => (el.textContent = ""))
     } else {
       setError("Something went wrong. Please try again.")
     }
   }}
 >
 
+
         <div className="contact-grid">
-          <div>
-            <label>Email Address</label>
-            <input name="email" placeholder="Enter your email address" />
-          </div>
+        <div>
+  <label>Email Address</label>
+  <input name="email" placeholder="Enter your email address" />
+  <p id="email-error" className="input-error" style={{ color: "red", fontSize: "13px" }}></p>
 
-          <div>
-            <label>Phone Number</label>
-            <input name="phone" placeholder="Enter your phone number" />
-          </div>
+</div>
 
-          <div>
-            <label>First Name</label>
-            <input name="firstName" placeholder="Enter your first name" />
-          </div>
 
-          <div>
-            <label>Last Name</label>
-            <input name="lastName" placeholder="Enter your last name" />
-          </div>
+<div>
+  <label>Phone Number</label>
+  <input name="phone" placeholder="Enter your phone number" />
+  <p id="phone-error" className="input-error" style={{ color: "red", fontSize: "13px" }}></p>
+
+</div>
+
+
+<div>
+  <label>First Name</label>
+  <input name="firstName" placeholder="Enter your first name" />
+  <p id="firstName-error" className="input-error" style={{ color: "red", fontSize: "13px" }}></p>
+
+</div>
+
+
+<div>
+  <label>Last Name</label>
+  <input name="lastName" placeholder="Enter your last name" />
+  <p id="lastName-error" className="input-error" style={{ color: "red", fontSize: "13px" }}></p>
+
+</div>
+
         </div>
 
         <div style={{ marginTop: "16px" }}>
-          <label>Message</label>
-          <textarea
-          name="message"
-  rows={4}
-  placeholder="Tell us about your project..."
-></textarea>
+  <label>Message</label>
+  <textarea
+    name="message"
+    rows={4}
+    placeholder="Tell us about your project..."
+  ></textarea>
+  <p id="message-error" className="input-error" style={{ color: "red", fontSize: "13px" }}></p>
 
+</div>
 
-        </div>
 
         <button className="contact-btn" disabled={loading}>
   {loading ? "Sending..." : "Send Message →"}
