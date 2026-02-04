@@ -64,17 +64,13 @@ export default function Page() {
   }
 
   body {
-   padding-top: 90px; 
-     background: radial-gradient(
-    1200px 500px at 70% 20%,
-    #f5f8ff 0%,
-    #eef2ff 40%,
-    #eef2ff 100%
-  );
-    color: var(--text-dark);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+  padding-top: 90px;
+  background: #f0f9ff !important; /* Clean white background */
+  color: var(--text-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 
   /* ================= NAV ================= */
   header {
@@ -99,7 +95,7 @@ export default function Page() {
 
   .logo {
     font-weight: 800;
-    font-size: 18px;
+    font-size: 24px;
     color: var(--primary);
   }
 
@@ -121,44 +117,6 @@ export default function Page() {
   z-index: 2 !important;
 }
 
-
-
-  /* ================= HERO ================= */
-  .hero {
-  padding-top: 130px;
-  padding-bottom: 90px;
-}
-
-
-  .hero-container {
-    max-width: 1400px;
-    margin: auto;
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 50px;
-    align-items: center;
-  }
-/* Tablets */
-@media (max-width: 1024px) {
-  .hero-container {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-}
-
-/* Mobile */
-@media (max-width: 600px) {
-  .hero h1 {
-    font-size: 34px;
-  }
-  .hero p {
-    font-size: 18px;
-  }
-}
-  /* constrain text column (important) */
-  .hero-container > div:first-child {
-    max-width: 600px;
-  }
 
   /* ✅ FIXED HERO HEADING */
   .hero h1 {
@@ -578,7 +536,7 @@ export default function Page() {
 /* ================= CONTACT (SIMPLE & CLEAN) ================= */
 
 #contact {
-  background: #eef2ff; /* same light blue as theme */
+  background: linear-gradient(180deg, #f0f9ff, #ffffff);
   padding: 80px 20px;
 }
 
@@ -778,10 +736,6 @@ export default function Page() {
   margin-bottom: 50px;        /* 🔥 increased spacing */
 }
 
-.hero {
-  padding-top: 130px;
-  padding-bottom: 90px;
-}
 
 .product-section {
   padding: 120px 20px;
@@ -920,6 +874,216 @@ export default function Page() {
     min-height: auto;        /* mobile should scroll naturally */
   }
 }
+/* -------------------------------------------
+   UNIFORM CARD HEIGHT + PERFECT TOP/BOTTOM SPACE
+------------------------------------------- */
+
+/* Equal padding for every card */
+.glow-box {
+  padding: 32px 32px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background: #ffffff;
+  border-radius: 16px;
+  min-height: 260px !important;
+}
+
+/* Make text content take up variable space
+   so bottom padding ALWAYS stays equal */
+.glow-box h3,
+.glow-box h4 {
+  margin-bottom: 12px !important;
+}
+
+.glow-box p {
+  flex: 1; /* IMPORTANT → pushes bottom spacing evenly */
+  line-height: 1.3;
+}
+
+/* Make all cards inside the same grid EXACT same height */
+.product-grid .glow-box,
+.features-grid .glow-box {
+  height: 100% !important;
+}
+
+/* Ensure grid rows stretch evenly */
+.product-grid,
+.features-grid {
+  align-items: stretch !important;
+}
+
+/* =========================================================
+   CLEAN, PERFECT, FIXED TOP = BOTTOM SPACING
+   (PRODUCT + MANAGED SERVICES ONLY)
+============================================================ */
+
+/* Remove previous flex-grow, min-height, equal-height hacks */
+#product .product-grid .glow-box,
+#managed-services .product-grid .glow-box {
+  display: block !important;
+  min-height: auto !important;
+  height: auto !important;
+}
+
+/* FIX padding EXACTLY even */
+#product .product-grid .glow-box,
+#managed-services .product-grid .glow-box {
+  padding: 26px 30px !important;
+}
+
+/* Title spacing */
+#product .product-grid .glow-box h4,
+#managed-services .product-grid .glow-box h4 {
+  margin-top: 0 !important;
+  margin-bottom: 14px !important;
+}
+
+/* Paragraph resets */
+#product .product-grid .glow-box p,
+#managed-services .product-grid .glow-box p {
+  margin-bottom: 0 !important;
+  line-height: 1.55 !important;
+
+  /* Remove flex pushing */
+  flex: none !important;
+}
+
+/* =========================================================
+   FIX UNEVEN TOP/BOTTOM PADDING BUT KEEP GLOW
+============================================================ */
+
+#product .glow-box,
+#managed-services .glow-box {
+  padding: 28px 30px !important; /* your desired padding */
+  position: relative;
+}
+
+/* Keep glow but make inset equal on all sides */
+#product .glow-box::after,
+#managed-services .glow-box::after {
+  inset: 1px !important;          /* keep the glow border breathing room */
+  top: 1px !important;
+  bottom: 1px !important;         /* this fixes the visual imbalance */
+  border-radius: 14px !important;
+}
+
+#product .glow-box p,
+#managed-services .glow-box p {
+  margin-bottom: 0 !important;
+  flex: none !important;
+}
+/* =========================================================
+   FIX FOR UNEVEN TOP / BOTTOM SPACING IN PRODUCT & MANAGED SERVICES
+============================================================ */
+
+#product.product-section,
+#managed-services.product-section {
+  padding-top: 100px !important;
+  padding-bottom: 100px !important;
+}
+/* =========================================================
+   FINAL HERO RESPONSIVE FIX (CLEAN + EXACT)
+============================================================ */
+
+.hero {
+  background: linear-gradient(180deg, #f0f9ff, #ffffff);
+  padding: 120px 20px 80px; 
+}
+
+.hero-container {
+  max-width: 1200px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.hero-container > div:first-child {
+  max-width: 550px;
+}
+
+//* ================= PERFECT TABLET HERO ALIGNMENT FIX ================= */
+@media (max-width: 1024px) {
+
+  /* EXACTLY SAME AS ABOUT SECTION */
+  .hero {
+    padding: 20px 20px 40px !important;
+    /* top = 20px (remove big empty space)
+       left/right = 10px (same as about section)
+       bottom = 40px */
+  }
+
+  /* Make hero container same max-width behavior as about section */
+  .hero-container {
+    max-width: 960px !important;  /* same as process */
+    margin: 0 auto !important;
+    padding: 0 !important;
+  }
+
+  /* Center text column */
+   .hero-container > div:first-child {
+    text-align: left !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    max-width: 100% !important;
+  }
+
+  /* Match process card spacing with other tablet grids */
+  .process {
+    max-width: 760px !important;
+    margin: 0 auto !important;
+    padding: 20px !important;
+  }
+    /* Align hero text exactly with process card */
+  
+
+  /* Bullets and texts also align */
+ 
+  .hero h1,
+  .hero p,
+  .hero-points,
+  .hero-points li {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+  }
+
+
+}
+
+/* ================= MOBILE HERO FIX ================= */
+@media (max-width: 600px) {
+
+  /* Remove large white gap caused by fixed header */
+  body {
+    padding-top: 65px !important;
+  }
+
+  /* Remove extra spacing above hero */
+  .hero {
+    padding-top: 10px !important;
+  }
+
+  /* Stack hero into one column */
+  .hero-container {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  /* Ensure text comes first */
+  .hero-container > div:first-child {
+    order: 1 !important;
+  }
+
+  /* Move process below text */
+  .process {
+    order: 2 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
 
 
 `}</style>
@@ -977,7 +1141,7 @@ export default function Page() {
     style={{
       textAlign: "left",
       fontSize: "13px",
-      fontWeight: 400,
+      fontWeight: 700,
       color: "#2546f5",
       marginBottom: "12px",
       marginTop: "-4px"
@@ -997,7 +1161,7 @@ export default function Page() {
     style={{
       textAlign: "left",
       fontSize: "13px",
-      fontWeight: 400,
+      fontWeight: 700,
       color: "#2546f5",
       marginBottom: "12px",
       marginTop: "-4px"
@@ -1082,7 +1246,7 @@ export default function Page() {
       <section className="features-section" id="features">
         <div className="features-container">
           <div className="features-header">
-            <span className="features-eyebrow">Platform Capabilities</span>
+            <span className="features-eyebrow">Features</span>
             <h2>Built for Intelligent, Governed Procurement</h2>
             <p>
             The platform combines AI-driven intelligence with strong governance to support confident, auditable procurement decisions at scale.
@@ -1131,7 +1295,7 @@ export default function Page() {
 
     <h2 className="section-title">Product</h2>
     <h3 className="product-heading">
-      ODIN P2P™ – Intelligent Procure-to-Pay Platform
+      ODIN P2P – Intelligent Procure-to-Pay Platform
     </h3>
 
     <p className="product-intro">
