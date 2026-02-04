@@ -165,7 +165,7 @@ export default function Page() {
   /* ================= PROCESS CARD ================= */
   .process {
   width: 100%;
-  max-width: 620px;        /* perfect width like original */
+  max-width: 650px;        /* perfect width like original */
   border-radius: 22px;
   padding: 28px 30px;      /* more compact and clean */
   background: white;
@@ -418,22 +418,7 @@ export default function Page() {
 
  
   
-  // @media (max-width: 900px) {
-  //   .hero-container {
-  //     grid-template-columns: 1fr;
-  //   }
-  //     }
-
-
-  //   .steps {
-  //     flex-wrap: wrap;
-  //   }
-
-  //   .steps::after {
-  //      z-index: 1;
-  //   }
-  // }
-
+  
   @media (max-width: 900px) {
   .steps {
     flex-wrap: wrap;
@@ -1084,6 +1069,21 @@ export default function Page() {
   }
 }
 
+/* =========================================================
+   FIX: REMOVE EXTRA LEFT/RIGHT PADDING ON DESKTOP HERO
+============================================================ */
+@media (min-width: 1025px) {
+
+  .hero {
+    padding: 100px 20px 100px !important;
+  }
+
+  .hero-container {
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+  }
+}
 
 
 `}</style>
