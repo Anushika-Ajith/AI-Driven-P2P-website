@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 
 export default function Page() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [productOpen, setProductOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState("")
   const [error, setError] = useState("")
@@ -239,23 +240,40 @@ export default function Page() {
     transform 0.6s ease;
 }
 
+/* CONNECTING LINE */
 .step:not(:last-child)::after {
   content: "";
   position: absolute;
 
-  /* ⬇ 75% vertical alignment */
-  top: 65%;
+  top: 50%;
+  left: 100%;                 /* start exactly at right edge of box */
 
-  /* start just outside pill */
-  right: -18px;
+  width: 16px;                /* half the gap between boxes */
+  height: 1.5px;
 
-  width: 18px;
-  height: 2px;
 
-  background: #c7d2fe;
+  background: #9ca3af;
 
-  z-index: 1;
+  transform: translateY(-50%);
 }
+
+/* ARROW HEAD */
+.step:not(:last-child)::before {
+  content: "";
+  position: absolute;
+
+  top: 50%;
+  left: calc(100% + 14px);    /* place arrow at end of line */
+
+  transform: translateY(-50%);
+
+  border-top: 3.5px solid transparent;
+border-bottom: 3.5px solid transparent;
+border-left: 5.5px solid #9ca3af;
+
+}
+
+
 
   .step.glow {
   border-color: #3b82f6 !important;
@@ -1117,6 +1135,56 @@ export default function Page() {
     padding: 0 !important;
   }
 }
+/* ================= DROPDOWN ================= */
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-btn {
+  background: none;
+  border: none;
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--text-muted);
+  cursor: pointer;
+  margin-left: 22px;
+}
+
+.dropdown-btn:hover {
+  color: var(--secondary);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 38px;
+  left: 0;
+
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 10px 0;
+  min-width: 180px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border);
+
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+}
+
+.dropdown-menu a {
+  padding: 10px 16px;
+  text-decoration: none;
+  color: #334155;
+  font-size: 15px;
+}
+
+.dropdown-menu a:hover {
+  background: #f1f5f9;
+  color: var(--secondary);
+}
 
 
 `}</style>
@@ -1130,7 +1198,27 @@ export default function Page() {
           <nav className={`nav-links ${menuOpen ? "open" : ""}`}>
           <a href="#about" onClick={() => setMenuOpen(false)}>About</a>
           <a href="#features" onClick={() => setMenuOpen(false)}>Features</a>
-          <a href="#product" onClick={() => setMenuOpen(false)}>Product</a>
+          <div 
+  className="dropdown"
+  onMouseEnter={() => setProductOpen(true)}
+  onMouseLeave={() => setProductOpen(false)}
+>
+  <button 
+    className="dropdown-btn"
+    onClick={() => setProductOpen(!productOpen)}
+  >
+    Products ▾
+  </button>
+
+  {productOpen && (
+    <div className="dropdown-menu">
+      <a href="#product" onClick={() => {setProductOpen(false); setMenuOpen(false)}}>P2P</a>
+      <a href="#whatsapp" onClick={() => {setProductOpen(false); setMenuOpen(false)}}>WhatsApp</a>
+      <a href="#document-management" onClick={() => {setProductOpen(false); setMenuOpen(false)}}>Document Management</a>
+    </div>
+  )}
+</div>
+
           <a href="#managed-services" onClick={() => setMenuOpen(false)}>Managed Services</a>
           <a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
 </nav>
@@ -1221,7 +1309,7 @@ export default function Page() {
 
     <h2 className="section-title">About</h2>
     <h3 className="product-heading">
-      Built for Secure, Transparent Enterprise Operations
+      Built for Secure, Enterprise Procurement Operations
     </h3>
 
     <p className="product-intro">
@@ -1247,8 +1335,7 @@ export default function Page() {
       <div className="glow-box">
         <h4>Governance by Design</h4>
         <p>
-          Built-in audit trails, traceable actions, and policy-driven workflows
-          ensure accountability and compliance without slowing operations.
+          Built-in audit trails, traceable actions, and policy-driven workflows ensuring accountability without comprimsing operational efficiency.
         </p>
       </div>
 
@@ -1387,9 +1474,7 @@ export default function Page() {
     </h3>
 
     <p className="product-intro">
-      ODIN Technologies provides managed procurement services to accelerate
-      operations while preserving strict confidentiality, security, and
-      customer-defined data protection controls.
+    ODIN Technologies provides managed vendor services to accelerate operations while preserving strict confidentiality, security, and customer-defined data protection controls.
     </p>
 
     <div className="product-grid">
