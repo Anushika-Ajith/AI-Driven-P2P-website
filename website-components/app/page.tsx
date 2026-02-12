@@ -120,8 +120,8 @@ export default function Page() {
 
   /* ✅ FIXED HERO HEADING */
   .hero h1 {
-    font-size: 48px;
-    font-weight: 700;
+    font-size: 42px;
+    font-weight: 790;
     line-height: 1.15;
     letter-spacing: -0.01em;
     color: #0f172a;
@@ -1153,9 +1153,8 @@ export default function Page() {
         <div className="hero-container">
           <div>
             <h1>
-              AI-Driven Procurement.
-              <br />
-              Complete Transparency.
+              AI-Driven Procurement <br></br>
+              with Complete Transparency
             </h1>
 
             <p>
