@@ -1119,6 +1119,20 @@ border-left: 5.5px solid #9ca3af;
     max-width: 100% !important;
   }
 }
+/* ================= HERO STACK FOR TABLET + MOBILE ================= */
+@media (max-width: 1024px) {
+
+  .hero-container {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+  }
+
+  .process {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+}
 
 /* =========================================================
    FIX: REMOVE EXTRA LEFT/RIGHT PADDING ON DESKTOP HERO
@@ -1186,6 +1200,43 @@ border-left: 5.5px solid #9ca3af;
   color: var(--secondary);
 }
 
+
+/* ================= MOBILE SAFE FIX ================= */
+@media (max-width: 480px) {
+
+  /* Smaller hero text */
+  .hero h1 {
+    font-size: 30px !important;
+    line-height: 1.2;
+  }
+
+  .hero p {
+    font-size: 16px !important;
+  }
+
+  /* Reduce section spacing */
+  .product-section,
+  .features-section {
+    padding: 60px 16px !important;
+  }
+
+  /* Prevent dropdown overflow */
+  .dropdown-menu {
+    position: static !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding-left: 10px;
+  }
+
+  .dropdown-btn {
+    margin-left: 0 !important;
+  }
+
+  /* Prevent overflow */
+  body {
+    overflow-x: hidden;
+  }
+}
 
 `}</style>
 
