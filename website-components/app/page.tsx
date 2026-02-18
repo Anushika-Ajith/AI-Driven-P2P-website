@@ -80,7 +80,7 @@ export default function Page() {
 
     <div className={`dropdown-menu ${productOpen ? "show" : ""}`}>
       <a href="#product" onClick={() => { setProductOpen(false); setMenuOpen(false) }}>P2P</a>
-      <a href="#whatsapp" onClick={() => { setProductOpen(false); setMenuOpen(false) }}>WhatsApp</a>
+      <a href="#whatsapp" onClick={() => { setProductOpen(false); setMenuOpen(false) }}>WhatsApp AI Assistant</a>
       <a href="#document-management" onClick={() => { setProductOpen(false); setMenuOpen(false) }}>Document Management</a>
     </div>
   </div>
