@@ -68,7 +68,7 @@ export default function Page() {
     className="dropdown-btn"
     onClick={() => setProductOpen(prev => !prev)}
   >
-    Products ▾
+    Products
   </button>
 
   <div className={`dropdown-menu ${productOpen ? "show" : ""}`}>

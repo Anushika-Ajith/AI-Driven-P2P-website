@@ -1714,3 +1714,18 @@
   background: #f1f5f9;
   color: var(--secondary);
 }
+/* ========================================
+   HERO RIGHT SIDE (PROCESS CARD) BOLD TEXT
+======================================== */
+
+#process h4 {
+  font-weight: 700 !important;
+}
+
+#process .step {
+  font-weight: 600 !important;
+}
+
+#process .divider {
+  font-weight: 600 !important;
+}
