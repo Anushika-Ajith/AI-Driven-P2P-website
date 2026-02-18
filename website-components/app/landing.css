@@ -1424,3 +1424,26 @@
 .features-grid .glow-box p {
   flex: 1 !important;
 }
+/* =========================================================
+   GLOBAL FULL-WIDTH HERO TEXT FIX (ALL SECTIONS)
+   Makes headings + intro paragraphs full container width
+=========================================================== */
+
+.product-intro,
+.features-header,
+.features-header p,
+.doc-hero,
+.whatsapp-hero {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+/* Ensure containers stretch fully */
+.product-container,
+.features-container,
+.whatsapp-container,
+.doc-container {
+  max-width: 1400px !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+}

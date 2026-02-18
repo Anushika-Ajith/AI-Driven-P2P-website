@@ -15,9 +15,11 @@ export default function ProductsWhatsApp() {
   }
 
   .whatsapp-hero {
-    max-width: 820px;
-    margin-bottom: 60px;
-  }
+  max-width: 100%;
+  width: 100%;
+  margin-bottom: 60px;
+}
+
 
   .whatsapp-heading {
     font-size: 34px;

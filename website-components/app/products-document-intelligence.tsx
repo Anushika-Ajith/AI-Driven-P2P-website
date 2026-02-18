@@ -43,9 +43,11 @@ export default function ProductsDocumentIntelligence() {
         }
 
         .doc-hero {
-          max-width: 820px;
-          margin-bottom: 60px;
-        }
+  max-width: 100%;
+  width: 100%;
+  margin-bottom: 60px;
+}
+
 
         .doc-heading {
           font-size: 34px;
