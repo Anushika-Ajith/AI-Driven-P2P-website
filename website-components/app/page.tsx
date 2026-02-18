@@ -61,29 +61,40 @@ export default function Page() {
         <div className="nav">
           <div className="logo">ODIN Technologies</div>
           <nav className={`nav-links ${menuOpen ? "open" : ""}`}>
-          <a href="#about" onClick={() => setMenuOpen(false)}>About</a>
-          <a href="#features" onClick={() => setMenuOpen(false)}>Features</a>
-          <div className="dropdown">
-  <button
-    className="dropdown-btn"
-    onClick={() => setProductOpen(prev => !prev)}
-  >
-    Products
-  </button>
 
-  <div className={`dropdown-menu ${productOpen ? "show" : ""}`}>
+  <div className="nav-item">
+    <a href="#about" onClick={() => setMenuOpen(false)}>About</a>
+  </div>
 
+  <div className="nav-item">
+    <a href="#features" onClick={() => setMenuOpen(false)}>Features</a>
+  </div>
+
+  <div className="nav-item dropdown">
+    <button
+      className="dropdown-btn"
+      onClick={() => setProductOpen(prev => !prev)}
+    >
+      Products
+    </button>
+
+    <div className={`dropdown-menu ${productOpen ? "show" : ""}`}>
       <a href="#product" onClick={() => { setProductOpen(false); setMenuOpen(false) }}>P2P</a>
       <a href="#whatsapp" onClick={() => { setProductOpen(false); setMenuOpen(false) }}>WhatsApp</a>
       <a href="#document-management" onClick={() => { setProductOpen(false); setMenuOpen(false) }}>Document Management</a>
     </div>
-  
-</div>
+  </div>
 
+  <div className="nav-item">
+    <a href="#managed-services" onClick={() => setMenuOpen(false)}>Managed Services</a>
+  </div>
 
-          <a href="#managed-services" onClick={() => setMenuOpen(false)}>Managed Services</a>
-          <a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
+  <div className="nav-item">
+    <a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
+  </div>
+
 </nav>
+
 
 <button
   className={`hamburger ${menuOpen ? "active" : ""}`}

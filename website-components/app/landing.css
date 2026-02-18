@@ -1731,6 +1731,84 @@
 #process .divider {
   font-weight: 600 !important;
 }
+
+/* =========================================================
+   GLOBAL PARAGRAPH JUSTIFY OVERRIDE
+   (Non-destructive – placed at very bottom)
+=========================================================== */
+
+.hero p,
+.product-intro,
+.features-header p,
+.glow-box p,
+.feature-card p,
+.contact-desc,
+.contact-box p {
+  text-align: justify !important;
+}
+/* =========================================
+   CONTACT BUTTON ICON ALIGNMENT OVERRIDE
+========================================= */
+
+.contact-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px;
+}
+
+.contact-btn .btn-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-btn svg {
+  color: #ffffff; /* same as button text */
+  transition: transform 0.2s ease;
+}
+
+.contact-btn:hover svg {
+  transform: translateX(4px);
+}
+/* =========================================
+   NAV STRUCTURE FIX – UNIFIED ALIGNMENT
+========================================= */
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;   /* spacing between items */
+}
+
+/* Each nav item wrapper */
+.nav-item {
+  display: flex;
+  align-items: center;
+}
+
+/* Remove old margin-left spacing */
+.nav-links a,
+.dropdown-btn {
+  margin-left: 0 !important;
+}
+
+/* Keep consistent font */
+.nav-links a,
+.dropdown-btn {
+  font-size: 17px !important;
+  font-weight: 620 !important;
+  color: var(--text-muted) !important;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Hover */
+.nav-links a:hover,
+.dropdown-btn:hover {
+  color: var(--secondary) !important;
+}
 /* =========================================================
    FINAL CLEAN DROPDOWN – NO EXTRA WHITE SPACE
    ========================================================= */
@@ -1796,44 +1874,4 @@
     font-size: 15px !important;
     height: 44px !important;
   }
-}
-
-/* =========================================================
-   GLOBAL PARAGRAPH JUSTIFY OVERRIDE
-   (Non-destructive – placed at very bottom)
-=========================================================== */
-
-.hero p,
-.product-intro,
-.features-header p,
-.glow-box p,
-.feature-card p,
-.contact-desc,
-.contact-box p {
-  text-align: justify !important;
-}
-/* =========================================
-   CONTACT BUTTON ICON ALIGNMENT OVERRIDE
-========================================= */
-
-.contact-btn {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 8px;
-}
-
-.contact-btn .btn-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.contact-btn svg {
-  color: #ffffff; /* same as button text */
-  transition: transform 0.2s ease;
-}
-
-.contact-btn:hover svg {
-  transform: translateX(4px);
 }
