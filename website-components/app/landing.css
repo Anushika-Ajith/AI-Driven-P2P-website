@@ -1812,3 +1812,28 @@
 .contact-box p {
   text-align: justify !important;
 }
+/* =========================================
+   CONTACT BUTTON ICON ALIGNMENT OVERRIDE
+========================================= */
+
+.contact-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px;
+}
+
+.contact-btn .btn-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-btn svg {
+  color: #ffffff; /* same as button text */
+  transition: transform 0.2s ease;
+}
+
+.contact-btn:hover svg {
+  transform: translateX(4px);
+}

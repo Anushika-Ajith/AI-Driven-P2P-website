@@ -539,9 +539,33 @@ if (!message || message.length < 10)
 </div>
 
 
-        <button className="contact-btn" disabled={loading}>
-  {loading ? "Sending..." : "Send Message →"}
+<button className="contact-btn" disabled={loading}>
+  {loading ? (
+    "Sending..."
+  ) : (
+    <>
+      Send Message
+      <span className="btn-arrow">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5 12H19M19 12L13 6M19 12L13 18"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </span>
+    </>
+  )}
 </button>
+
 {success && <p style={{ color: "green", marginTop: 10 }}>{success}</p>}
 {error && <p style={{ color: "red", marginTop: 10 }}>{error}</p>}
 
