@@ -426,6 +426,7 @@ export default function Page() {
     const firstName = String(formData.get("firstName") || "").trim()
     const lastName = String(formData.get("lastName") || "").trim()
     const message = String(formData.get("message") || "").trim()
+    
 
 
     // -------------------------
@@ -435,6 +436,11 @@ export default function Page() {
 // VALIDATION RULES
 // -------------------------
 const errors: Record<string, string> = {}
+const privacyConsent = formData.get("privacyConsent")
+// PRIVACY CONSENT
+if (!privacyConsent) {
+  errors.privacyConsent = "You must agree to the Privacy Policy."
+}
 
 // EMAIL
 if (!email) errors.email = "Email is required"
@@ -550,6 +556,31 @@ if (!message || message.length < 10)
 </div>
 
 
+{/* ================= PRIVACY CONSENT ================= */}
+
+<div className="privacy-consent">
+  <label className="checkbox-wrapper">
+    <input
+      type="checkbox"
+      name="privacyConsent"
+      required
+    />
+    <span>
+      I have read and agree to the{" "}
+      <a
+        href="/privacy-policy"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Privacy Policy
+      </a>.
+    </span>
+  </label>
+</div>
+
+
+{/* ================= BUTTON ================= */}
+
 <button className="contact-btn" disabled={loading}>
   {loading ? (
     "Sending..."
@@ -577,10 +608,12 @@ if (!message || message.length < 10)
   )}
 </button>
 
+
 {success && <p style={{ color: "green", marginTop: 10 }}>{success}</p>}
 {error && <p style={{ color: "red", marginTop: 10 }}>{error}</p>}
 
       </form>
+
     </div>
   </div>
   

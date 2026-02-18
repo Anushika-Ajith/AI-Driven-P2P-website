@@ -1875,3 +1875,149 @@
     height: 44px !important;
   }
 }
+.legal-page {
+  max-width: 900px;
+  margin: 120px auto;
+  padding: 20px;
+  line-height: 1.7;
+  color: #334155;
+}
+
+.legal-page h1,
+.legal-page h2,
+.legal-page h3 {
+  color: #0f172a;
+  margin-top: 30px;
+}
+/* ================= PRIVACY CONSENT ================= */
+
+.privacy-consent {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.checkbox-wrapper input {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.checkbox-wrapper a {
+  color: #2563eb;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.checkbox-wrapper a:hover {
+  text-decoration: underline;
+}
+/* ===== Privacy Checkbox Alignment ===== */
+
+.privacy-consent {
+  margin-top: 20px;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;   /* This fixes vertical alignment */
+  gap: 8px;              /* Space between checkbox and text */
+  font-size: 15px;
+  color: #334155;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  margin: 0;            /* remove default offset */
+}
+
+.checkbox-wrapper span {
+  line-height: 1.4;
+}
+
+.checkbox-wrapper a {
+  color: #2563eb;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.checkbox-wrapper a:hover {
+  text-decoration: underline;
+}
+/* Fix checkbox text alignment override */
+
+.privacy-consent,
+.checkbox-wrapper,
+.checkbox-wrapper span {
+  text-align: left !important;
+}
+/* ================= PERFECT PRIVACY CHECKBOX ALIGNMENT ================= */
+
+.privacy-consent {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: flex-start;     /* KEY FIX */
+  gap: 10px;
+  font-size: 15px;
+  color: #334155;
+  line-height: 1.4;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+  margin-top: 3px;             /* fine-tuned visual alignment */
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.checkbox-wrapper span {
+  display: inline-block;
+}
+
+.checkbox-wrapper a {
+  color: #2563eb;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.checkbox-wrapper a:hover {
+  text-decoration: underline;
+}
+/* ================= PRIVACY TEXT ALIGNMENT FIX ================= */
+
+.privacy-consent {
+  text-align: left !important;
+}
+
+.checkbox-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.checkbox-wrapper span {
+  text-align: left !important;
+  line-height: 1.4 !important;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
