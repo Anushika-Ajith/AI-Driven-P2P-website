@@ -187,7 +187,7 @@ export default function Page() {
 
     <p className="product-intro">
   An AI-powered Procure-to-Pay platform designed for cross-industry
-  supplier ecosystems—combining securely isolated multi-tenancy with a
+  supplier ecosystems combining securely isolated multi-tenancy with a
   highly configurable architecture. Supporting Cloud, On-Premise, or Hybrid
   deployment, it ensures rigorous data isolation to meet the most stringent
   compliance and residency needs.
@@ -200,7 +200,7 @@ export default function Page() {
         <h4>Security-First Engineering</h4>
         <p>
           Every component is designed with tenant isolation, encryption, and
-          controlled access at its core—protecting sensitive commercial data
+          controlled access at its core protecting sensitive commercial data
           across users and organizations.
         </p>
       </div>
@@ -208,7 +208,7 @@ export default function Page() {
       <div className="glow-box">
         <h4>Governance by Design</h4>
         <p>
-          Built-in audit trails, traceable actions, and policy-driven workflows ensuring accountability without comprimsing operational efficiency.
+          Built-in audit trails, traceable actions, and policy-driven workflows ensuring accountability without compromising operational efficiency.
         </p>
       </div>
 
@@ -223,7 +223,7 @@ export default function Page() {
       <div className="glow-box">
         <h4>Long-Term Partnership</h4>
         <p>
-          ODIN works as a trusted partner—supporting customers through platform
+          ODIN works as a trusted partner supporting customers through platform
           evolution, security needs, and changing operational demands.
         </p>
       </div>
@@ -259,7 +259,7 @@ export default function Page() {
   <div className="glow-box">
     <h3>Decision-Centric Workflows</h3>
     <p>Highly configurable and mobile-responsive workflows built for agile
-    decision-making—enabling seamless approvals from any device, anywhere.</p>
+    decision making enabling seamless approvals from any device, anywhere.</p>
   </div>
 
   <div className="glow-box">
@@ -292,7 +292,7 @@ export default function Page() {
 
     <p className="product-intro">
       A secure, AI-powered, multi-tenant Procure-to-Pay platform designed for
-      organizations and their supplier ecosystems—built for control, compliance,
+      organizations and their supplier ecosystems built for control, compliance,
       and transparency.
     </p>
 
@@ -325,7 +325,7 @@ export default function Page() {
       <div className="glow-box">
         <h4>Flexible & Scalable</h4>
         <p>
-          Configurable approvals, compliance rules, and an API-first
+          Configurable approvals, compliance rules, and an API first
           microservices architecture adaptable across industries.
         </p>
       </div>
@@ -349,7 +349,7 @@ export default function Page() {
     </h3>
 
     <p className="product-intro">
-    ODIN Technologies provides managed vendor services to accelerate operations while preserving strict confidentiality, security, and customer-defined data protection controls.
+    ODIN Technologies provides managed vendor services to accelerate operations while preserving strict confidentiality, security, and customer defined data protection controls.
     </p>
 
     <div className="product-grid">

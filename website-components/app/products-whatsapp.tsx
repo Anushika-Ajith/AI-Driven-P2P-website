@@ -168,12 +168,12 @@ export default function ProductsWhatsApp() {
               with suppliers, customers, and teams through natural conversations
               in multiple languages. Built as an intelligent communication layer,
               it understands queries, assists users instantly, and transforms
-              everyday chats and calls into meaningful business insights — all
+              everyday chats and calls into meaningful business insights all
               within the familiarity of WhatsApp.
               <br /><br />
               Designed for modern operations, the assistant doesn’t just respond
               to messages; it listens, analyzes, and organizes conversations into
-              clear outcomes — helping organizations reduce missed follow-ups,
+              clear outcomes helping organizations reduce missed follow-ups,
               improve response time, and maintain complete visibility across interactions.
             </p>
           </div>

@@ -172,7 +172,7 @@ export default function ProductsDocumentIntelligence() {
             <p className="doc-intro">
               Transform scattered business documents into structured, intelligent assets.
               Our AI Document Intelligence Platform uses advanced OCR and contextual data extraction
-              to digitize, classify, and link documents directly to your core business entities —
+              to digitize, classify, and link documents directly to your core business entities
               enabling faster decisions, automation, and real-time insights.
             </p>
 
