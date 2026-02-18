@@ -471,7 +471,7 @@ if (!message || message.length < 10)
     // If validation fails → stop and show errors
     if (Object.keys(errors).length > 0) {
       setLoading(false)
-      setError("Please fix the errors below.")
+      setError("Please fill the required fields.")
 
       // Show inline errors
       const errorElements = document.querySelectorAll(".input-error")
