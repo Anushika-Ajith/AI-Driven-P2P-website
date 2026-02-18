@@ -212,8 +212,10 @@
     height: 1.5px;
   
   
-    background: #9ca3af;
-  
+    /*background: #9ca3af;*/
+    background: #cfd8e3;
+    border-left: 5.5px solid #cfd8e3;
+    
     transform: translateY(-50%);
   }
   
@@ -229,7 +231,7 @@
   
     border-top: 3.5px solid transparent;
   border-bottom: 3.5px solid transparent;
-  border-left: 5.5px solid #9ca3af;
+  border-left: 5.5px solid #cfd8e3;
   
   }
   
@@ -1728,4 +1730,85 @@
 
 #process .divider {
   font-weight: 600 !important;
+}
+/* =========================================================
+   FINAL CLEAN DROPDOWN – NO EXTRA WHITE SPACE
+   ========================================================= */
+
+/* Dropdown container */
+.dropdown-menu {
+  min-width: 220px !important;
+  padding: 0 !important;              /* REMOVE top & bottom space */
+  margin: 0 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  display: none;
+}
+
+/* Show dropdown */
+.dropdown-menu.show {
+  display: block !important;
+}
+
+/* All dropdown items */
+.dropdown-menu a {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+
+  width: 100% !important;
+  height: 44px !important;            /* uniform height */
+  padding: 0 18px !important;         /* only left/right padding */
+
+  font-size: 15px !important;         /* reduced by one */
+  font-weight: 500 !important;
+
+  color: var(--text-muted) !important;
+  text-decoration: none !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* Full-width hover */
+.dropdown-menu a:hover {
+  background: #f1f5f9 !important;
+  color: var(--secondary) !important;
+}
+
+/* Optional subtle separator */
+.dropdown-menu a + a {
+  border-top: 1px solid #f1f5f9 !important;
+}
+
+/* Force same size on ALL screens */
+@media (max-width: 1024px) {
+  .dropdown-menu a {
+    font-size: 15px !important;
+    height: 44px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .dropdown-menu a {
+    font-size: 15px !important;
+    height: 44px !important;
+  }
+}
+
+/* =========================================================
+   GLOBAL PARAGRAPH JUSTIFY OVERRIDE
+   (Non-destructive – placed at very bottom)
+=========================================================== */
+
+.hero p,
+.product-intro,
+.features-header p,
+.glow-box p,
+.feature-card p,
+.contact-desc,
+.contact-box p {
+  text-align: justify !important;
 }

@@ -139,6 +139,14 @@ export default function ProductsDocumentIntelligence() {
           line-height: 1.6;
           color: #475569;
         }
+                /* =========================================
+           JUSTIFY PARAGRAPHS – DOCUMENT SECTION ONLY
+        ========================================== */
+
+        .doc-intro,
+        .doc-card p {
+          text-align: justify;
+        }
 
         @keyframes borderGlow {
           0% { background-position: 0% 50%; }

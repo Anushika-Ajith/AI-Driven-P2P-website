@@ -139,6 +139,17 @@ export default function ProductsWhatsApp() {
   color: #1e3a8a; /* same blue tone used elsewhere */
 }
 
+  /* =========================================
+     JUSTIFY PARAGRAPHS – WHATSAPP SECTION ONLY
+  ========================================== */
+
+  .whatsapp-intro,
+  .wa-card p,
+  .whatsapp-highlight p {
+    text-align: justify;
+    text-justify: inter-word;
+  }
+
 `}</style>
 
 
