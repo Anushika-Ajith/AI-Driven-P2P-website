@@ -32,6 +32,7 @@ export default function ProductsDocumentIntelligence() {
   return (
     <>
       <style jsx>{`
+
         #document-management {
           padding: 120px 20px;
           background: linear-gradient(180deg, #f0f9ff, #ffffff);
@@ -43,11 +44,9 @@ export default function ProductsDocumentIntelligence() {
         }
 
         .doc-hero {
-  max-width: 100%;
-  width: 100%;
-  margin-bottom: 60px;
-}
-
+          max-width: 100%;
+          margin-bottom: 60px;
+        }
 
         .doc-heading {
           font-size: 34px;
@@ -70,68 +69,33 @@ export default function ProductsDocumentIntelligence() {
           margin-bottom: 20px;
         }
 
-        /* ===== Scroll View ===== */
+        /* ===== SAME GRID AS WHATSAPP ===== */
 
-        .scroll-wrapper {
-          margin-top: 60px;
-          overflow-x: auto;
-          scrollbar-width: thin;
+        .doc-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 36px;
+          margin-top: 50px;
         }
 
-        .scroll-wrapper::-webkit-scrollbar {
-          height: 6px;
+        @media (max-width: 1024px) {
+          .doc-grid {
+            grid-template-columns: 1fr;
+          }
         }
 
-        .scroll-wrapper::-webkit-scrollbar-thumb {
-          background: #cbd5e1;
-          border-radius: 10px;
-        }
+        /* ===== EXACT SAME CARD STYLE AS WHATSAPP ===== */
 
-        .scroll-track {
-          display: flex;
-        }
-
-        /* STRICT width control */
-
-        /* Default = Mobile First (1 card) */
-
-.doc-card {
-  flex: 0 0 100%;
-  padding: 18px;
-  box-sizing: border-box;
-  display: flex;
-}
-
-/* Tablet = 2 cards */
-@media (min-width: 768px) {
-  .doc-card {
-    flex: 0 0 50%;
-  }
-}
-
-/* Desktop = 3 cards */
-@media (min-width: 1200px) {
-  .doc-card {
-    flex: 0 0 33.3333%;
-  }
-}
-
-
-        .doc-card-inner {
+        .doc-card {
           position: relative;
-          width: 100%;
-          padding: 30px;
-          border-radius: 18px;
+          padding: 32px;
+          border-radius: 16px;
           background: #ffffff;
-          box-shadow: 0 8px 30px rgba(2, 132, 199, 0.08);
           overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          min-height: 200px;
+          box-shadow: 0 8px 30px rgba(2, 132, 199, 0.08);
         }
 
-        .doc-card-inner::before {
+        .doc-card::before {
           content: "";
           position: absolute;
           inset: -2px;
@@ -148,29 +112,29 @@ export default function ProductsDocumentIntelligence() {
           z-index: 0;
         }
 
-        .doc-card-inner::after {
+        .doc-card::after {
           content: "";
           position: absolute;
           inset: 1px;
           background: #ffffff;
-          border-radius: 16px;
+          border-radius: 14px;
           z-index: 1;
         }
 
-        .doc-card-inner h4,
-        .doc-card-inner p {
+        .doc-card h4,
+        .doc-card p {
           position: relative;
           z-index: 2;
         }
 
-        .doc-card-inner h4 {
+        .doc-card h4 {
           font-size: 20px;
-          font-weight: 600;
           margin-bottom: 12px;
+          font-weight: 600;
           color: #0f172a;
         }
 
-        .doc-card-inner p {
+        .doc-card p {
           font-size: 17px;
           line-height: 1.6;
           color: #475569;
@@ -180,6 +144,7 @@ export default function ProductsDocumentIntelligence() {
           0% { background-position: 0% 50%; }
           100% { background-position: 400% 50%; }
         }
+
       `}</style>
 
       <section id="document-management">
@@ -209,17 +174,13 @@ export default function ProductsDocumentIntelligence() {
             </p>
           </div>
 
-          <div className="scroll-wrapper">
-            <div className="scroll-track">
-              {cards.map((card, i) => (
-                <div className="doc-card" key={i}>
-                  <div className="doc-card-inner">
-                    <h4>{card.title}</h4>
-                    <p>{card.text}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="doc-grid">
+            {cards.map((card, i) => (
+              <div className="doc-card" key={i}>
+                <h4>{card.title}</h4>
+                <p>{card.text}</p>
+              </div>
+            ))}
           </div>
 
         </div>
