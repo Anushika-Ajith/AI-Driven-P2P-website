@@ -445,6 +445,12 @@
   }
   
   /* ---------- MOBILE & TABLET ---------- */
+  .nav-links a,
+.dropdown-btn {
+  font-size: 16px;
+  font-weight: 500;
+}
+
   @media (max-width: 1024px) {
   
     .hamburger {
@@ -479,10 +485,7 @@
       pointer-events: auto;
     }
   
-    .nav-links a {
-      margin-left: 0;
-      font-size: 18px;
-    }
+    
   
     .nav {
       position: relative;
@@ -494,6 +497,16 @@
     .nav-links {
       display: flex;
     }
+  }
+  @media (max-width: 1024px) {
+
+    .nav-links a,
+    .dropdown-btn {
+      margin-left: 0;
+      font-size: 18px;   /* SAME as others */
+      font-weight: 500;
+    }
+  
   }
   
   /* ================= CONTACT (SIMPLE & CLEAN) ================= */
@@ -1480,4 +1493,58 @@
 
 .dropdown-menu.show {
   display: flex;
+}
+
+/* =========================================================
+   FINAL NAVBAR FONT UNIFICATION (OVERRIDE EVERYTHING)
+   ========================================================= */
+
+/* Base style for ALL navbar text */
+.nav-links a,
+.dropdown-btn {
+  font-size: 17px !important;
+  font-weight: 500 !important;
+  color: var(--text-muted) !important;
+  text-decoration: none !important;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif !important;
+}
+
+/* Remove margin difference */
+.nav-links a,
+.dropdown-btn {
+  margin-left: 22px !important;
+}
+
+/* Hover consistency */
+.nav-links a:hover,
+.dropdown-btn:hover {
+  color: var(--secondary) !important;
+}
+
+
+/* ================= DESKTOP ================= */
+@media (min-width: 1025px) {
+  .nav-links a,
+  .dropdown-btn {
+    font-size: 17px !important;
+  }
+}
+
+
+/* ================= TABLET ================= */
+@media (max-width: 1024px) {
+  .nav-links a,
+  .dropdown-btn {
+    font-size: 17px !important;
+    margin-left: 0 !important;
+  }
+}
+
+
+/* ================= MOBILE ================= */
+@media (max-width: 600px) {
+  .nav-links a,
+  .dropdown-btn {
+    font-size: 17px !important;
+  }
 }
