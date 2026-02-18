@@ -395,7 +395,7 @@ export default function Page() {
 
     <p className="contact-desc">
       Ready to transform your workflow? Contact us today and discover how
-      StreamLine can help your team achieve extraordinary results.
+      ODIN Technologies can help your team achieve extraordinary results.
     </p>
 
     <div className="contact-box">
