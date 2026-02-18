@@ -334,7 +334,7 @@ export default function Page() {
 
     <h2 className="section-title">Managed Services</h2>
     <h3 className="product-heading">
-      Secure Procurement Operations, Managed by Experts
+    Confidential and Controlled Vendor Management Services, Managed by Experts
     </h3>
 
     <p className="product-intro">
@@ -355,8 +355,8 @@ export default function Page() {
       <div className="glow-box">
         <h4>Rate Contract Lifecycle Management</h4>
         <p>
-          Effective dates, renewals, expiries, and compliance are continuously
-          monitored to keep rate contracts accurate and up to date.
+        Secure seal opening, Effective dates, renewals, expiries, and compliance are continuously monitored 
+        to keep rate contracts accurate and up to date.
         </p>
       </div>
 

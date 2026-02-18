@@ -1548,3 +1548,169 @@
     font-size: 17px !important;
   }
 }
+
+/* ================= CLEAN DROPDOWN ================= */
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Dropdown box */
+.dropdown-menu {
+  position: absolute;
+  top: 42px;
+  left: 0;
+
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 8px 0;
+  min-width: 200px;
+
+  border: 1px solid var(--border);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+
+  display: none;
+  z-index: 9999;
+}
+
+/* Show */
+.dropdown-menu.show {
+  display: block;
+}
+
+/* Links */
+.dropdown-menu a {
+  display: block;
+  padding: 12px 20px;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* PERFECT hover */
+.dropdown-menu a:hover {
+  background: #f1f5f9;
+  color: var(--secondary);
+}
+/* =========================================
+   PERFECT DROPDOWN HOVER FIX
+========================================= */
+
+.dropdown-menu {
+  overflow: hidden !important;  /* makes hover respect border-radius */
+  border-radius: 12px !important;
+}
+
+/* Remove square look */
+.dropdown-menu a {
+  display: block;
+  padding: 12px 20px;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+/* Smooth full hover */
+.dropdown-menu a:hover {
+  background: #f1f5f9;
+  color: var(--secondary);
+}
+
+/* Optional: better spacing between items */
+.dropdown-menu a + a {
+  border-top: 1px solid #f1f5f9;
+}
+/* =====================================================
+   DROPDOWN FULL-WIDTH HOVER — FINAL OVERWRITE FIX
+   ===================================================== */
+
+/* Remove any side padding from dropdown container */
+.dropdown-menu {
+  padding: 8px 0 !important;      /* ONLY top & bottom */
+  overflow: hidden !important;    /* respect border radius */
+  border-radius: 12px !important;
+}
+
+/* Force each item to take full width */
+.dropdown-menu a {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 12px 20px !important;
+  box-sizing: border-box !important;
+  border-radius: 0 !important;
+}
+
+/* Full-width hover background */
+.dropdown-menu a:hover {
+  background: #f1f5f9 !important;
+  color: var(--secondary) !important;
+}
+/* =====================================================
+   FINAL CLEAN DROPDOWN (ONLY VERSION YOU NEED)
+===================================================== */
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Dropdown box */
+.dropdown-menu {
+  position: absolute;
+  top: 42px;
+  left: 0;
+
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 8px 0;
+  min-width: 200px;
+
+  border: 1px solid var(--border);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+
+  display: none;
+  overflow: hidden; /* important */
+  z-index: 9999;
+}
+
+/* Show when class applied */
+.dropdown-menu.show {
+  display: block;
+}
+
+/* Links */
+.dropdown-menu a {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+/* Full-width hover */
+.dropdown-menu a:hover {
+  background: #f1f5f9;
+  color: var(--secondary);
+}
