@@ -358,7 +358,7 @@ export default function Page() {
         <h4>Vendor Onboarding Acceleration</h4>
         <p>
           Our team fast-tracks supplier onboarding, validation, and
-          configuration—reducing cycle time while maintaining governance and
+          configuration reducing cycle time while maintaining governance and
           compliance.
         </p>
       </div>
