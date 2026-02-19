@@ -2320,3 +2320,211 @@
   }
 
 }
+/* =========================================
+   REMOVE EXTRA TOP SPACE – MOBILE & TABLET
+========================================= */
+
+@media (max-width: 1024px) {
+
+  #about,
+  #features,
+  #product,
+  #managed-services,
+  #whatsapp,
+  #document-management {
+    padding-top: 40px !important;     /* 🔥 reduced from 120px */
+    padding-bottom: 60px !important;
+    min-height: auto !important;      /* remove forced full height */
+    display: block !important;        /* remove vertical centering */
+  }
+
+}
+/* =====================================================
+   ABOUT SECTION — REMOVE EXTRA SPACE (TABLET + MOBILE)
+   ===================================================== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+
+  #about.product-section {
+    padding-top: 40px !important;
+    padding-bottom: 60px !important;
+
+    min-height: auto !important;     /* remove 100vh */
+    display: block !important;       /* remove flex */
+    align-items: unset !important;   /* remove vertical centering */
+  }
+
+  #about .product-container {
+    margin: 0 auto !important;
+  }
+
+}
+
+
+/* Mobile */
+@media (max-width: 600px) {
+
+  #about.product-section {
+    padding-top: 30px !important;
+    padding-bottom: 50px !important;
+
+    min-height: auto !important;
+    display: block !important;
+  }
+
+}
+/* =====================================================
+   PRODUCT SECTION — CLEAN TABLET & MOBILE SPACING
+   ===================================================== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+
+  #product.product-section {
+    padding-top: 40px !important;
+    padding-bottom: 60px !important;
+
+    min-height: auto !important;     /* remove 100vh */
+    display: block !important;       /* remove vertical centering */
+    align-items: unset !important;
+  }
+
+  #product .product-container {
+    margin: 0 auto !important;
+  }
+
+  /* Clean card height */
+  #product .product-grid .glow-box {
+    height: auto !important;
+    min-height: auto !important;
+    display: block !important;
+    padding: 28px 24px !important;
+  }
+
+}
+
+
+/* Mobile */
+@media (max-width: 600px) {
+
+  #product.product-section {
+    padding-top: 30px !important;
+    padding-bottom: 50px !important;
+
+    min-height: auto !important;
+    display: block !important;
+  }
+
+  #product .product-grid {
+    gap: 20px !important; /* tighter spacing */
+  }
+
+  #product .glow-box {
+    padding: 24px 20px !important;
+  }
+
+}
+/* =====================================================
+   MANAGED SERVICES — CLEAN TABLET & MOBILE SPACING
+   ===================================================== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+
+  #managed-services.product-section {
+    padding-top: 40px !important;
+    padding-bottom: 60px !important;
+
+    min-height: auto !important;     /* remove 100vh */
+    display: block !important;       /* remove vertical centering */
+    align-items: unset !important;
+  }
+
+  #managed-services .product-container {
+    margin: 0 auto !important;
+  }
+
+  /* Natural card height */
+  #managed-services .product-grid .glow-box {
+    height: auto !important;
+    min-height: auto !important;
+    display: block !important;
+    padding: 28px 24px !important;
+  }
+
+}
+
+
+/* Mobile */
+@media (max-width: 600px) {
+
+  #managed-services.product-section {
+    padding-top: 30px !important;
+    padding-bottom: 50px !important;
+
+    min-height: auto !important;
+    display: block !important;
+  }
+
+  #managed-services .product-grid {
+    gap: 20px !important; /* tighter spacing */
+  }
+
+  #managed-services .glow-box {
+    padding: 24px 20px !important;
+  }
+
+}
+/* =====================================================
+   CONTACT SECTION — CLEAN TABLET & MOBILE SPACING
+   ===================================================== */
+
+/* Remove any forced height */
+#contact {
+  min-height: auto !important;
+  display: block !important;
+}
+
+
+/* ================= TABLET ================= */
+@media (max-width: 1024px) {
+
+  #contact {
+    padding-top: 40px !important;
+    padding-bottom: 60px !important;
+  }
+
+  .contact-wrap {
+    max-width: 760px !important;
+    margin: 0 auto !important;
+  }
+
+  .contact-box {
+    padding: 28px 24px !important;
+  }
+
+}
+
+
+/* ================= MOBILE ================= */
+@media (max-width: 600px) {
+
+  #contact {
+    padding-top: 30px !important;
+    padding-bottom: 50px !important;
+  }
+
+  .contact-box {
+    padding: 22px 18px !important;
+  }
+
+  .contact-title {
+    font-size: 26px !important;
+  }
+
+  .contact-desc {
+    font-size: 16px !important;
+  }
+
+}
