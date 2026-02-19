@@ -149,6 +149,16 @@ export default function ProductsWhatsApp() {
     text-align: justify;
     text-justify: inter-word;
   }
+    /* =========================================
+MOBILE – UNIFORM CARD SPACING
+========================================= */
+
+@media (max-width: 600px) {
+  .whatsapp-grid {
+    gap: 16px !important;   /* same spacing as all other sections */
+  }
+}
+
 
 `}</style>
 

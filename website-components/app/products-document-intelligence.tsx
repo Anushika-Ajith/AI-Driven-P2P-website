@@ -152,6 +152,16 @@ export default function ProductsDocumentIntelligence() {
           0% { background-position: 0% 50%; }
           100% { background-position: 400% 50%; }
         }
+          /* =========================================
+MOBILE – UNIFORM CARD SPACING
+========================================= */
+
+@media (max-width: 600px) {
+  .doc-grid {
+    gap: 16px !important;   /* same spacing as other sections */
+  }
+}
+
 
       `}</style>
 
