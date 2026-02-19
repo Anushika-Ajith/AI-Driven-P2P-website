@@ -2021,3 +2021,302 @@
   height: 16px;
   margin: 0;
 }
+/* =========================================
+   MOBILE DROPDOWN ACCORDION STYLE
+========================================= */
+
+@media (max-width: 1024px) {
+
+  /* Make dropdown inside flow (not absolute) */
+  .dropdown-menu {
+    position: static !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin-top: 6px;
+  }
+
+  /* Accordion animation */
+  .dropdown-menu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+
+  .dropdown-menu.show {
+    max-height: 300px; /* enough height for items */
+  }
+
+  /* Arrow styling */
+
+  .dropdown-btn .arrow {
+    font-size: 14px;
+    transition: transform 0.3s ease;
+  }
+
+  .dropdown-btn.open .arrow {
+    transform: rotate(180deg);
+  }
+
+  /* Indent dropdown links slightly */
+  .dropdown-menu a {
+    padding-left: 24px !important;
+  }
+
+}
+/* =========================================
+   FINAL CLEAN MOBILE DROPDOWN
+========================================= */
+
+@media (max-width: 1024px) {
+
+  /* Make dropdown behave like accordion */
+  .dropdown-menu {
+    position: static !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: transparent !important;
+
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .dropdown-menu.show {
+    max-height: 300px;
+  }
+
+  /* LEFT ALIGN everything */
+  .dropdown-menu a {
+    text-align: left !important;
+    padding: 10px 0 10px 18px !important;
+    font-size: 17px !important;
+  }
+
+  /* Products button layout */
+  .dropdown-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  /* Arrow styling */
+  .arrow {
+    display: inline-block;
+    font-size: 14px;
+    transition: transform 0.3s ease;
+  }
+
+  .dropdown-btn.open .arrow {
+    transform: rotate(180deg);
+  }
+}
+
+/* =========================================
+   DESKTOP — REMOVE ARROW
+========================================= */
+
+@media (min-width: 1025px) {
+
+  .arrow {
+    display: none !important;
+  }
+
+}
+/* =========================================
+   FINAL MOBILE / TABLET SIDE MENU OVERRIDE
+========================================= */
+
+@media (max-width: 1024px) {
+
+  /* Make nav container relative */
+  .nav {
+    position: relative;
+  }
+
+  /* Right side slide panel */
+  .nav-links {
+    position: fixed !important;
+    top: 0;
+    right: 0;
+    height: 100vh;
+
+    width: 260px;              /* 🔥 SMALL WIDTH */
+    max-width: 80%;
+
+    background: #ffffff;
+    box-shadow: -8px 0 30px rgba(0,0,0,0.08);
+
+    padding: 90px 24px 30px;   /* space below header */
+    flex-direction: column;
+    align-items: flex-start;
+
+    transform: translateX(100%);
+    transition: transform 0.35s ease;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  /* When open */
+  .nav-links.open {
+    transform: translateX(0);
+  }
+
+  /* Remove old full width behavior */
+  .nav-links {
+    left: auto !important;
+  }
+
+  /* Make nav items stacked */
+  .nav-item {
+    width: 100%;
+  }
+
+  .nav-links a,
+  .dropdown-btn {
+    width: 100%;
+    text-align: left;
+    padding: 10px 0;
+  }
+
+}
+/* =========================================
+   MOBILE DROPDOWN — CLEAN ACCORDION
+========================================= */
+
+@media (max-width: 1024px) {
+
+  .dropdown-menu {
+    position: static !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: transparent !important;
+
+    padding: 0 !important;
+    margin: 0 0 10px 0;
+
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .dropdown-menu.show {
+    max-height: 300px;
+  }
+
+  .dropdown-menu a {
+    padding: 8px 0 8px 14px !important;
+    font-size: 15px !important;
+  }
+
+}
+/* =========================================
+   MOBILE / TABLET RIGHT POPUP DROPDOWN
+========================================= */
+
+@media (max-width: 1024px) {
+
+  .dropdown {
+    position: relative;
+    width: 100%;
+  }
+
+  /* Popup to the RIGHT of Products */
+  .dropdown-menu {
+    position: absolute !important;
+    top: 0;
+    left: 100%;              /* 🔥 OPEN TO RIGHT SIDE */
+    margin-left: 10px;
+
+    width: 200px;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+
+    padding: 8px 0;
+    display: none;
+    z-index: 9999;
+  }
+
+  .dropdown-menu.show {
+    display: block !important;
+  }
+
+  .dropdown-menu a {
+    display: block;
+    padding: 12px 18px;
+    font-size: 15px;
+    text-align: left;
+  }
+
+}
+/* =========================================
+   REDUCE MOBILE SIDE NAV HEIGHT
+========================================= */
+
+@media (max-width: 1024px) {
+
+  .nav-links {
+    height: auto !important;          /* remove full screen */
+    max-height: 420px !important;     /* control height */
+    
+    top: 80px !important;             /* start below header */
+    padding: 25px 20px !important;    /* compact spacing */
+    
+    border-radius: 14px 0 0 14px;     /* rounded left corners */
+  }
+
+}
+/* =========================================
+   MOBILE SIDE PANEL POPUP DROPDOWN (FIXED)
+========================================= */
+
+@media (max-width: 1024px) {
+
+  .dropdown {
+    position: relative;
+    width: 100%;
+  }
+
+  /* TRUE floating white card */
+  .dropdown-menu {
+    position: absolute !important;
+    top: 42px;
+    left: 0;
+    right: 0;
+
+    background: #ffffff !important;   /* FORCE WHITE */
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+
+    padding: 10px 0;
+
+    display: none;
+    z-index: 99999;                   /* ABOVE EVERYTHING */
+  }
+
+  .dropdown-menu.show {
+    display: block !important;
+  }
+
+  /* Each item */
+  .dropdown-menu a {
+    display: block;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #475569;
+    background: #ffffff;              /* Prevent transparency */
+    text-decoration: none;
+  }
+
+  .dropdown-menu a:hover {
+    background: #f1f5f9;
+    color: #2563eb;
+  }
+
+}

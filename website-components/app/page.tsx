@@ -71,12 +71,17 @@ export default function Page() {
   </div>
 
   <div className="nav-item dropdown">
-    <button
-      className="dropdown-btn"
-      onClick={() => setProductOpen(prev => !prev)}
-    >
-      Products
-    </button>
+  <button
+  className={`dropdown-btn ${productOpen ? "open" : ""}`}
+  onClick={() => setProductOpen(prev => !prev)}
+>
+  <span>Products</span>
+
+  {/* Arrow ONLY visible in mobile via CSS */}
+  <span className="arrow">▾</span>
+</button>
+
+
 
     <div className={`dropdown-menu ${productOpen ? "show" : ""}`}>
       <a href="#product" onClick={() => { setProductOpen(false); setMenuOpen(false) }}>P2P</a>
