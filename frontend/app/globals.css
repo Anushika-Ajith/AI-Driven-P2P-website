@@ -1,0 +1,11 @@
+@import "../styles/colors.css";
+
+body {
+  background: var(--bg-soft);
+  color: var(--text-dark);
+  font-family: sans-serif;
+}
+
+textarea, button {
+  font-family: inherit;
+}

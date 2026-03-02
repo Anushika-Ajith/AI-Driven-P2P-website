@@ -1,0 +1,262 @@
+========================================
+ODIN TECHNOLOGIES – COMPLETE KNOWLEDGE BASE
+========================================
+
+This file represents the cleaned and structured content of the ODIN website.
+The assistant must use ONLY this content to answer user questions.
+
+The assistant may infer logically, but must stay strictly within these topics:
+Procurement, P2P workflow, sourcing, automation, visibility, governance, security,
+document intelligence, WhatsApp AI communication, vendor management services.
+
+========================================
+HERO SECTION – AI-DRIVEN PROCUREMENT
+========================================
+
+Title:
+AI-Driven Procurement with Complete Transparency
+
+Description:
+ODIN redesigns the procure-to-pay (P2P) lifecycle to be transparent,
+auditable, secure, and AI-driven. The platform improves sourcing outcomes,
+eliminates manual inefficiencies, and provides visibility to leadership.
+
+Highlighted Points:
+- 100% decision traceability and auditability
+- Smart sourcing recommendations
+- Reduced risk and improved compliance
+- Real-time leadership transparency
+
+Buttons:
+- Explore AI-driven sourcing
+- View how internal sourcing works
+- Learn how external sourcing flow happens
+
+Internal Sourcing Workflow:
+1. Internal Requisition  
+2. Expiry Optimization  
+3. Central Stock  
+4. Store Issue  
+
+External Sourcing Workflow:
+1. RFQ  
+2. PO  
+3. GRN  
+4. Invoice  
+5. Payment  
+
+========================================
+ABOUT SECTION – BUILT FOR SECURE, ENTERPRISE PROCUREMENT
+========================================
+
+ODIN delivers enterprise-grade procurement systems engineered for security,
+governance, operational discipline, and long-term enterprise partnership.
+It enables secure multi-tenant operations with strong data isolation.
+
+Pillars of the Platform:
+
+1. Security-First Engineering  
+   - Tenant-isolated design  
+   - Encryption  
+   - Controlled access  
+   - Secure data environments  
+
+2. Governance by Design  
+   - Built-in audit trails  
+   - Traceable workflows  
+   - Policy-driven approvals  
+
+3. Operational Discipline  
+   - Process stability  
+   - Reliability  
+   - Consistency for mission-critical operations  
+
+4. Long-Term Partnership  
+   - Continued platform evolution  
+   - Security enhancements  
+   - Support for enterprise transformation  
+
+========================================
+FEATURES – INTELLIGENT, GOVERNED PROCUREMENT
+========================================
+
+ODIN provides a unified platform with AI, workflow automation, auditability,
+and decision intelligence for sourcing and vendor collaboration.
+
+Platform Features:
+
+1. AI-Driven Sourcing Intelligence  
+   Evaluates demand signals and internal availability, improves sourcing decisions.
+
+2. End-to-End Traceability  
+   Provides complete audit trail across all procurement stages.
+
+3. Decision-Centric Workflows  
+   Configurable, mobile-responsive approval workflows for agile execution.
+
+4. Leadership Visibility & Control  
+   Real-time dashboards and event visibility for leaders.
+
+5. Vendor Interaction Intelligence  
+   Connects negotiations and interactions directly to sourcing events.
+
+6. Enterprise-Ready Architecture  
+   Secure, scalable, multi-tenant architecture for organizations.
+
+========================================
+PRODUCT – ODIN P2P (PROCURE-TO-PAY)
+========================================
+
+A secure, AI-powered, end-to-end multi-tenant Procure-to-Pay system that
+enables intelligent sourcing and full lifecycle procurement automation.
+
+Capabilities:
+
+1. End-to-End Automation  
+   Full P2P lifecycle: requisition → sourcing → RFQ → PO → GRN → invoicing → payments.
+
+2. AI-Driven Intelligence  
+   Supplier selection, forecasting, negotiation insights, spend visibility.
+
+3. Security with Transparency  
+   Tenant isolation, audit logs, explainable decision visibility.
+
+4. Flexible & Scalable  
+   Configurable workflows, compliance enforcement, API-first microservices.
+
+========================================
+PRODUCT – WHATSAPP AI ASSISTANT
+========================================
+
+ODIN’s WhatsApp AI Assistant enables natural, multilingual conversations
+between teams, vendors, and customers.  
+It converts chats/calls into structured business insights.
+
+Key Capabilities:
+
+1. Multilingual Conversations  
+   Chat or voice in any supported language.
+
+2. AI Call & Chat Intelligence  
+   Automatically extracts insights, commitments, and decisions.
+
+3. Smart Summaries  
+   Generates instant summaries of conversations.
+
+4. Action Item Identification  
+   Detects tasks, follow-ups, responsibilities.
+
+5. Business Integration  
+   Integrates with existing systems or functions standalone.
+
+Tagline:
+"Simple to use. Familiar like WhatsApp. Powerful for business communication."
+
+========================================
+PRODUCT – AI DOCUMENT INTELLIGENCE PLATFORM
+========================================
+
+Transforms unstructured documents into structured business intelligence.
+
+Key Features:
+
+1. Intelligent OCR + Field Extraction  
+   Extracts key fields from invoices, contracts, registrations, etc.
+
+2. Entity-Driven Mapping  
+   Links documents to suppliers, assets, departments, transactions.
+
+3. AI-Ready Repository  
+   Converts files into searchable datasets.
+
+4. Workflow Automation  
+   Enables onboarding, approval checks, 3-way match, compliance.
+
+5. Multi-Tenant Security  
+   Governance, encryption, scalable storage.
+
+6. Natural Language Search  
+   Retrieve documents using business context.
+
+========================================
+MANAGED SERVICES – CONTROLLED VENDOR MANAGEMENT
+========================================
+
+ODIN provides secure, confidential managed vendor services with full governance.
+
+Service Areas:
+
+1. Vendor Onboarding Acceleration  
+   Fast onboarding with compliance and governance support.
+
+2. Rate Contract Lifecycle Management  
+   Manage renewals, expiries, updates, and compliance validation.
+
+3. Encrypted & Controlled Access  
+   Sensitive data visible only to authorized roles.
+
+4. Customer-Defined Encryption  
+   Custom encryption for documents and fields.
+
+========================================
+CONTACT SECTION
+========================================
+
+Purpose:
+Enable customers to reach ODIN for procurement transformation discussions.
+
+Required Contact Fields:
+- First name  
+- Last name  
+- Phone number  
+- Email  
+- Message  
+- Privacy Policy agreement  
+
+Outcome:
+Successful submissions redirect to a “Thank You” page.
+
+========================================
+DERIVED LOGICAL INSIGHTS (AI-INFERRED BUT WITHIN DOMAIN)
+========================================
+
+These insights are allowed because they do NOT contradict the website:
+
+1. ODIN likely uses enterprise project methodology:
+   - Discovery, workflow mapping, configuration, testing, deployment, support.
+
+2. ODIN is designed for:
+   - Enterprises  
+   - Manufacturing  
+   - Retail  
+   - Multi-vendor ecosystems  
+   - Organizations requiring traceability  
+
+3. Core values:
+   - Accuracy  
+   - Governance  
+   - Transparency  
+   - Security  
+   - Auditability  
+
+4. ODIN improves:
+   - Procurement speed  
+   - Accountability  
+   - Vendor communication  
+   - Document accuracy  
+   - Leadership visibility  
+
+========================================
+RULES FOR THE ASSISTANT
+========================================
+
+1. NEVER hallucinate outside ODIN’s domain.  
+2. ALWAYS answer every question using reasoning grounded in this file.  
+3. If a question is outside ODIN's scope:
+   - Redirect politely but still provide a useful ODIN-aligned answer.  
+4. Summaries must stay factual and aligned with the website.  
+5. Never invent products, services, teams, or claims not listed here.  
+
+========================================
+END OF KNOWLEDGE BASE
+========================================
