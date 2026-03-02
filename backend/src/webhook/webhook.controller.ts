@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from "@nestjs/common";
+import { Controller, Post, Get, Body, Query, HttpCode, HttpStatus } from "@nestjs/common";
 import { WhatsAppService } from "../whatsapp/whatsapp.service";
 import { SarvamService } from "../sarvam/sarvam.service";
 import { OpenAIService } from "../openai/openai.service";
@@ -11,16 +11,75 @@ export class WebhookController {
     private openai: OpenAIService
   ) {}
 
+  // GET endpoint for webhook verification (hub.challenge)
+  @Get()
+  verify(@Query("hub.mode") mode: string, @Query("hub.challenge") challenge: string, @Query("hub.verify_token") token: string) {
+    console.log("Webhook verification request received");
+    console.log("Mode:", mode);
+    console.log("Challenge:", challenge);
+    console.log("Verify Token:", token);
+
+    // Verify token (you should set this in your Meta Business account)
+    const verifyToken = process.env.WHATSAPP_VERIFY_TOKEN || "your_verify_token";
+    
+    if (mode === "subscribe" && token === verifyToken) {
+      console.log("Webhook verified successfully!");
+      // Return the challenge to complete verification
+      return challenge;
+    } else {
+      console.log("Webhook verification failed");
+      return "Verification failed";
+    }
+  }
+
+  // POST endpoint for receiving messages
   @Post()
+  @HttpCode(HttpStatus.OK)
   async handle(@Body() body: any) {
     try {
-      const msg = body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+      // Handle status updates (acknowledge immediately to prevent retries)
+      const value = body.entry?.[0]?.changes?.[0]?.value;
+      
+      // If this is a status update, acknowledge and return immediately
+      if (value?.statuses) {
+        console.log("📊 Status update received, acknowledging...");
+        return "OK";
+      }
+
+      // Debug: Log the incoming webhook body
+      console.log("Webhook received:", JSON.stringify(body, null, 2));
+      
+      const msg = value?.messages?.[0];
       const from = msg?.from; // your WhatsApp number
 
-      if (!msg) return "NO MESSAGE";
+      if (!msg) {
+        console.log("NO MESSAGE in webhook - acknowledging anyway");
+        return "OK";
+      }
 
-      // 📌 CASE 1: USER SENDS AUDIO
-      if (msg.type === "audio") {
+      console.log("Message type:", msg.type, "From:", from);
+
+      // Acknowledge receipt immediately to prevent retries
+      // Process message asynchronously (don't await)
+      this.processMessage(msg, from).catch((err) => {
+        console.error("Error in async message processing:", err);
+      });
+
+      // Return immediately to stop retries
+      return "OK";
+    } catch (err: any) {
+      console.error("WEBHOOK ERROR:", err);
+      console.error("Error details:", err.message);
+      // Always return 200 to prevent retries
+      return "OK";
+    }
+  }
+
+  // Process message asynchronously
+  private async processMessage(msg: any, from: string) {
+    // 📌 CASE 1: USER SENDS AUDIO
+    if (msg.type === "audio") {
+      try {
         const mediaId = msg.audio.id;
 
         // 1) Download user voice
@@ -41,24 +100,39 @@ export class WebhookController {
         // 6) Send audio reply BACK to WhatsApp user
         await this.whatsapp.sendAudio(from, uploadedId);
 
-        return { status: "Voice reply sent!" };
+        console.log("✅ Voice reply sent!");
+      } catch (audioError: any) {
+        console.error("❌ Error processing audio:", audioError.message);
       }
+      return;
+    }
 
-      // 📌 CASE 2: USER SENDS TEXT
-      if (msg.type === "text") {
+    // 📌 CASE 2: USER SENDS TEXT
+    if (msg.type === "text") {
+      try {
         const text = msg.text.body;
+        console.log("Received text message:", text);
+
+        // Print "hi" to terminal when user sends "hi"
+        if (text.toLowerCase().trim() === "hi") {
+          console.log("hi");
+        }
+
+        // Print "hello" to terminal when user sends "hello"
+        if (text.toLowerCase().trim() === "hello") {
+          console.log("hello");
+        }
 
         const answer = await this.openai.ask(text);
 
         await this.whatsapp.sendText(from, answer);
-
-        return { status: "Text reply sent!" };
+        console.log("✅ Text reply sent!");
+      } catch (textError: any) {
+        console.error("❌ Error processing text:", textError.message);
       }
-
-      return "Ignored";
-    } catch (err) {
-      console.error("WEBHOOK ERROR:", err);
-      return "Error";
+      return;
     }
+
+    console.log("⚠️  Unhandled message type:", msg.type);
   }
 }

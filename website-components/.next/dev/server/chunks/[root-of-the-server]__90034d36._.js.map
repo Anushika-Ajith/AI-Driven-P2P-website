@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 46, "column": 0}, "map": {"version":3,"sources":["file:///home/anushika-ajith/Desktop/website/AI-Driven-P2P-website/website-components/app/api/whatsapp/route.ts"],"sourcesContent":["import { NextResponse } from \"next/server\"\n\nexport async function GET() {\n  const phone = process.env.WHATSAPP_NUMBER\n  const msg = process.env.WHATSAPP_MESSAGE\n\n  if (!phone) {\n    return NextResponse.json(\n      { error: \"WhatsApp number missing\" },\n      { status: 500 }\n    )\n  }\n\n  const url =\n    `https://wa.me/${phone}?text=${encodeURIComponent(msg || \"\")}`\n\n  return NextResponse.redirect(url)\n}\n"],"names":[],"mappings":";;;;AAAA;;AAEO,eAAe;IACpB,MAAM,QAAQ,QAAQ,GAAG,CAAC,eAAe;IACzC,MAAM,MAAM,QAAQ,GAAG,CAAC,gBAAgB;IAExC,IAAI,CAAC,OAAO;QACV,OAAO,yKAAY,CAAC,IAAI,CACtB;YAAE,OAAO;QAA0B,GACnC;YAAE,QAAQ;QAAI;IAElB;IAEA,MAAM,MACJ,CAAC,cAAc,EAAE,MAAM,MAAM,EAAE,mBAAmB,OAAO,KAAK;IAEhE,OAAO,yKAAY,CAAC,QAAQ,CAAC;AAC/B"}}]
+}
