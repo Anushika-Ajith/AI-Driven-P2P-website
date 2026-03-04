@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import OpenAI from "openai";
 import { SarvamService } from "../sarvam/sarvam.service";
 import { loadKnowledgeBase } from "../../data/source";
+import { VectorService } from "src/vector/vector.service";
 type SarvamTranslation =
   | string
   | {
@@ -14,7 +15,9 @@ export class OpenAIService {
   private client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
   private knowledge: string;
 
-  constructor(private sarvam: SarvamService) {
+  constructor(private sarvam: SarvamService,
+    private vector: VectorService
+  ) {
     this.knowledge = loadKnowledgeBase();
   }
 
@@ -91,11 +94,60 @@ Text: "${text}"`
     // 2) Translate question → English
     const qEnglish = await this.chunkTranslate(question, src, "en-IN");
 
+    // Step 2: embed
+  const embedding = await this.vector.embed(qEnglish);
+
+  // Step 3: similarity search
+  const candidates = await this.vector.searchSimilar(embedding);
+
+if (candidates && candidates.length > 0) {
+
+  const prompt = `
+You are a semantic matching system.
+
+User Question:
+${qEnglish}
+
+Candidate Questions:
+${candidates.map((c, i) => `${i + 1}. ${c.question_text}`).join("\n")}
+
+Determine if any candidate question would have an answer that also correctly answers the user question.
+
+Rules:
+- Match meaning, not wording.
+- Different wording with same intent should match.
+- If the candidate answer would satisfy the user question, it is a match.
+
+Return ONLY the number of the best matching candidate (1-${candidates.length})..
+Return 0 if none match.
+
+Answer format:
+<number>
+`;
+
+  const match = await this.client.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [{ role: "user", content: prompt }],
+    temperature: 0
+  });
+
+  const index = parseInt(match.choices?.[0]?.message?.content || "0");
+
+  if (index > 0 && candidates[index - 1]) {
+    console.log("⚡ Hybrid Cache HIT");
+    return candidates[index - 1].answer_text;
+  }
+}
+
+  console.log("❌ Cache MISS - asking OpenAI");
     // 3) Ask OpenAI in English
     const prompt = `
-You are ODIN Assistant. Use ONLY ODIN knowledge below to answer.
-Write clean natural paragraphs. No bullets. No markdown.for all language the name "ODIN" should not be changed.
-
+You are ODIN, an intelligent assistant with a friendly conversational tone.
+Speak naturally — like talking to a person — not formal, not robotic.
+Do not use bullet points or markdown.
+Always keep the name "ODIN" exactly as it is in all languages.
+Use ONLY the ODIN knowledge provided below to answer.
+If you don't find the answer in the knowledge base, reply honestly but still conversationally.
 
 KNOWLEDGE:
 ${this.knowledge}
@@ -104,7 +156,7 @@ QUESTION:
 ${qEnglish}
 
 ANSWER:
-    `;
+`;
 
     const res = await this.client.chat.completions.create({
       model: "gpt-4o-mini",
@@ -114,6 +166,14 @@ ANSWER:
 
     const englishAnswer =
   res.choices?.[0]?.message?.content?.trim() || "No answer available.";
+
+  // Step 5: Store in cache
+  await this.vector.store({
+    questionText: qEnglish,
+    answerText: englishAnswer,
+    embedding,
+  });
+  
 // 4) Translate back → user language
 const target = MAP[userLang] || "hi-IN";
 let finalAnswer = await this.chunkTranslate(englishAnswer, "en-IN", target);

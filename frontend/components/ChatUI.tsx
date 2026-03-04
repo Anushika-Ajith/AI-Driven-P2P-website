@@ -36,10 +36,54 @@ export default function ChatUI() {
     }
   }
 
-  // ----------------------------------------
-  // START RECORDING
-  // ----------------------------------------
-  async function startRecording() {
+  /// ----------------------------------------
+// HANDLE RECORDING STOP (UPLOAD AUDIO)
+// ----------------------------------------
+async function handleRecordingStop() {
+  try {
+    setLoading(true);
+
+    // prevent empty audio upload
+    if (audioChunksRef.current.length === 0) {
+      setAnswer("⚠ No audio recorded.");
+      return;
+    }
+
+    const blob = new Blob(audioChunksRef.current, { type: "audio/webm" });
+
+    const formData = new FormData();
+    formData.append("audio", blob, "voice.webm");
+
+    const res = await axios.post(
+      "http://localhost:4000/ask/voice",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    setAnswer(res.data.answer_text || res.data.answer || "");
+
+    if (res.data.audio_url) {
+      setAudioURL(res.data.audio_url);
+    }
+
+  } catch (err) {
+    console.error("Voice request failed:", err);
+    setAnswer("❌ Voice request failed.");
+  } finally {
+    setLoading(false);
+  }
+}
+
+// ----------------------------------------
+// START RECORDING
+// ----------------------------------------
+async function startRecording() {
+  setAudioURL("");
+  try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
     const recorder = new MediaRecorder(stream);
@@ -47,41 +91,36 @@ export default function ChatUI() {
 
     audioChunksRef.current = [];
 
-    recorder.ondataavailable = (e) => {
-      audioChunksRef.current.push(e.data);
+    recorder.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        audioChunksRef.current.push(event.data);
+      }
     };
 
-    recorder.onstop = async () => {
-  const blob = new Blob(audioChunksRef.current, { type: "audio/ogg" });
-
-  const formData = new FormData();
-  formData.append("file", blob); // FIXED
-
-  const res = await axios.post(
-    "http://localhost:4000/ask/voice",
-    formData,
-    {
-      headers: { "Content-Type": "multipart/form-data" },
-    }
-  );
-
-  setAnswer(res.data.answer_text);
-  setAudioURL(res.data.audio_url);
-};
+    recorder.onstop = handleRecordingStop;
 
     recorder.start();
     setRecording(true);
+
+  } catch (error) {
+    console.error("Microphone access error:", error);
+    alert("Microphone access denied.");
+  }
+}
+
+// ----------------------------------------
+// STOP RECORDING
+// ----------------------------------------
+function stopRecording() {
+  if (mediaRecorderRef.current) {
+    const tracks = mediaRecorderRef.current.stream.getTracks();
+    tracks.forEach((track) => track.stop());
+
+    mediaRecorderRef.current.stop();
   }
 
-  // ----------------------------------------
-  // STOP RECORDING
-  // ----------------------------------------
-  function stopRecording() {
-    if (mediaRecorderRef.current) {
-      mediaRecorderRef.current.stop(); // safe
-    }
-    setRecording(false);
-  }
+  setRecording(false);
+}
 
   return (
     <div
@@ -165,7 +204,8 @@ export default function ChatUI() {
 
         {/* MIC BUTTON */}
         <button
-          onClick={recording ? stopRecording : startRecording}
+  disabled={loading}
+  onClick={recording ? stopRecording : startRecording}
           style={{
             marginTop: "10px",
             width: "100%",
