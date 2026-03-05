@@ -66,70 +66,168 @@ export class AskService {
     };
   }
 
-  async handleVoice(
+//   async handleVoice(
+//   file: any,
+//   gender: "male" | "female" = "female"
+// ) {
+//   // save input audio
+//   const tempPath = `audio/input_${Date.now()}.webm`;
+//   fs.writeFileSync(tempPath, file.buffer);
+
+//   // 1️⃣ Speech → Text
+//   const text = await this.sarvam.stt(tempPath);
+
+//   console.log("VOICE TEXT:", text);
+
+//   // 2️⃣ Generate embedding
+//   const embedding = await this.vector.embed(text);
+
+//   // 3️⃣ Semantic search
+//   // 3️⃣ Semantic search
+// const candidates = await this.vector.searchSimilar(embedding);
+
+// if (candidates && candidates.length > 0) {
+
+//   console.log("⚡ VOICE CACHE HIT");
+
+//   const best = candidates[0];
+
+//   // If audio already stored → return audio directly
+//   if (best.answer_audio_url) {
+//     return {
+//       audio_url: best.answer_audio_url
+//     };
+//   }
+
+//   // If audio not stored → generate once
+//   const audioFile = await this.sarvam.tts(best.answer_text, "en-IN", gender);
+
+//   return {
+//     audio_url: `/audio/${audioFile}`
+//   };
+// }
+
+//   console.log("❌ VOICE CACHE MISS");
+
+//   // 4️⃣ Ask OpenAI
+//   const answerText = await this.openAI.ask(text,false);
+
+//   // 5️⃣ Generate TTS
+//   const audioFile = await this.sarvam.tts(answerText, "en-IN", gender);
+
+//   const answerAudioPath = `audio/${audioFile}`;
+
+//   // 6️⃣ Store in DB
+//  const best = candidates?.[0];
+
+// // check if EXACT text match exists
+// if (!best || best.question_text.toLowerCase().trim() !== text.toLowerCase().trim()) {
+
+//   console.log("💾 Storing new semantic question variant");
+
+//   await this.vector.store({
+//     questionText: text,
+//     questionAudioUrl: tempPath,
+//     answerText: best?.answer_text || answerText,
+//     answerAudioUrl: best?.answer_audio_url || answerAudioPath,
+//     embedding
+//   });
+
+// } else {
+//   console.log("⚡ Exact question already exists → skip storing");
+// }
+
+//   return {
+//     // question_text: text,
+//     // answer_text: answerText,
+//     audio_url: `/audio/${audioFile}`
+//   };
+// }
+
+
+async handleVoice(
   file: any,
   gender: "male" | "female" = "female"
 ) {
-  // save input audio
+
+  // 1️⃣ Save audio
   const tempPath = `audio/input_${Date.now()}.webm`;
   fs.writeFileSync(tempPath, file.buffer);
 
-  // 1️⃣ Speech → Text
+  // 2️⃣ Speech → Text
   const text = await this.sarvam.stt(tempPath);
-
   console.log("VOICE TEXT:", text);
 
-  // 2️⃣ Generate embedding
+  // 3️⃣ Generate embedding
   const embedding = await this.vector.embed(text);
 
-  // 3️⃣ Semantic search
-  // 3️⃣ Semantic search
-const candidates = await this.vector.searchSimilar(embedding);
+  // 4️⃣ Semantic search
+  const candidates = await this.vector.searchSimilar(embedding);
 
-if (candidates && candidates.length > 0) {
+let best: any = null;
 
-  const prompt = `
-User Question:
-${text}
+  if (candidates && candidates.length > 0) {
 
-Candidate Questions:
-${candidates.map((c,i)=>`${i+1}. ${c.question_text}`).join("\n")}
-
-Return the number of best match or 0.
-`;
-
-  const match = await this.openAI["client"].chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [{ role: "user", content: prompt }],
-    temperature: 0
-  });
-
-  const index = parseInt(match.choices?.[0]?.message?.content || "0");
-
-  if (index > 0 && candidates[index - 1]) {
+    best = candidates[0];
 
     console.log("⚡ VOICE CACHE HIT");
 
-    // 🚀 RETURN IMMEDIATELY
+    if (!best) {
+  console.log("❌ No candidate found");
+  return;
+}
+
+const isExact =
+  best.question_text.toLowerCase().trim() ===
+  text.toLowerCase().trim();
+
+    // Store semantic variant if different text
+    if (!isExact) {
+
+      console.log("💾 Storing semantic question variant");
+
+      await this.vector.store({
+        questionText: text,
+        questionAudioUrl: tempPath,
+        answerText: best.answer_text,
+        answerAudioUrl: best.answer_audio_url,
+        embedding
+      });
+
+    } else {
+      console.log("⚡ Exact question already exists → skip storing");
+    }
+
+    // return stored audio
+    if (best.answer_audio_url) {
+      return {
+        audio_url: best.answer_audio_url
+      };
+    }
+
+    // generate audio once if missing
+    const audioFile = await this.sarvam.tts(best.answer_text, "en-IN", gender);
+
     return {
-      question_text: text,
-      answer_text: candidates[index - 1].answer_text,
-      audio_url: candidates[index - 1].answer_audio_url
+      audio_url: `/audio/${audioFile}`
     };
   }
-}
+
+  // ------------------------------------------------
+  // ❌ CACHE MISS
+  // ------------------------------------------------
 
   console.log("❌ VOICE CACHE MISS");
 
-  // 4️⃣ Ask OpenAI
-  const answerText = await this.openAI.ask(text,false);
+  // Ask LLM
+  const answerText = await this.openAI.ask(text, false);
 
-  // 5️⃣ Generate TTS
+  // Generate voice
   const audioFile = await this.sarvam.tts(answerText, "en-IN", gender);
 
   const answerAudioPath = `audio/${audioFile}`;
 
-  // 6️⃣ Store in DB
+  // Store new question
   await this.vector.store({
     questionText: text,
     questionAudioUrl: tempPath,
@@ -138,10 +236,12 @@ Return the number of best match or 0.
     embedding
   });
 
+  console.log("💾 Stored new voice query");
+
   return {
-    question_text: text,
-    answer_text: answerText,
     audio_url: `/audio/${audioFile}`
   };
 }
+
+
 }

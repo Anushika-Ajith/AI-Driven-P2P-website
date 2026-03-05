@@ -136,11 +136,23 @@ ANSWER:
   // Step 5: Store in cache
   // Store only if this is text input
 if (store) {
-  await this.vector.store({
-    questionText: qEnglish,
-    answerText: englishAnswer,
-    embedding,
-  });
+
+  const best = candidates?.[0];
+
+  // store only if no exact match
+  if (!best || best.distance !== 0) {
+
+    await this.vector.store({
+      questionText: qEnglish,
+      answerText: englishAnswer,
+      embedding,
+    });
+
+    console.log("💾 Stored new text query in DB");
+
+  } else {
+    console.log("⚡ Exact match found — skipping DB store");
+  }
 }
   
 // 4) Translate back → user language
