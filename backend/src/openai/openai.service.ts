@@ -73,7 +73,7 @@ Text: "${text}"`
   // ------------------------------------------------
   // MAIN ASK
   // ------------------------------------------------
-  async ask(question: string): Promise<string> {
+  async ask(question: string, store: boolean = true): Promise<string> {
     // 1) Detect language
     const userLang = await this.detectLanguage(question);
     console.log("LANG:", userLang);
@@ -101,42 +101,8 @@ Text: "${text}"`
   const candidates = await this.vector.searchSimilar(embedding);
 
 if (candidates && candidates.length > 0) {
-
-  const prompt = `
-You are a semantic matching system.
-
-User Question:
-${qEnglish}
-
-Candidate Questions:
-${candidates.map((c, i) => `${i + 1}. ${c.question_text}`).join("\n")}
-
-Determine if any candidate question would have an answer that also correctly answers the user question.
-
-Rules:
-- Match meaning, not wording.
-- Different wording with same intent should match.
-- If the candidate answer would satisfy the user question, it is a match.
-
-Return ONLY the number of the best matching candidate (1-${candidates.length})..
-Return 0 if none match.
-
-Answer format:
-<number>
-`;
-
-  const match = await this.client.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [{ role: "user", content: prompt }],
-    temperature: 0
-  });
-
-  const index = parseInt(match.choices?.[0]?.message?.content || "0");
-
-  if (index > 0 && candidates[index - 1]) {
-    console.log("⚡ Hybrid Cache HIT");
-    return candidates[index - 1].answer_text;
-  }
+  console.log("⚡ Vector Cache HIT");
+  return candidates[0].answer_text;
 }
 
   console.log("❌ Cache MISS - asking OpenAI");
@@ -168,11 +134,14 @@ ANSWER:
   res.choices?.[0]?.message?.content?.trim() || "No answer available.";
 
   // Step 5: Store in cache
+  // Store only if this is text input
+if (store) {
   await this.vector.store({
     questionText: qEnglish,
     answerText: englishAnswer,
     embedding,
   });
+}
   
 // 4) Translate back → user language
 const target = MAP[userLang] || "hi-IN";

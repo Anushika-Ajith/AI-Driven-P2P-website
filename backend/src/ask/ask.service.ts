@@ -122,7 +122,7 @@ Return the number of best match or 0.
   console.log("❌ VOICE CACHE MISS");
 
   // 4️⃣ Ask OpenAI
-  const answerText = await this.openAI.ask(text);
+  const answerText = await this.openAI.ask(text,false);
 
   // 5️⃣ Generate TTS
   const audioFile = await this.sarvam.tts(answerText, "en-IN", gender);
