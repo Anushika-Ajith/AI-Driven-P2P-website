@@ -30,9 +30,12 @@ export class VectorService {
 
   const result: any[] = await this.prisma.$queryRawUnsafe(
     `
-    SELECT question_text, answer_text, embedding <=> $1::vector AS distance
+    SELECT
+question_text,
+answer_text,
+answer_audio_url,
+embedding <=> $1::vector AS distance
 FROM semantic_cache
-WHERE embedding <=> $1::vector < 0.25
 ORDER BY distance ASC
 LIMIT 1
     `,
