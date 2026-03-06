@@ -7,8 +7,8 @@ const pool = new Pool({
   host: "localhost",
   port: 5432,
   user: "postgres",
-  password: "anjana123",
-  database: "odin_ai",
+  password: "postgres",
+  database: "postgres",
 });
 
 const adapter = new PrismaPg(pool);

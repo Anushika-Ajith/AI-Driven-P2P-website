@@ -43,6 +43,7 @@ export class AskController {
   @Post("voice")
   @UseInterceptors(FileInterceptor("audio"))
   async voice(@UploadedFile() file: any) {
+    console.log("🎵 Voice route called with file:", file);
     return this.askService.handleVoice(file);
   }
 

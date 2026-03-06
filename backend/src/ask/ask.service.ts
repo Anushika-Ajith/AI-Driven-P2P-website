@@ -149,14 +149,39 @@ async handleVoice(
   file: any,
   gender: "male" | "female" = "female"
 ) {
-
+  console.log("🎵 handleVoice called with gender:", gender);
   // 1️⃣ Save audio
   const tempPath = `audio/input_${Date.now()}.webm`;
   fs.writeFileSync(tempPath, file.buffer);
-
+  console.log("💾 Saved audio to:", tempPath);
   // 2️⃣ Speech → Text
   const text = await this.sarvam.stt(tempPath);
   console.log("VOICE TEXT:", text);
+
+  const textLower = text.toLowerCase().trim();
+  
+  // Handle greetings in audio
+  const greetings = ["hi", "hello", "hey", "hey there", "hi there", "greetings", "good morning", "good afternoon", "good evening"];
+  if (greetings.includes(textLower)) {
+    const greetingMessage = "Hello! How can I help you today?";
+    const greetingAudioFile = await this.sarvam.tts(greetingMessage, "en-IN", gender);
+    return {
+      audio_url: `/${greetingAudioFile}`
+    };
+  }
+
+  // Check if question is relevant to ODIN domain
+  const isRelevant = await this.openAI.isRelevantToDomain(text);
+  
+  if (!isRelevant) {
+    console.log("⚠️ Non-relevant audio question detected");
+    const fallbackMessage = "Sorry, please ask questions related to ODIN Technologies, procurement, P2P workflows, vendor management, or document processing.";
+    // Generate audio for fallback message
+    const fallbackAudioFile = await this.sarvam.tts(fallbackMessage, "en-IN", gender);
+    return {
+      audio_url: `/${fallbackAudioFile}`
+    };
+  }
 
   // 3️⃣ Generate embedding
   const embedding = await this.vector.embed(text);
@@ -165,6 +190,9 @@ async handleVoice(
   const candidates = await this.vector.searchSimilar(embedding);
 
 let best: any = null;
+console.log("🔍 Candidates:", candidates);
+console.log("embedding:", embedding);
+
 
   if (candidates && candidates.length > 0) {
 
@@ -181,35 +209,65 @@ const isExact =
   best.question_text.toLowerCase().trim() ===
   text.toLowerCase().trim();
 
-    // Store semantic variant if different text
-    if (!isExact) {
-
-      console.log("💾 Storing semantic question variant");
-
-      await this.vector.store({
-        questionText: text,
-        questionAudioUrl: tempPath,
-        answerText: best.answer_text,
-        answerAudioUrl: best.answer_audio_url,
-        embedding
-      });
-
-    } else {
-      console.log("⚡ Exact question already exists → skip storing");
-    }
-
-    // return stored audio
+    // return stored audio if it exists
     if (best.answer_audio_url) {
+      // Store semantic variant if different text (but audio already exists)
+      if (!isExact) {
+        console.log("💾 Storing semantic question variant");
+        console.log("📝 Values - questionAudioUrl:", tempPath, "answerAudioUrl:", best.answer_audio_url);
+        await this.vector.store({
+          questionText: text,
+          questionAudioUrl: tempPath,
+          answerText: best.answer_text,
+          answerAudioUrl: best.answer_audio_url,
+          embedding
+        });
+      } else {
+        console.log("⚡ Exact question already exists → skip storing");
+      }
+      
       return {
         audio_url: best.answer_audio_url
       };
     }
 
     // generate audio once if missing
+    console.log("🎵 Generating audio for missing answer_audio_url");
     const audioFile = await this.sarvam.tts(best.answer_text, "en-IN", gender);
+    // audioFile already includes "audio/" prefix (e.g., "audio/tts_1234567890.mp3")
+    // Normalize to ensure it's exactly "audio/filename.mp3" format
+    const answerAudioPath = audioFile.startsWith("audio/") ? audioFile : `audio/${audioFile}`;
+    console.log("💾 Generated audio path:", answerAudioPath);
+
+    // Save the generated audio URL to the original best record
+    console.log("🔍 Best record ID:", best.id, "Type:", typeof best.id);
+    if (best.id) {
+      try {
+        await this.vector.updateAudioUrl(best.id, answerAudioPath);
+        console.log("💾 Saved generated audio URL to database for record:", best.id);
+      } catch (error) {
+        console.error("❌ Error saving audio URL:", error);
+        throw error;
+      }
+    } else {
+      console.warn("⚠️ No ID found in best record, cannot update audio URL");
+    }
+
+    // Store semantic variant if different text (with the newly generated audio)
+    if (!isExact) {
+      console.log("💾 Storing semantic question variant with generated audio");
+      console.log("📝 Values - questionAudioUrl:", tempPath, "answerAudioUrl:", answerAudioPath);
+      await this.vector.store({
+        questionText: text,
+        questionAudioUrl: tempPath,
+        answerText: best.answer_text,
+        answerAudioUrl: answerAudioPath,
+        embedding
+      });
+    }
 
     return {
-      audio_url: `/audio/${audioFile}`
+      audio_url: `/${audioFile}`
     };
   }
 
@@ -224,10 +282,13 @@ const isExact =
 
   // Generate voice
   const audioFile = await this.sarvam.tts(answerText, "en-IN", gender);
-
-  const answerAudioPath = `audio/${audioFile}`;
+  // audioFile already includes "audio/" prefix (e.g., "audio/tts_1234567890.mp3")
+  // Normalize to ensure it's exactly "audio/filename.mp3" format
+  const answerAudioPath = audioFile.startsWith("audio/") ? audioFile : `audio/${audioFile}`;
+  console.log("💾 Generated audio path:", answerAudioPath);
 
   // Store new question
+  console.log("📝 Values - questionAudioUrl:", tempPath, "answerAudioUrl:", answerAudioPath);
   await this.vector.store({
     questionText: text,
     questionAudioUrl: tempPath,
@@ -239,7 +300,7 @@ const isExact =
   console.log("💾 Stored new voice query");
 
   return {
-    audio_url: `/audio/${audioFile}`
+    audio_url: `/${audioFile}`
   };
 }
 

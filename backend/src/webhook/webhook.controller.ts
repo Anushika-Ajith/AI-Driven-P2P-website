@@ -2,13 +2,16 @@ import { Controller, Post, Get, Body, Query, HttpCode, HttpStatus } from "@nestj
 import { WhatsAppService } from "../whatsapp/whatsapp.service";
 import { SarvamService } from "../sarvam/sarvam.service";
 import { OpenAIService } from "../openai/openai.service";
+import { AskService } from "../ask/ask.service";
+import * as fs from "fs";
 
 @Controller("webhook")
 export class WebhookController {
   constructor(
     private whatsapp: WhatsAppService,
     private sarvam: SarvamService,
-    private openai: OpenAIService
+    private openai: OpenAIService,
+    private askService: AskService
   ) {}
 
   // GET endpoint for webhook verification (hub.challenge)
@@ -51,6 +54,7 @@ export class WebhookController {
       
       const msg = value?.messages?.[0];
       const from = msg?.from; // your WhatsApp number
+      const contactName = value?.contacts?.[0]?.profile?.name || "there";
 
       if (!msg) {
         console.log("NO MESSAGE in webhook - acknowledging anyway");
@@ -61,7 +65,7 @@ export class WebhookController {
 
       // Acknowledge receipt immediately to prevent retries
       // Process message asynchronously (don't await)
-      this.processMessage(msg, from).catch((err) => {
+      this.processMessage(msg, from, contactName).catch((err) => {
         console.error("Error in async message processing:", err);
       });
 
@@ -76,7 +80,7 @@ export class WebhookController {
   }
 
   // Process message asynchronously
-  private async processMessage(msg: any, from: string) {
+  private async processMessage(msg: any, from: string, contactName: string = "there") {
     // 📌 CASE 1: USER SENDS AUDIO
     if (msg.type === "audio") {
       try {
@@ -85,24 +89,38 @@ export class WebhookController {
         // 1) Download user voice
         const filePath = await this.whatsapp.downloadMedia(mediaId);
 
-        // 2) Convert speech to text
-        const textFromUser = await this.sarvam.stt(filePath);
+        // 2) Read the file and create a file-like object for handleVoice
+        const fileBuffer = fs.readFileSync(filePath);
+        const file = {
+          buffer: fileBuffer,
+          originalname: `${mediaId}.ogg`,
+          mimetype: msg.audio.mime_type || "audio/ogg",
+        };
 
-        // 3) Generate LLM reply
-        const answer = await this.openai.ask(textFromUser);
+        // 3) Use askService.handleVoice which handles STT, caching, LLM, TTS, and storage
+        const result = await this.askService.handleVoice(file, "female");
+        console.log("🎵 handleVoice result:", result);
 
-        // 4) Convert reply text to speech
-        const replyVoice = await this.sarvam.tts(answer, "en-IN", "female");
+        if (!result || !result.audio_url) {
+          console.error("❌ No audio URL returned from handleVoice");
+          return;
+        }
 
-        // 5) Upload speech mp3 to WhatsApp
-        const uploadedId = await this.whatsapp.uploadMedia(replyVoice);
+        // 4) Upload the generated audio to WhatsApp
+        // result.audio_url is like "/audio/tts_1234567890.mp3" or "audio/tts_1234567890.mp3"
+        const audioPath = result.audio_url.startsWith("/") 
+          ? result.audio_url.substring(1) 
+          : result.audio_url;
+        
+        const uploadedId = await this.whatsapp.uploadMedia(audioPath);
 
-        // 6) Send audio reply BACK to WhatsApp user
+        // 5) Send audio reply BACK to WhatsApp user
         await this.whatsapp.sendAudio(from, uploadedId);
 
         console.log("✅ Voice reply sent!");
       } catch (audioError: any) {
         console.error("❌ Error processing audio:", audioError.message);
+        console.error("❌ Error stack:", audioError.stack);
       }
       return;
     }
@@ -110,20 +128,31 @@ export class WebhookController {
     // 📌 CASE 2: USER SENDS TEXT
     if (msg.type === "text") {
       try {
-        const text = msg.text.body;
+        const text = msg.text.body.toLowerCase().trim();
         console.log("Received text message:", text);
 
-        // Print "hi" to terminal when user sends "hi"
-        if (text.toLowerCase().trim() === "hi") {
-          console.log("hi");
+        // Handle greetings (hi, hello, hey, etc.)
+        const greetings = ["hi", "hello", "hey", "hey there", "hi there", "greetings", "good morning", "good afternoon", "good evening"];
+        
+        if (greetings.includes(text)) {
+          const greetingResponse = `Hello ${contactName} 👋\n\nHow can I help you today?`;
+          await this.whatsapp.sendText(from, greetingResponse);
+          console.log(`✅ Greeting sent to ${contactName}`);
+          return;
         }
 
-        // Print "hello" to terminal when user sends "hello"
-        if (text.toLowerCase().trim() === "hello") {
-          console.log("hello");
+        // Check if question is relevant to ODIN domain
+        const isRelevant = await this.openai.isRelevantToDomain(msg.text.body);
+        
+        if (!isRelevant) {
+          const fallbackMessage = "Sorry, please ask questions related to ODIN Technologies, procurement, P2P workflows, vendor management, or document processing.";
+          await this.whatsapp.sendText(from, fallbackMessage);
+          console.log("⚠️ Non-relevant question detected, sent fallback message");
+          return;
         }
 
-        const answer = await this.openai.ask(text);
+        // For relevant questions, use OpenAI
+        const answer = await this.openai.ask(msg.text.body);
 
         await this.whatsapp.sendText(from, answer);
         console.log("✅ Text reply sent!");

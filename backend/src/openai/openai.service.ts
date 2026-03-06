@@ -22,6 +22,42 @@ export class OpenAIService {
   }
 
   // ------------------------------------------------
+  // Check if question is relevant to ODIN domain
+  // ------------------------------------------------
+  async isRelevantToDomain(question: string): Promise<boolean> {
+    const prompt = `You are a relevance checker for ODIN Technologies, a procurement and P2P workflow platform.
+
+ODIN's domain includes:
+- Procurement, P2P workflow, sourcing, automation
+- Vendor management, rate contracts, supplier selection
+- Document intelligence, invoice processing, GRN, PO
+- WhatsApp AI Assistant for business communication
+- Enterprise procurement systems, governance, security
+- Leadership visibility, audit trails, traceability
+
+Question: "${question}"
+
+Is this question related to ODIN Technologies, procurement, P2P workflows, vendor management, document processing, or business communication? 
+
+Respond with ONLY "yes" or "no" (lowercase).`;
+
+    try {
+      const res = await this.client.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0,
+      });
+
+      const response = res.choices?.[0]?.message?.content?.trim().toLowerCase();
+      return response === "yes";
+    } catch (error) {
+      console.error("❌ Error checking relevance:", error);
+      // Default to true to avoid blocking legitimate questions
+      return true;
+    }
+  }
+
+  // ------------------------------------------------
   // Strict language detection
   // ------------------------------------------------
   async detectLanguage(text: string): Promise<string> {
