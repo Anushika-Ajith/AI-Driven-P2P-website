@@ -18,7 +18,7 @@ async function bootstrap() {
   // Serve audio files
   app.use('/audio', express.static(join(__dirname, '..', 'audio')));
 
-  await app.listen(4000);
+  await app.listen(4000, '0.0.0.0');
   console.log("Backend running on port 4000");
 }
 bootstrap();
