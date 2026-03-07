@@ -23,7 +23,7 @@ export class WebhookController {
     console.log("Verify Token:", token);
 
     // Verify token (you should set this in your Meta Business account)
-    const verifyToken = process.env.WHATSAPP_VERIFY_TOKEN || "your_verify_token";
+    const verifyToken = process.env.WHATSAPP_VERIFY_TOKEN || "my_verify_token";
     
     if (mode === "subscribe" && token === verifyToken) {
       console.log("Webhook verified successfully!");
