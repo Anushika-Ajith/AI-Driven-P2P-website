@@ -8,19 +8,18 @@ datasource db {
 }
 
 model SemanticCache {
-  id               String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   question_text    String
   question_audio_url String?
   embedding        Unsupported("vector")
   answer_text      String
   answer_audio_url String?
-  hit_count        Int?                  @default(0)
-  last_used_at     DateTime?             @db.Timestamp(6)
-  source           String?               @default("website") @db.VarChar(50)
-  created_at       DateTime?             @default(now()) @db.Timestamp(6)
-  updated_at       DateTime?             @default(now()) @db.Timestamp(6)
+  hit_count        Int?     @default(0)
+  last_used_at     DateTime? @db.Timestamp(6)
+  source           String?  @default("website") @db.VarChar(50)
+  created_at       DateTime? @default(now()) @db.Timestamp(6)
+  updated_at       DateTime? @default(now()) @db.Timestamp(6)
 
-  @@index([embedding])
   @@map("semantic_cache")
 }
 
