@@ -3,11 +3,21 @@ import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
 
+// DB_HOST=whatsapp-chat.cpe4asg46vgp.eu-north-1.rds.amazonaws.com
+// DB_PORT=5432
+// DB_USER=postgres
+// DB_PASSWORD=Postgres21!
+// DB_NAME=postgres
+
+
+
+
+
 const pool = new Pool({
-  host: "localhost",
+  host: "whatsapp-chat.cpe4asg46vgp.eu-north-1.rds.amazonaws.com",
   port: 5432,
   user: "postgres",
-  password: "postgres",
+  password: "Postgres21!",
   database: "postgres",
 });
 
