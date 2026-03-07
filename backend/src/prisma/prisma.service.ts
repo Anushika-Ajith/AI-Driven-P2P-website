@@ -19,6 +19,9 @@ const pool = new Pool({
   user: "postgres",
   password: "Postgres21!",
   database: "postgres",
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 const adapter = new PrismaPg(pool);
