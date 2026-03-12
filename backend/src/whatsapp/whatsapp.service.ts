@@ -133,7 +133,10 @@ export class WhatsAppService {
       //   },
       //   { headers: { Authorization: `Bearer ${this.token}` } }
       // );
-
+      console.log("Sending text message to:", to);
+      console.log("Text message:", text);
+      console.log("Phone ID:", this.phoneId);
+      console.log("Token (first 10 chars):", this.token?.substring(0, 10) + "...");
       const response = await axios.post(
         `https://graph.facebook.com/v25.0/${this.phoneId}/messages`,
         {
