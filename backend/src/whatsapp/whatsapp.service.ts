@@ -123,15 +123,31 @@ export class WhatsAppService {
     }
 
     try {
+      // const response = await axios.post(
+      //   `https://graph.facebook.com/v18.0/${this.phoneId}/messages`,
+      //   {
+      //     messaging_product: "whatsapp",
+      //     to,
+      //     type: "text",
+      //     text: { body: text },
+      //   },
+      //   { headers: { Authorization: `Bearer ${this.token}` } }
+      // );
+
       const response = await axios.post(
-        `https://graph.facebook.com/v18.0/${this.phoneId}/messages`,
+        `https://graph.facebook.com/v25.0/${this.phoneId}/messages`,
         {
           messaging_product: "whatsapp",
-          to,
+          to: to,
           type: "text",
           text: { body: text },
         },
-        { headers: { Authorization: `Bearer ${this.token}` } }
+        {
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+            "Content-Type": "application/json",
+          },
+        }
       );
       console.log("✅ Message sent successfully:", response.data);
       return response.data;
