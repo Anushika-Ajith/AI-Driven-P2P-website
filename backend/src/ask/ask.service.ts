@@ -49,7 +49,7 @@ import { SarvamService } from "../sarvam/sarvam.service";
 import * as fs from "fs";
 import { Express } from "express";  // ✔ Correct import
 import { VectorService } from "../vector/vector.service";
-
+import axios from "axios";
 @Injectable()
 export class AskService {
   constructor(
@@ -59,12 +59,29 @@ export class AskService {
   ) {}
 
   async ask(question: string) {
-    const finalTranslatedText = await this.openAI.ask(question);
+
+  try {
+
+    const res = await axios.post("http://127.0.0.1:8000/agent", {
+      user_id: "ui_user",
+      role: "store",
+      message: question
+    });
 
     return {
-      answer: String(finalTranslatedText).trim(),
+      answer: res.data.response
     };
+
+  } catch (error) {
+
+    console.error("LangGraph error:", error);
+
+    return {
+      answer: "AI service error"
+    };
+
   }
+}
 
 //   async handleVoice(
 //   file: any,

@@ -1,0 +1,19 @@
+from typing import TypedDict, List
+
+class GraphState(TypedDict):
+    user_id: str
+    user_role: str
+    user_message: str
+
+    topic: str
+    intent: str
+    product_name: str
+
+    forecast_data: str
+    requirements: str
+    stock_level: str
+    approvals_pending: str
+    pr_created: str
+
+    conversation_history: List[str]
+    response: str
