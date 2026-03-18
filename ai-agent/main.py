@@ -21,3 +21,20 @@ async def run_agent(data:dict):
     return {
         "response": result["response"]
     }
+
+#dummy
+@app.get("/approvals")
+def approvals():
+    return {"message": "You have 2 approvals pending"}
+
+@app.post("/rfq/create")
+def create_rfq():
+    return {"message": "RFQ created successfully"}
+
+@app.post("/po/approve")
+def approve_po():
+    return {"message": "PO approved"}
+
+@app.get("/supplier/list")
+def suppliers():
+    return {"message": ["Vendor A", "Vendor B"]}

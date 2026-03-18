@@ -1,0 +1,7 @@
+[
+  { "intent_name": "knowledge", "query": "rfq workflow process" },
+  { "intent_name": "knowledge", "query": "explain rfq workflow" },
+  { "intent_name": "faq", "query": "what is grn" },
+  { "intent_name": "action", "query": "show my approvals" },
+  { "intent_name": "action", "query": "create rfq" }
+]
