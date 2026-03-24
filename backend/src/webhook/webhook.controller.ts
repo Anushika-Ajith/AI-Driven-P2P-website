@@ -3,6 +3,7 @@ import { WhatsAppService } from "../whatsapp/whatsapp.service";
 import { SarvamService } from "../sarvam/sarvam.service";
 import { OpenAIService } from "../openai/openai.service";
 import { AskService } from "../ask/ask.service";
+import { UserRoleService } from "../auth/user-role.service";
 import * as fs from "fs";
 
 @Controller("webhook")
@@ -11,7 +12,8 @@ export class WebhookController {
     private whatsapp: WhatsAppService,
     private sarvam: SarvamService,
     private openai: OpenAIService,
-    private askService: AskService
+    private askService: AskService,
+    private userRoleService: UserRoleService
   ) {}
 
   // GET endpoint for webhook verification (hub.challenge)
@@ -65,7 +67,7 @@ export class WebhookController {
 
       // Acknowledge receipt immediately to prevent retries
       // Process message asynchronously (don't await)
-      this.processMessage(msg, from, contactName).catch((err) => {
+      this.processMessage(body, msg, from, contactName).catch((err) => {
         console.error("Error in async message processing:", err);
       });
 
@@ -79,8 +81,31 @@ export class WebhookController {
     }
   }
 
+  private extractUserRole(body: any, value: any): string {
+    return (
+      body?.role ||
+      body?.userRole ||
+      body?.user?.role ||
+      value?.role ||
+      value?.userRole ||
+      value?.contacts?.[0]?.role ||
+      ""
+    );
+  }
+
   // Process message asynchronously
-  private async processMessage(msg: any, from: string, contactName: string = "there") {
+  private async processMessage(
+    body: any,
+    msg: any,
+    from: string,
+    contactName: string = "there"
+  ) {
+    const value = body?.entry?.[0]?.changes?.[0]?.value;
+    const roleFromPayload = this.extractUserRole(body, value);
+    const roleFromApi = await this.userRoleService.fetchRoleByPhone(from);
+    const userRole =
+      (roleFromApi && String(roleFromApi).trim()) || roleFromPayload || "";
+
     // 📌 CASE 1: USER SENDS AUDIO
     if (msg.type === "audio") {
       try {
@@ -96,6 +121,15 @@ export class WebhookController {
           originalname: `${mediaId}.ogg`,
           mimetype: msg.audio.mime_type || "audio/ogg",
         };
+
+        // For individual WhatsApp users:
+        // transcribe audio and return text in same language.
+        if (userRole?.toLowerCase() === "individualwhatsappuser") {
+          const transcript = await this.sarvam.stt(filePath);
+          await this.whatsapp.sendText(from, transcript || "Sorry, could not transcribe the audio.");
+          console.log("✅ Sent transcript text for individualwhatsappuser");
+          return;
+        }
 
         // 3) Use askService.handleVoice which handles STT, caching, LLM, TTS, and storage
         const result = await this.askService.handleVoice(file, "female");
