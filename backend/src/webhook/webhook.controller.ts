@@ -93,6 +93,19 @@ export class WebhookController {
     );
   }
 
+  private isIndividualWhatsAppUser(role: string): boolean {
+    const normalized = String(role || "")
+      .trim()
+      .toUpperCase()
+      .replace(/[\s-]+/g, "_");
+
+    // Support exact DB role and common typo variant.
+    return (
+      normalized === "INDIVIDUAL_WHATSAPP_USER" ||
+      normalized === "INVIDIAL_WHATSAPP_USER"
+    );
+  }
+
   // Process message asynchronously
   private async processMessage(
     body: any,
@@ -105,6 +118,7 @@ export class WebhookController {
     const roleFromApi = await this.userRoleService.fetchRoleByPhone(from);
     const userRole =
       (roleFromApi && String(roleFromApi).trim()) || roleFromPayload || "";
+    console.log("Resolved user role:", userRole || "(empty)");
 
     // 📌 CASE 1: USER SENDS AUDIO
     if (msg.type === "audio") {
@@ -124,7 +138,7 @@ export class WebhookController {
 
         // For individual WhatsApp users:
         // transcribe audio and return text in same language.
-        if (userRole === "INDIVIDUAL_WHATSAPP_USER") {
+        if (this.isIndividualWhatsAppUser(userRole)) {
           const transcript = await this.sarvam.stt(filePath);
           await this.whatsapp.sendText(from, transcript || "Sorry, could not transcribe the audio.");
           console.log("✅ Sent transcript text for INDIVIDUAL_WHATSAPP_USER");
