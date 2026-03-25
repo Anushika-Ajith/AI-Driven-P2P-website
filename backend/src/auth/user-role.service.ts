@@ -16,13 +16,13 @@ export class UserRoleService {
       .trim();
   }
 
-  private toE164(whatsappFrom: string): string {
+  /**
+   * Auth API expects the number as plain digits (e.g. 918086076193), no + and no %2B encoding.
+   */
+  private normalizePhoneForAuthApi(whatsappFrom: string): string {
     const trimmed = String(whatsappFrom || "").trim();
-    if (!trimmed) return trimmed;
-    const digits = trimmed.startsWith("+")
-      ? trimmed.slice(1).replace(/\D/g, "")
-      : trimmed.replace(/\D/g, "");
-    return `+${digits}`;
+    if (!trimmed) return "";
+    return trimmed.replace(/^\+/, "").replace(/\D/g, "");
   }
 
   private getBearerToken(): string {
@@ -89,13 +89,15 @@ export class UserRoleService {
     const token = this.getBearerToken();
     if (!token) return null;
 
-    const phoneNumber = this.toE164(whatsappFrom);
-    if (!phoneNumber || phoneNumber === "+") return null;
+    const phoneNumber = this.normalizePhoneForAuthApi(whatsappFrom);
+    if (!phoneNumber) return null;
 
     try {
       const url = `${base.replace(/\/$/, "")}/auth/user-roles/by-phone`;
-      const { data } = await axios.get(url, {
-        params: { phoneNumber },
+      // Build query manually so phoneNumber is never encoded as %2B (no + prefix).
+      const sep = url.includes("?") ? "&" : "?";
+      const fullUrl = `${url}${sep}phoneNumber=${phoneNumber}`;
+      const { data } = await axios.get(fullUrl, {
         headers: { Authorization: `Bearer ${token}` },
         timeout: 15_000,
         validateStatus: (s) => s >= 200 && s < 300,
