@@ -8,6 +8,9 @@ import * as fs from "fs";
 
 @Controller("webhook")
 export class WebhookController {
+  private processedMessageIds = new Map<string, number>();
+  private processedMessageTtlMs = 5 * 60 * 1000; // 5 minutes
+
   constructor(
     private whatsapp: WhatsAppService,
     private sarvam: SarvamService,
@@ -61,6 +64,40 @@ export class WebhookController {
       if (!msg) {
         console.log("NO MESSAGE in webhook - acknowledging anyway");
         return "OK";
+      }
+
+      // Prevent sending delayed/duplicated responses due to webhook retries.
+      // Meta includes `msg.id` and `msg.timestamp` (unix seconds).
+      const msgId = msg?.id;
+      const now = Date.now();
+      const msgTimestampSec = Number(msg?.timestamp);
+      const maxAgeMs =
+        Number(process.env.WHATSAPP_MESSAGE_MAX_AGE_MS ?? this.processedMessageTtlMs) ||
+        this.processedMessageTtlMs;
+
+      if (msgTimestampSec && maxAgeMs > 0 && now - msgTimestampSec * 1000 > maxAgeMs) {
+        console.log(
+          "Skipping stale webhook message",
+          msgId,
+          "ageMs=",
+          now - msgTimestampSec * 1000,
+          "maxAgeMs=",
+          maxAgeMs
+        );
+        return "OK";
+      }
+
+      if (msgId) {
+        const seenAt = this.processedMessageIds.get(msgId);
+        if (seenAt && now - seenAt < this.processedMessageTtlMs) {
+          console.log("Skipping duplicate webhook message", msgId);
+          return "OK";
+        }
+        this.processedMessageIds.set(msgId, now);
+        // Cleanup old ids
+        for (const [id, ts] of this.processedMessageIds.entries()) {
+          if (now - ts > this.processedMessageTtlMs) this.processedMessageIds.delete(id);
+        }
       }
 
       console.log("Message type:", msg.type, "From:", from);
