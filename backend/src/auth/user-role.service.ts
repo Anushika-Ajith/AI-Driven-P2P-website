@@ -61,26 +61,6 @@ export class UserRoleService {
     return token;
   }
 
-  private parseRole(data: unknown): string | null {
-    if (data == null) return null;
-    if (typeof data === "string") {
-      const s = data.trim();
-      return s || null;
-    }
-    if (typeof data !== "object") return null;
-    const o = data as Record<string, unknown>;
-    const candidates = [
-      o.role,
-      o.userRole,
-      (o.data as Record<string, unknown> | undefined)?.role,
-      (o.user as Record<string, unknown> | undefined)?.role,
-    ];
-    for (const c of candidates) {
-      if (typeof c === "string" && c.trim()) return c.trim();
-    }
-    return null;
-  }
-
   async fetchRoleByPhone(whatsappFrom: string): Promise<string | null> {
     const base =
       process.env.AUTH_API_BASE_URL ||
@@ -102,7 +82,10 @@ export class UserRoleService {
         timeout: 15_000,
         validateStatus: (s) => s >= 200 && s < 300,
       });
-      return this.parseRole(data);
+      const response = data as {
+        roleNames?: string[];
+      };
+      return response?.roleNames?.[0] || null;
     } catch (err: unknown) {
       const ax = err as { response?: { status?: number; data?: unknown }; message?: string };
       console.error(

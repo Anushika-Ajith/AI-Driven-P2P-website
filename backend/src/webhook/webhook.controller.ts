@@ -124,10 +124,10 @@ export class WebhookController {
 
         // For individual WhatsApp users:
         // transcribe audio and return text in same language.
-        if (userRole?.toLowerCase() === "individualwhatsappuser") {
+        if (userRole === "INDIVIDUAL_WHATSAPP_USER") {
           const transcript = await this.sarvam.stt(filePath);
           await this.whatsapp.sendText(from, transcript || "Sorry, could not transcribe the audio.");
-          console.log("✅ Sent transcript text for individualwhatsappuser");
+          console.log("✅ Sent transcript text for INDIVIDUAL_WHATSAPP_USER");
           return;
         }
 
