@@ -49,6 +49,10 @@ export class AskController {
   // 📝 Text route
   @Post()
   async ask(@Body("question") q: string) {
-    return this.askService.ask(q);
+    console.log("[ASK][pipeline][1/nest:controller] POST /ask received");
+    console.log("[ASK][pipeline][1/nest:controller] question:", q);
+    const out = await this.askService.ask(q);
+    console.log("[ASK][pipeline][9/nest:controller] Returning response to client (answer length:", String(out?.answer ?? "").length, ")");
+    return out;
   }
 }

@@ -32,14 +32,19 @@ builder.add_node("fallback", fallback_node)
 # 🔀 ROUTING
 def decide(state):
     intent = (state.get("intent") or "").lower()
-    print("[ASK][graph] Routing decision. intent=", intent, "distance=", state.get("intent_distance"))
+    dist = state.get("intent_distance")
+    print("[ASK][pipeline][graph:route] intent_router finished → intent=%r intent_distance=%r" % (intent, dist))
 
     if intent == "faq":
+        print("[ASK][pipeline][graph:route] → next node: faq_node")
         return "faq"
     elif intent == "knowledge":
+        print("[ASK][pipeline][graph:route] → next node: knowledge_node")
         return "knowledge"
     elif intent == "action":
+        print("[ASK][pipeline][graph:route] → next node: action_node")
         return "action"
+    print("[ASK][pipeline][graph:route] → next node: fallback_node (intent not faq/knowledge/action or was fallback)")
     return "fallback"
 
 builder.add_conditional_edges(

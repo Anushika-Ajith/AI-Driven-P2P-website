@@ -26,20 +26,22 @@ def _clarify_message(param: str) -> str:
 def action_node(state):
 
     query = state["user_message"]
-    print("[ASK][graph][action] Entered action node. query:", query)
+    print("[ASK][pipeline][graph:action] STEP — enter action_node")
+    print("[ASK][pipeline][graph:action] STEP — query:", query)
 
     embedding = get_embedding(query)
-    print("[ASK][graph][action] Generated embedding dims:", len(embedding))
+    print("[ASK][pipeline][graph:action] STEP — embedding dims:", len(embedding))
 
     rows = search_action_rows(embedding, limit=1)
 
     if not rows:
-        print("[ASK][graph][action] No matching API action row found.")
+        print("[ASK][pipeline][graph:action] STEP — no api_action_vectors match")
         sr = build_text("No API found")
+        print("[ASK][pipeline][graph:action] STEP — exit action_node (terminal, no API row)")
         return {"response": sr["message"], "structured_response": sr}
 
     row = rows[0]
-    print("[ASK][graph][action] Top action row:", row)
+    print("[ASK][pipeline][graph:action] STEP — top action row sample_query:", row.get("sample_query"))
 
     request_schema = parse_request_schema(row.get("request_schema"))
     route_template = (row.get("route_template") or "").strip()
@@ -67,7 +69,8 @@ def action_node(state):
     if missing:
         msg = _clarify_message(missing[0])
         sr = build_clarification(missing, msg)
-        print("[ASK][graph][action] Missing params:", missing)
+        print("[ASK][pipeline][graph:action] STEP — missing params:", missing)
+        print("[ASK][pipeline][graph:action] STEP — exit action_node (terminal, clarification)")
         return {"response": sr["message"], "structured_response": sr}
 
     filled_route = None
@@ -77,6 +80,7 @@ def action_node(state):
             inner_missing = list_placeholders(filled)
             if inner_missing:
                 sr = build_clarification(inner_missing, _clarify_message(inner_missing[0]))
+                print("[ASK][pipeline][graph:action] STEP — exit action_node (terminal, inner clarification)")
                 return {"response": sr["message"], "structured_response": sr}
         filled_route = join_ui_route(ui_route, filled) if ui_route else filled
 
@@ -95,19 +99,22 @@ def action_node(state):
                 filled_route = ui_route
             else:
                 sr = build_text("Navigation route not configured.")
+                print("[ASK][pipeline][graph:action] STEP — exit action_node (terminal, nav misconfigured)")
                 return {"response": sr["message"], "structured_response": sr}
         msg = row.get("action_description") or row.get("sample_query") or "Opening the requested screen."
         sr = build_navigation(msg, filled_route, filled_endpoint or None)
-        print("[ASK][graph][action] Navigation response:", sr)
+        print("[ASK][pipeline][graph:action] STEP — navigation response built")
+        print("[ASK][pipeline][graph:action] STEP — exit action_node (terminal, navigation)")
         return {"response": sr["message"], "structured_response": sr}
 
     # API execution (no route_template, or legacy rows)
     endpoint = filled_endpoint or api_endpoint
-    print("[ASK][graph][action] Calling API:", method, endpoint)
+    print("[ASK][pipeline][graph:action] STEP — HTTP", method, endpoint)
 
     if not endpoint or not method:
-        print("[ASK][graph][action] Missing endpoint or method in row.")
+        print("[ASK][pipeline][graph:action] STEP — missing endpoint or method in row")
         sr = build_text("API configuration missing")
+        print("[ASK][pipeline][graph:action] STEP — exit action_node (terminal, bad config)")
         return {"response": sr["message"], "structured_response": sr}
 
     try:
@@ -115,14 +122,16 @@ def action_node(state):
             res = requests.get(endpoint, timeout=60)
         else:
             res = requests.post(endpoint, timeout=60)
-        print("[ASK][graph][action] API status:", res.status_code)
+        print("[ASK][pipeline][graph:action] STEP — API response status:", res.status_code)
         body = res.text or ""
         sr = build_api(body[:4000], endpoint)
         if filled_route:
             sr["route"] = filled_route
+        print("[ASK][pipeline][graph:action] STEP — exit action_node (terminal, API success)")
         return {"response": body, "structured_response": sr}
 
     except Exception as e:
-        print("[ASK][graph][action] API Error:", e)
+        print("[ASK][pipeline][graph:action] STEP — API exception:", e)
         sr = build_text(f"API call failed: {e}")
+        print("[ASK][pipeline][graph:action] STEP — exit action_node (terminal, API error)")
         return {"response": sr["message"], "structured_response": sr}

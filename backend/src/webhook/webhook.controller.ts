@@ -1,7 +1,6 @@
 import { Controller, Post, Get, Body, Query, HttpCode, HttpStatus } from "@nestjs/common";
 import { WhatsAppService } from "../whatsapp/whatsapp.service";
 import { SarvamService } from "../sarvam/sarvam.service";
-import { OpenAIService } from "../openai/openai.service";
 import { AskService } from "../ask/ask.service";
 import { UserRoleService } from "../auth/user-role.service";
 import * as fs from "fs";
@@ -14,7 +13,6 @@ export class WebhookController {
   constructor(
     private whatsapp: WhatsAppService,
     private sarvam: SarvamService,
-    private openai: OpenAIService,
     private askService: AskService,
     private userRoleService: UserRoleService
   ) {}
@@ -118,6 +116,40 @@ export class WebhookController {
     );
   }
 
+  /** Maps resolved WhatsApp role to LangGraph `role` field (defaults to store like Web UI). */
+  private roleForAgent(resolvedRole: string): string {
+    const r = String(resolvedRole || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[\s-]+/g, "_");
+    if (!r) return "store";
+    return r;
+  }
+
+  /** Same agent answer as Web UI; append structured payload when present (WhatsApp text limit ~4096). */
+  private formatWhatsAppAgentReply(answer: unknown, structured: unknown): string {
+    const main = String(answer ?? "").trim();
+    if (structured === null || structured === undefined) {
+      return main || " ";
+    }
+    let extra: string;
+    try {
+      extra =
+        typeof structured === "string"
+          ? structured
+          : JSON.stringify(structured, null, 2);
+    } catch {
+      extra = String(structured);
+    }
+    const sep = "\n\n—\n";
+    const combined = main + sep + extra;
+    const max = 4090;
+    if (combined.length <= max) return combined;
+    const budget = max - main.length - sep.length - 20;
+    if (budget < 80) return main.slice(0, max - 3) + "...";
+    return main + sep + extra.slice(0, budget) + "\n…";
+  }
+
   private isIndividualWhatsAppUser(role: string): boolean {
     const normalized = String(role || "")
       .trim()
@@ -214,20 +246,20 @@ export class WebhookController {
           return;
         }
 
-        const isRelevant = await this.openai.isRelevantToDomain(msg.text.body);
-
-        if (!isRelevant) {
-          const fallbackMessage =
-            "Sorry, please ask questions related to ODIN Technologies, procurement, P2P workflows, vendor management, or document processing.";
-          await this.whatsapp.sendText(from, fallbackMessage);
-          console.log("⚠️ Non-relevant question detected, sent fallback message");
-          return;
+        // Same LangGraph /agent path as Web UI POST /ask (memory → entity → intent_router → faq|knowledge|action|fallback).
+        const agentRole = this.roleForAgent(userRole);
+        const result = await this.askService.ask(msg.text.body, {
+          userId: `wa_${from}`,
+          role: agentRole,
+        });
+        console.log("[webhook][whatsapp:text] agent answer preview:", String(result?.answer ?? "").slice(0, 160));
+        if (result?.structured != null) {
+          console.log("[webhook][whatsapp:text] agent structured payload present");
         }
 
-        const answer = await this.openai.ask(msg.text.body);
-
-        await this.whatsapp.sendText(from, answer);
-        console.log("✅ Text reply sent!");
+        const outbound = this.formatWhatsAppAgentReply(result.answer, result.structured);
+        await this.whatsapp.sendText(from, outbound);
+        console.log("✅ Text reply sent (via ai-agent /agent, same as Web UI)");
       } catch (textError: any) {
         console.error("❌ Error processing text:", textError.message);
       }

@@ -21,28 +21,50 @@ export class OpenAIService {
     this.knowledge = loadKnowledgeBase();
   }
 
+  /**
+   * Fast path: procurement / P2P phrasing that must not depend on LLM flakiness (e.g. AWS).
+   * Keeps the semantic gate for everything else.
+   */
+  private matchesProcurementKeywordHint(text: string): boolean {
+    const t = text.toLowerCase();
+    const patterns: RegExp[] = [
+      /\b(?:pending|my|show|list|get|what\s+are)\s+(?:the\s+)?(?:my\s+)?(?:pending\s+)?approvals?\b/,
+      /\bapprovals?\s+(?:pending|due|waiting|list|queue)\b/,
+      /\b(?:requisition|requisitions|rfq|rfp|grn|purchase\s+order|p\.?\s*o\.?|invoice|invoices|vendor|vendors|supplier|suppliers|procurement|procure|p2p|procure-to-pay|accounts\s+payable|goods\s+receipt)\b/,
+      /\b(?:odin|erp|purchase|pr\s+creation|purchase\s+request)\b/,
+    ];
+    return patterns.some((re) => re.test(t));
+  }
+
   /** Returns true if the message is plausibly about ODIN / P2P / procurement (for WhatsApp guardrails). */
   async isRelevantToDomain(message: string): Promise<boolean> {
     const trimmed = String(message || "").trim();
     if (!trimmed) return false;
+
+    if (this.matchesProcurementKeywordHint(trimmed)) {
+      return true;
+    }
 
     const res = await this.client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
-          content: `You are a strict classifier. Reply with exactly YES or NO.
-YES = the user is asking about ODIN Technologies, procurement, P2P, accounts payable, vendor/supplier management, invoices, purchase orders, ERP, document processing for business, or the assistant named ODIN.
-NO = small talk, unrelated tech, personal topics, jokes, or anything clearly not about those topics.`,
+          content: `You are a strict classifier. Reply with exactly one word: YES or NO.
+
+YES = the message is about business/procurement work: ODIN Technologies, procurement, procure-to-pay (P2P), accounts payable, approval workflows, pending or listed approvals, requisitions, RFQ/RFP, purchase orders (PO), vendors/suppliers, invoices, GRN, ERP, business document processing, or the assistant named ODIN.
+
+NO = small talk, personal life, unrelated tech, jokes, or topics clearly outside procurement/finance operations.`,
         },
         { role: "user", content: trimmed },
       ],
       temperature: 0,
-      max_tokens: 5,
+      max_tokens: 8,
     });
 
     const raw = res.choices?.[0]?.message?.content?.trim().toUpperCase() || "";
-    return raw.startsWith("Y");
+    const firstWord = raw.split(/\s+/)[0] ?? "";
+    return firstWord.startsWith("Y");
   }
 
   // ------------------------------------------------

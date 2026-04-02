@@ -50,6 +50,13 @@ import * as fs from "fs";
 import { Express } from "express";  // ✔ Correct import
 import { VectorService } from "../vector/vector.service";
 import axios from "axios";
+
+export type AskAgentOptions = {
+  userId?: string;
+  /** Passed to LangGraph as user_role (e.g. store, manager). */
+  role?: string;
+};
+
 @Injectable()
 export class AskService {
   constructor(
@@ -58,18 +65,34 @@ export class AskService {
     private readonly vector: VectorService
   ) {}
 
-  async ask(question: string) {
+  private agentUrl(): string {
+    const raw = (process.env.AI_AGENT_URL || "http://127.0.0.1:8000").trim();
+    const base = raw.replace(/\/$/, "");
+    if (base.endsWith("/agent")) return base;
+    return `${base}/agent`;
+  }
+
+  async ask(question: string, options?: AskAgentOptions) {
+    const userId = options?.userId ?? "ui_user";
+    const role = options?.role ?? "store";
 
   try {
-    console.log("[ASK][backend] Received /ask question:", question);
-    console.log("[ASK][backend] Forwarding to ai-agent at http://127.0.0.1:8000/agent");
+    const url = this.agentUrl();
+    console.log("[ASK][pipeline][2/nest:service] AskService.ask — received question");
+    console.log("[ASK][pipeline][3/nest:service] Calling ai-agent POST", url, {
+      user_id: userId,
+      role,
+      message: question,
+    });
 
-    const res = await axios.post("http://127.0.0.1:8000/agent", {
-      user_id: "ui_user",
-      role: "store",
+    const res = await axios.post(url, {
+      user_id: userId,
+      role,
       message: question
     });
-    console.log("[ASK][backend] ai-agent response received:", res.data?.response);
+    console.log("[ASK][pipeline][4/nest:service] ai-agent HTTP response OK");
+    console.log("[ASK][pipeline][4/nest:service] response.preview:", String(res.data?.response ?? "").slice(0, 200));
+    console.log("[ASK][pipeline][4/nest:service] has structured:", res.data?.structured != null);
 
     return {
       answer: res.data.response,
@@ -78,7 +101,7 @@ export class AskService {
 
   } catch (error) {
 
-    console.error("[ASK][backend] LangGraph error:", error);
+    console.error("[ASK][pipeline][error/nest:service] ai-agent request failed:", error);
 
     return {
       answer: "AI service error"
