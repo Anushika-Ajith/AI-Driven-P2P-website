@@ -14,5 +14,6 @@ import { VectorModule } from "../vector/vector.module";
   ],
   controllers: [AskController],
   providers: [AskService],
+  exports: [AskService],
 })
 export class AskModule {}

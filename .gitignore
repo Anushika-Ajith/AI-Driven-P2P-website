@@ -1,0 +1,20 @@
+/backend/.env
+
+/backend/node_modules
+/ai-agent/__pycache__
+/ai-agent/.venv
+/ai-agent/.venv/lib/python3.10/site-packages
+/ai-agent/.venv/lib/python3.10/site-packages/numpy
+/ai-agent/.venv/lib/python3.10/site-packages/numpy/core
+/ai-agent/.venv/lib/python3.10/site-packages/numpy/core/multiarray.py
+/ai-agent/.venv/lib/python3.10/site-packages/numpy/core/multiarray.pyc
+/ai-agent/.venv/lib/python3.10/site-packages/numpy/core/multiarray.pyd
+/ai-agent/.venv/lib/python3.10/site-packages/numpy/core/multiarray.pyo
+/ai-agent/.venv/lib/python3.10/site-packages/numpy/core/multiarray.pyw
+/ai-agent/.venv/lib/python3.10/site-packages/numpy/core/multiarray.pyx
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

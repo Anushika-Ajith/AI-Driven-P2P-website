@@ -8,14 +8,19 @@ async function bootstrap() {
 
   // CORS FIX
   app.enableCors({
-    origin: "http://localhost:3000",
-    methods: "GET,POST",
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'http://localhost:3002',
+    ],
+    methods: 'GET,POST',
   });
 
   // Serve audio files
   app.use('/audio', express.static(join(__dirname, '..', 'audio')));
 
-  await app.listen(4000);
-  console.log("Backend running on port 4000");
+  const port = Number.parseInt(process.env.PORT ?? "4000", 10);
+  await app.listen(port);
+  console.log(`Backend running on port ${port}`);
 }
 bootstrap();

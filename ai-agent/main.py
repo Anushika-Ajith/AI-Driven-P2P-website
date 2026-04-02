@@ -1,13 +1,26 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from graph import graph
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:3002",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 @app.get("/")
 def home():
     return {"message": "AI Procurement Agent running"}
 @app.post("/agent")
 
 async def run_agent(data:dict):
+    print("[ASK][agent] /agent request payload:", data)
 
     state = {
         "user_id": data.get("user_id"),
@@ -15,12 +28,17 @@ async def run_agent(data:dict):
         "user_message": data.get("message"),
         "conversation_history":[]
     }
+    print("[ASK][agent] Initial graph state:", state)
 
+    print("[ASK][agent] Invoking graph...")
     result = graph.invoke(state)
+    print("[ASK][agent] Graph completed. Final result:", result)
 
-    return {
-        "response": result["response"]
-    }
+    out = {"response": result.get("response", "")}
+    sr = result.get("structured_response")
+    if sr is not None:
+        out["structured"] = sr
+    return out
 
 #dummy
 @app.get("/approvals")

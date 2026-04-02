@@ -1,7 +1,32 @@
 [
-  { "intent_name": "knowledge", "query": "rfq workflow process" },
-  { "intent_name": "knowledge", "query": "explain rfq workflow" },
-  { "intent_name": "faq", "query": "what is grn" },
-  { "intent_name": "action", "query": "show my approvals" },
-  { "intent_name": "action", "query": "create rfq" }
+  {
+    "intent_name": "knowledge",
+    "intent_description": "Procurement process explanations",
+    "query": "rfq workflow process",
+    "domain_topic_intent": { "domain": "procurement", "topic": "rfq", "intent": "knowledge" }
+  },
+  {
+    "intent_name": "knowledge",
+    "intent_description": "Procurement process explanations",
+    "query": "explain rfq workflow",
+    "domain_topic_intent": { "domain": "procurement", "topic": "rfq", "intent": "knowledge" }
+  },
+  {
+    "intent_name": "faq",
+    "intent_description": "Short direct definitions",
+    "query": "what is grn",
+    "domain_topic_intent": { "domain": "procurement", "topic": "grn", "intent": "faq" }
+  },
+  {
+    "intent_name": "action",
+    "intent_description": "Execute system actions via API",
+    "query": "show my approvals",
+    "domain_topic_intent": { "domain": "procurement", "intent": "action" }
+  },
+  {
+    "intent_name": "action",
+    "intent_description": "Execute system actions via API",
+    "query": "create rfq",
+    "domain_topic_intent": { "domain": "procurement", "intent": "action" }
+  }
 ]

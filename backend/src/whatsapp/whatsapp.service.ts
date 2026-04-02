@@ -33,7 +33,11 @@ export class WhatsAppService {
       headers: { Authorization: `Bearer ${this.token}` },
     });
 
-    const filePath = path.join(process.cwd(), "audio", `${mediaId}.ogg`);
+    const audioDir = path.join(process.cwd(), "audio");
+    if (!fs.existsSync(audioDir)) {
+      fs.mkdirSync(audioDir, { recursive: true });
+    }
+    const filePath = path.join(audioDir, `${mediaId}.ogg`);
     fs.writeFileSync(filePath, file.data);
 
     return filePath;
@@ -123,15 +127,24 @@ export class WhatsAppService {
     }
 
     try {
+      console.log("Sending text message to:", to);
+      console.log("Text message:", text);
+      console.log("Phone ID:", this.phoneId);
+      console.log("Token (first 10 chars):", this.token?.substring(0, 10) + "...");
       const response = await axios.post(
-        `https://graph.facebook.com/v18.0/${this.phoneId}/messages`,
+        `https://graph.facebook.com/v25.0/${this.phoneId}/messages`,
         {
           messaging_product: "whatsapp",
-          to,
+          to: to,
           type: "text",
           text: { body: text },
         },
-        { headers: { Authorization: `Bearer ${this.token}` } }
+        {
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+            "Content-Type": "application/json",
+          },
+        }
       );
       console.log("✅ Message sent successfully:", response.data);
       return response.data;

@@ -9,8 +9,9 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 def get_embedding(text: str):
 
     response = client.embeddings.create(
-        model="text-embedding-3-small",  # 1536 dimensions
-        input=text
+        model="text-embedding-3-small",  # requested dimensions: 768
+        input=text,
+         dimensions=768
     )
 
     return response.data[0].embedding

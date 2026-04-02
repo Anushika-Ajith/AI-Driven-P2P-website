@@ -1,4 +1,7 @@
-from typing import TypedDict, List
+from typing import Any, Dict, List, TypedDict
+
+from typing_extensions import NotRequired
+
 
 class GraphState(TypedDict):
     user_id: str
@@ -7,6 +10,7 @@ class GraphState(TypedDict):
 
     topic: str
     intent: str
+    intent_distance: float
     product_name: str
 
     forecast_data: str
@@ -17,3 +21,4 @@ class GraphState(TypedDict):
 
     conversation_history: List[str]
     response: str
+    structured_response: NotRequired[Dict[str, Any]]

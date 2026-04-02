@@ -23,14 +23,22 @@ for item in data:
     cursor.execute("""
     INSERT INTO intent_router_vectors (
         intent_name,
+        intent_description,
         sample_query,
-        embedding
+        embedding,
+        domain_topic_intent,
+        tenant_id,
+        company_id
     )
-    VALUES (%s, %s, %s)
+    VALUES (%s, %s, %s, %s, %s, %s, %s)
     """, (
         item["intent_name"],
+        item.get("intent_description") or "Seeded intent",
         item["query"],
-        embedding
+        embedding,
+        item.get("domain_topic_intent") or None,
+        item.get("tenant_id") or None,
+        item.get("company_id") or None,
     ))
 
     print("Inserted:", item["query"])

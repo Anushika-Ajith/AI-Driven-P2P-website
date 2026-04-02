@@ -32,3 +32,33 @@ def search_vector(table, embedding):
     conn.close()
 
     return result
+
+
+def search_vector_rows(table: str, embedding, limit: int = 1):
+    """
+    Vector search returning rows as dicts keyed by column name.
+    Adds a computed `distance` column.
+    """
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    embedding_str = str(embedding)
+
+    query = f"""
+    SELECT *, (embedding <-> %s::vector) AS distance
+    FROM {table}
+    ORDER BY embedding <-> %s::vector
+    LIMIT {int(limit)};
+    """
+
+    cursor.execute(query, (embedding_str, embedding_str))
+    rows = cursor.fetchall()
+    colnames = [d[0] for d in cursor.description] if cursor.description else []
+
+    cursor.close()
+    conn.close()
+
+    results = []
+    for row in rows:
+        results.append({colnames[i]: row[i] for i in range(min(len(colnames), len(row)))})
+    return results

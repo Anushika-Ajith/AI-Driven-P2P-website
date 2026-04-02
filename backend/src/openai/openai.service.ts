@@ -21,6 +21,30 @@ export class OpenAIService {
     this.knowledge = loadKnowledgeBase();
   }
 
+  /** Returns true if the message is plausibly about ODIN / P2P / procurement (for WhatsApp guardrails). */
+  async isRelevantToDomain(message: string): Promise<boolean> {
+    const trimmed = String(message || "").trim();
+    if (!trimmed) return false;
+
+    const res = await this.client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content: `You are a strict classifier. Reply with exactly YES or NO.
+YES = the user is asking about ODIN Technologies, procurement, P2P, accounts payable, vendor/supplier management, invoices, purchase orders, ERP, document processing for business, or the assistant named ODIN.
+NO = small talk, unrelated tech, personal topics, jokes, or anything clearly not about those topics.`,
+        },
+        { role: "user", content: trimmed },
+      ],
+      temperature: 0,
+      max_tokens: 5,
+    });
+
+    const raw = res.choices?.[0]?.message?.content?.trim().toUpperCase() || "";
+    return raw.startsWith("Y");
+  }
+
   // ------------------------------------------------
   // Strict language detection
   // ------------------------------------------------

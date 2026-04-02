@@ -61,20 +61,24 @@ export class AskService {
   async ask(question: string) {
 
   try {
+    console.log("[ASK][backend] Received /ask question:", question);
+    console.log("[ASK][backend] Forwarding to ai-agent at http://127.0.0.1:8000/agent");
 
     const res = await axios.post("http://127.0.0.1:8000/agent", {
       user_id: "ui_user",
       role: "store",
       message: question
     });
+    console.log("[ASK][backend] ai-agent response received:", res.data?.response);
 
     return {
-      answer: res.data.response
+      answer: res.data.response,
+      structured: res.data.structured ?? null,
     };
 
   } catch (error) {
 
-    console.error("LangGraph error:", error);
+    console.error("[ASK][backend] LangGraph error:", error);
 
     return {
       answer: "AI service error"
