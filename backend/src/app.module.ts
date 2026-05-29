@@ -6,7 +6,10 @@ import { OpenAIModule } from "./openai/openai.module";
 import { WebhookModule } from "./webhook/webhook.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { VectorModule } from "./vector/vector.module";
-
+import { ApprovalsModule } from "./approvals/approvals.module";
+import { RfqModule } from "./rfq/rfq.module";
+import { PoModule } from "./po/po.module";
+import { FeedbackModule } from "./feedback/feedback.module";
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -15,7 +18,12 @@ import { VectorModule } from "./vector/vector.module";
     AskModule,
     PrismaModule,
     VectorModule,
-    WebhookModule,       // ⭐ Webhook module for WhatsApp
+    WebhookModule, 
+    
+    ApprovalsModule,
+    RfqModule,
+    PoModule,
+    FeedbackModule,// ⭐ Webhook module for WhatsApp
   ],
 })
 export class AppModule {}

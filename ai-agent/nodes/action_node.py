@@ -13,6 +13,10 @@ from services.response_builder import (
 )
 from services.vector_search import search_action_rows
 
+from services.pending_action_service import (
+    save_pending_action
+)
+
 
 def _clarify_message(param: str) -> str:
     labels = {
@@ -67,11 +71,30 @@ def action_node(state):
 
     missing = [p for p in required if not entities.get(p)]
     if missing:
-        msg = _clarify_message(missing[0])
-        sr = build_clarification(missing, msg)
-        print("[ASK][pipeline][graph:action] STEP — missing params:", missing)
-        print("[ASK][pipeline][graph:action] STEP — exit action_node (terminal, clarification)")
-        return {"response": sr["message"], "structured_response": sr}
+
+        save_pending_action(
+            user_id=state["user_id"],
+            action_name=row.get(
+                "action_id",
+                "unknown_action"
+            ),
+            original_query=query,
+            missing_param=missing[0]
+        )
+
+        msg = _clarify_message(
+            missing[0]
+        )
+
+        sr = build_clarification(
+            missing,
+            msg
+        )
+
+        return {
+            "response": sr["message"],
+            "structured_response": sr
+        }
 
     filled_route = None
     if route_template:
@@ -108,30 +131,127 @@ def action_node(state):
         return {"response": sr["message"], "structured_response": sr}
 
     # API execution (no route_template, or legacy rows)
+    # API execution
     endpoint = filled_endpoint or api_endpoint
+
+    # -------------------------------------------------
+    # FIX SELF-CALL LOOP
+    # -------------------------------------------------
+    endpoint = endpoint.replace(
+        "http://localhost:8000",
+        "http://localhost:4000"
+    )
+
     print("[ASK][pipeline][graph:action] STEP — HTTP", method, endpoint)
 
     if not endpoint or not method:
         print("[ASK][pipeline][graph:action] STEP — missing endpoint or method in row")
+
         sr = build_text("API configuration missing")
-        print("[ASK][pipeline][graph:action] STEP — exit action_node (terminal, bad config)")
-        return {"response": sr["message"], "structured_response": sr}
+
+        return {
+            "response": sr["message"],
+            "structured_response": sr
+        }
 
     try:
+
+        headers = {
+            "Content-Type": "application/json"
+        }
+
         if method == "GET":
-            res = requests.get(endpoint, timeout=60)
+
+            res = requests.get(
+                endpoint,
+                headers=headers,
+                timeout=15
+            )
+
         else:
-            res = requests.post(endpoint, timeout=60)
-        print("[ASK][pipeline][graph:action] STEP — API response status:", res.status_code)
-        body = res.text or ""
-        sr = build_api(body[:4000], endpoint)
+
+            res = requests.post(
+                endpoint,
+                headers=headers,
+                json=entities,
+                timeout=15
+            )
+
+        print(
+            "[ASK][pipeline][graph:action] STEP — API response status:",
+            res.status_code
+        )
+
+        try:
+            body = res.json()
+        except Exception:
+            body = res.text
+
+        sr = build_api(
+            str(body)[:4000],
+            endpoint
+        )
+
         if filled_route:
             sr["route"] = filled_route
-        print("[ASK][pipeline][graph:action] STEP — exit action_node (terminal, API success)")
-        return {"response": body, "structured_response": sr}
+
+        # -----------------------------------------
+        # USER FRIENDLY SUCCESS MESSAGE
+        # -----------------------------------------
+        message = str(body)
+
+        if isinstance(body, dict):
+
+            # Purchase Order Approval
+            if (
+                body.get("success") is True
+                and body.get("poNumber")
+                and body.get("status")
+            ):
+
+                message = (
+                    f"Purchase Order "
+                    f"{body['poNumber']} "
+                    f"{body['status']} successfully."
+                )
+
+            # Generic success response
+            elif body.get("success") is True:
+
+                if body.get("status"):
+
+                    message = (
+                        f"Operation completed successfully. "
+                        f"Status: {body['status']}"
+                    )
+
+                else:
+
+                    message = (
+                        "Operation completed successfully."
+                    )
+
+        print(
+            "[ASK][pipeline][graph:action] STEP — exit action_node (terminal, API success)"
+        )
+
+        return {
+            "response": message,
+            "structured_response": sr
+        }
 
     except Exception as e:
-        print("[ASK][pipeline][graph:action] STEP — API exception:", e)
-        sr = build_text(f"API call failed: {e}")
-        print("[ASK][pipeline][graph:action] STEP — exit action_node (terminal, API error)")
-        return {"response": sr["message"], "structured_response": sr}
+
+        print(
+            "[ASK][pipeline][graph:action] STEP — API exception:",
+            str(e)
+        )
+
+        sr = build_text(
+            f"API call failed: {str(e)}"
+        )
+
+        return {
+            "response": sr["message"],
+            "structured_response": sr
+        }

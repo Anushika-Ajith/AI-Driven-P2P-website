@@ -19,4 +19,8 @@ def faq_node(state):
     answer = result[2]
     print("[ASK][pipeline][graph:faq] STEP — FAQ hit, answer length:", len(str(answer)))
     print("[ASK][pipeline][graph:faq] STEP — exit faq_node (terminal)")
-    return {"response": answer}
+    return {
+        "response":
+        answer +
+        "\n\nWas this helpful? Reply YES or NO."
+    }

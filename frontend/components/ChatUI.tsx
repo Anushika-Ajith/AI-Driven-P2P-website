@@ -9,10 +9,14 @@ export default function ChatUI() {
   const [loading, setLoading] = useState(false);
   const [recording, setRecording] = useState(false);
   const [audioURL, setAudioURL] = useState("");
+  const [showFeedback, setShowFeedback] =
+    useState(false);
 
+  const [feedbackDone, setFeedbackDone] =
+    useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<BlobPart[]>([]);
-
+  
   // ----------------------------------------
   // TEXT QUESTION
   // ----------------------------------------
@@ -28,6 +32,9 @@ export default function ChatUI() {
       }
 
       setAnswer(String(res.data.answer || "").trim());
+
+      setFeedbackDone(false);
+      setShowFeedback(true);
     } catch (err) {
       console.error(err);
       setAnswer("❌ Error occurred. Check backend.");
@@ -65,7 +72,8 @@ async function handleRecordingStop() {
     );
 
     setAnswer(res.data.answer_text || res.data.answer || "");
-
+    setFeedbackDone(false);
+    setShowFeedback(true);
     if (res.data.audio_url) {
       setAudioURL(res.data.audio_url);
     }
@@ -120,6 +128,31 @@ function stopRecording() {
   }
 
   setRecording(false);
+}
+
+async function submitFeedback(
+  helpful: boolean
+) {
+
+  try {
+
+    await axios.post(
+      "http://localhost:4000/feedback",
+      {
+        feedbackId: crypto.randomUUID(),
+        isHelpful: helpful,
+        comments: ""
+      }
+    );
+
+    setFeedbackDone(true);
+
+  } catch (err) {
+
+    console.error(err);
+
+  }
+
 }
 
   return (
@@ -245,6 +278,80 @@ function stopRecording() {
   <audio controls style={{ width: "100%" }}>
     <source src={audioURL} type="audio/mp3" />
   </audio>
+)}
+
+{showFeedback && (
+  <div
+    style={{
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "flex-start",
+      paddingTop: "80px",
+      zIndex: 9999
+    }}
+  >
+    <div
+      style={{
+        width: "400px",
+        background: "#fff",
+        borderRadius: "16px",
+        padding: "24px",
+        textAlign: "center"
+      }}
+    >
+
+      {!feedbackDone ? (
+        <>
+          <h3>
+            Was this response helpful?
+          </h3>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "12px",
+              marginTop: "20px"
+            }}
+          >
+            <button
+              onClick={() =>
+                submitFeedback(true)
+              }
+            >
+              Yes
+            </button>
+
+            <button
+              onClick={() =>
+                submitFeedback(false)
+              }
+            >
+              No
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
+          <h3>
+            Thank you for your feedback!
+          </h3>
+
+          <button
+            onClick={() =>
+              setShowFeedback(false)
+            }
+          >
+            Close
+          </button>
+        </>
+      )}
+
+    </div>
+  </div>
 )}
       </div>
     </div>

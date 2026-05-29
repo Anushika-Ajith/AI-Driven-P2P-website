@@ -23,3 +23,10 @@ model SemanticCache {
   @@map("semantic_cache")
 }
 
+model Feedback {
+  id          String   @id @default(uuid())
+  feedbackId  String
+  isHelpful   Boolean
+  comments    String?
+  createdAt   DateTime @default(now())
+}

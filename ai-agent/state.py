@@ -8,6 +8,9 @@ class GraphState(TypedDict):
     user_role: str
     user_message: str
 
+    pending_action_id: str
+    pending_action_name: str
+
     topic: str
     intent: str
     intent_distance: float

@@ -28,5 +28,17 @@
     "intent_description": "Execute system actions via API",
     "query": "create rfq",
     "domain_topic_intent": { "domain": "procurement", "intent": "action" }
+  },
+  {
+    "intent_name": "action",
+    "query": "approve purchase order"
+  },
+  {
+    "intent_name": "action",
+    "query": "approve po"
+  },
+  {
+    "intent_name": "action",
+    "query": "approve purchase order po123"
   }
 ]
